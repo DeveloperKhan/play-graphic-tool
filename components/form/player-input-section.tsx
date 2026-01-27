@@ -10,7 +10,7 @@ import { FlagSelector } from "./flag-selector";
 import { TeamInput } from "./team-input";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
-import type { TournamentData, Placement } from "@/lib/types";
+import type { TournamentData, Placement, BracketSide, BracketGroup } from "@/lib/types";
 
 interface PlayerInputSectionProps {
   form: UseFormReturn<TournamentData>;
@@ -29,12 +29,38 @@ const PLACEMENT_OPTIONS: { value: Placement; label: string }[] = [
   { value: "25-32", label: "25-32 Place" },
 ];
 
+const BRACKET_SIDE_OPTIONS: { value: BracketSide; label: string }[] = [
+  { value: "Winners", label: "Winners Bracket" },
+  { value: "Losers", label: "Losers Bracket" },
+];
+
+const GROUP_OPTIONS: { value: BracketGroup; label: string }[] = [
+  { value: "A", label: "Group A" },
+  { value: "B", label: "Group B" },
+  { value: "C", label: "Group C" },
+  { value: "D", label: "Group D" },
+  { value: "E", label: "Group E" },
+  { value: "F", label: "Group F" },
+  { value: "G", label: "Group G" },
+  { value: "H", label: "Group H" },
+  { value: "I", label: "Group I" },
+  { value: "J", label: "Group J" },
+  { value: "K", label: "Group K" },
+  { value: "L", label: "Group L" },
+  { value: "M", label: "Group M" },
+  { value: "N", label: "Group N" },
+  { value: "O", label: "Group O" },
+  { value: "P", label: "Group P" },
+];
+
 export function PlayerInputSection({
   form,
   playerId,
   playerNumber,
 }: PlayerInputSectionProps) {
   const player = form.watch(`players.${playerId}`);
+  const overviewType = form.watch("overviewType");
+  const playerCount = form.watch("playerCount");
 
   if (!player) {
     return null;
@@ -43,6 +69,11 @@ export function PlayerInputSection({
   const flags = player.flags || [""];
   const canAddFlag = flags.length < 2;
   const canRemoveFlag = flags.length > 1;
+
+  // Determine available groups based on player count
+  const availableGroups = playerCount === 32
+    ? GROUP_OPTIONS
+    : GROUP_OPTIONS.slice(0, 8); // A-H for Top 16 and below
 
   const addFlag = () => {
     if (canAddFlag) {
@@ -81,43 +112,104 @@ export function PlayerInputSection({
           )}
         />
 
-        {/* Placement */}
-        <FormField
-          control={form.control}
-          name={`players.${playerId}.placement`}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Placement</FormLabel>
-              <Select
-                onValueChange={(value) => {
-                  // Handle both number and string placements
-                  const placement = isNaN(Number(value))
-                    ? value
-                    : Number(value);
-                  field.onChange(placement as Placement);
-                }}
-                value={String(field.value)}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select placement" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {PLACEMENT_OPTIONS.map((option) => (
-                    <SelectItem
-                      key={option.value}
-                      value={String(option.value)}
-                    >
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Conditional fields based on overview type */}
+        {overviewType === "Bracket" ? (
+          // Placement field for Bracket mode
+          <FormField
+            control={form.control}
+            name={`players.${playerId}.placement`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Placement</FormLabel>
+                <Select
+                  onValueChange={(value) => {
+                    // Handle both number and string placements
+                    const placement = isNaN(Number(value))
+                      ? value
+                      : Number(value);
+                    field.onChange(placement as Placement);
+                  }}
+                  value={String(field.value)}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select placement" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {PLACEMENT_OPTIONS.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        value={String(option.value)}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : (
+          // Bracket Side and Group for Usage mode
+          <>
+            <FormField
+              control={form.control}
+              name={`players.${playerId}.bracketSide`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bracket Side</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select bracket side" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {BRACKET_SIDE_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`players.${playerId}.group`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Group</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select group" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {availableGroups.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
 
         {/* Flags */}
         <div className="space-y-4">

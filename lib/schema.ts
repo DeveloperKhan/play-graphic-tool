@@ -10,6 +10,7 @@ export const pokemonSchema = z.object({
 export const playerSchema = z.object({
   id: z.string().min(1, "Player ID required"),
   name: z.string().min(1, "Player name required"),
+  // For Bracket mode
   placement: z.union([
     z.literal(1),
     z.literal(2),
@@ -19,7 +20,10 @@ export const playerSchema = z.object({
     z.literal("9-16"),
     z.literal("17-24"),
     z.literal("25-32"),
-  ]),
+  ]).optional(),
+  // For Usage mode
+  bracketSide: z.enum(["Winners", "Losers"]).optional(),
+  group: z.enum(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]).optional(),
   team: z
     .array(pokemonSchema)
     .length(6, "Team must have exactly 6 Pokemon"),
@@ -41,6 +45,14 @@ export const bracketMatchSchema = z.object({
   isGrandFinalsReset: z.boolean().optional(),
 });
 
+// Bracket pairing schema
+export const bracketPairingSchema = z.object({
+  id: z.string(),
+  group1: z.enum(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]),
+  group2: z.enum(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]),
+  description: z.string().optional(),
+});
+
 // Tournament data schema
 export const tournamentSchema = z
   .object({
@@ -52,6 +64,7 @@ export const tournamentSchema = z
     players: z.record(z.string(), playerSchema),
     playerOrder: z.array(z.string()),
     bracketMatches: z.array(bracketMatchSchema).optional(),
+    bracketPairings: z.array(bracketPairingSchema).optional(),
   })
   .refine(
     (data) => {
@@ -78,7 +91,11 @@ export const tournamentSchema = z
   )
   .refine(
     (data) => {
-      // Validate placement distribution based on player count
+      // Validate placement distribution based on player count (only for Bracket mode)
+      if (data.overviewType !== "Bracket") {
+        return true; // Skip validation for non-Bracket modes
+      }
+
       const players = Object.values(data.players);
       const placements = players.map((p) => p.placement);
 
@@ -156,6 +173,34 @@ export const tournamentSchema = z
     {
       message:
         "Invalid placement distribution for player count (must be 4, 8, 16, or 32)",
+    }
+  )
+  .refine(
+    (data) => {
+      // If Bracket mode, all players must have placement
+      if (data.overviewType === "Bracket") {
+        const players = Object.values(data.players);
+        return players.every((player) => player.placement !== undefined);
+      }
+      return true;
+    },
+    {
+      message: "In Bracket mode, all players must have a placement",
+    }
+  )
+  .refine(
+    (data) => {
+      // If Usage mode, all players must have bracketSide and group
+      if (data.overviewType === "Usage") {
+        const players = Object.values(data.players);
+        return players.every(
+          (player) => player.bracketSide !== undefined && player.group !== undefined
+        );
+      }
+      return true;
+    },
+    {
+      message: "In Usage mode, all players must have a bracket side and group",
     }
   );
 

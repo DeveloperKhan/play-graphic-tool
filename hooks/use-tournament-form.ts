@@ -13,14 +13,16 @@ function generatePlayerId(index: number): string {
 /**
  * Create default tournament data for form initialization
  * @param playerCount - Number of players (4, 8, 16, or 32)
+ * @param overviewType - Overview type (defaults to "Usage")
  */
 export function createDefaultTournamentData(
-  playerCount: number = 16
+  playerCount: number = 16,
+  overviewType: "Usage" | "Bracket" | "None" = "Usage"
 ): TournamentData {
   const players: Record<string, Player> = {};
   const playerOrder: string[] = [];
 
-  // Determine default placements based on player count
+  // Determine default placements based on player count (for Bracket mode)
   const getDefaultPlacement = (index: number): Placement => {
     if (index === 0) return 1;
     if (index === 1) return 2;
@@ -32,15 +34,21 @@ export function createDefaultTournamentData(
     return "25-32";
   };
 
+  // Determine default group based on player count (for Usage mode)
+  const getDefaultGroup = (index: number): string => {
+    const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"];
+    const groupCount = playerCount / 2; // Half for winners, half for losers
+    return groups[index % groupCount];
+  };
+
   // Create players with empty data
   for (let i = 0; i < playerCount; i++) {
     const playerId = generatePlayerId(i);
     playerOrder.push(playerId);
 
-    players[playerId] = {
+    const basePlayer = {
       id: playerId,
       name: "",
-      placement: getDefaultPlacement(i),
       team: Array(6)
         .fill(null)
         .map(() => ({
@@ -49,17 +57,33 @@ export function createDefaultTournamentData(
         })),
       flags: [""],
     };
+
+    // Add mode-specific fields
+    if (overviewType === "Bracket") {
+      players[playerId] = {
+        ...basePlayer,
+        placement: getDefaultPlacement(i),
+      };
+    } else {
+      // Usage mode defaults
+      players[playerId] = {
+        ...basePlayer,
+        bracketSide: (i < playerCount / 2 ? "Winners" : "Losers") as "Winners" | "Losers",
+        group: getDefaultGroup(i) as any,
+      };
+    }
   }
 
   return {
     eventName: "",
     eventType: "Regional",
-    overviewType: "Usage",
+    overviewType,
     playerCount: playerCount as 4 | 8 | 16 | 32,
     bracketReset: false,
     players,
     playerOrder,
     bracketMatches: [],
+    bracketPairings: [],
   };
 }
 

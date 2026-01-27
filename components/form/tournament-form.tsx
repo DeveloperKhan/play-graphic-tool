@@ -20,6 +20,7 @@ export function TournamentForm({
   const form = useTournamentForm(playerCount);
   const playerOrder = form.watch("playerOrder");
   const currentPlayerCount = form.watch("playerCount");
+  const overviewType = form.watch("overviewType");
 
   // Notify parent of form changes
   React.useEffect(() => {
@@ -30,6 +31,61 @@ export function TournamentForm({
       return () => subscription.unsubscribe();
     }
   }, [form, onFormChange]);
+
+  // Handle overview type changes - update player fields accordingly
+  React.useEffect(() => {
+    const players = form.getValues("players");
+    const updatedPlayers = { ...players };
+    let needsUpdate = false;
+
+    Object.keys(updatedPlayers).forEach((playerId, index) => {
+      const player = updatedPlayers[playerId];
+
+      if (overviewType === "Bracket") {
+        // Switch to Bracket mode - add placement, remove bracketSide/group
+        if (player.placement === undefined) {
+          needsUpdate = true;
+          // Determine default placement based on index
+          let defaultPlacement: any = "9-16";
+          if (index === 0) defaultPlacement = 1;
+          else if (index === 1) defaultPlacement = 2;
+          else if (index === 2) defaultPlacement = 3;
+          else if (index === 3) defaultPlacement = 4;
+          else if (index < 8) defaultPlacement = "5-8";
+          else if (index < 16) defaultPlacement = "9-16";
+          else if (index < 24) defaultPlacement = "17-24";
+          else defaultPlacement = "25-32";
+
+          updatedPlayers[playerId] = {
+            ...player,
+            placement: defaultPlacement,
+          };
+          // Remove Usage mode fields
+          delete (updatedPlayers[playerId] as any).bracketSide;
+          delete (updatedPlayers[playerId] as any).group;
+        }
+      } else if (overviewType === "Usage") {
+        // Switch to Usage mode - add bracketSide/group, remove placement
+        if (player.bracketSide === undefined || player.group === undefined) {
+          needsUpdate = true;
+          const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"];
+          const groupCount = currentPlayerCount / 2;
+
+          updatedPlayers[playerId] = {
+            ...player,
+            bracketSide: (index < currentPlayerCount / 2 ? "Winners" : "Losers") as any,
+            group: groups[index % groupCount] as any,
+          };
+          // Remove Bracket mode field
+          delete (updatedPlayers[playerId] as any).placement;
+        }
+      }
+    });
+
+    if (needsUpdate) {
+      form.setValue("players", updatedPlayers);
+    }
+  }, [overviewType, form, currentPlayerCount]);
 
   // Group players by placement for better organization
   const top4Players = playerOrder.slice(0, 4);

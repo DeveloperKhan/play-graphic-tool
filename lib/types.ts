@@ -9,10 +9,22 @@ export interface Pokemon {
   isShadow: boolean;
 }
 
+export type BracketSide = "Winners" | "Losers";
+export type BracketGroup =
+  | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H"
+  | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P"; // A-H for Top 16, A-P for Top 32
+
 export interface Player {
   id: string; // unique player identifier
   name: string; // player's name
-  placement: Placement;
+
+  // For Bracket mode (overviewType === "Bracket")
+  placement?: Placement;
+
+  // For Usage mode (overviewType === "Usage")
+  bracketSide?: BracketSide; // Winners or Losers
+  group?: BracketGroup; // A-P
+
   team: Pokemon[]; // exactly 6
   flags: string[]; // 1-2 ISO country codes (ISO 3166-1 alpha-2)
 }
@@ -28,6 +40,13 @@ export interface BracketMatch {
   isGrandFinalsReset?: boolean; // true if this is the bracket reset match
 }
 
+export interface BracketPairing {
+  id: string; // unique pairing identifier
+  group1: BracketGroup; // First group (e.g., "A")
+  group2: BracketGroup; // Second group (e.g., "H")
+  description?: string; // Optional description (e.g., "Winners A vs Winners H")
+}
+
 export type PlayerCount = 4 | 8 | 16 | 32;
 
 export interface TournamentData {
@@ -38,7 +57,8 @@ export interface TournamentData {
   bracketReset: boolean; // Was there a bracket reset in grand finals?
   players: Record<string, Player>; // player lookup by id
   playerOrder: string[]; // ordered list of player ids (for rendering order)
-  bracketMatches?: BracketMatch[]; // Manual bracket overrides
+  bracketMatches?: BracketMatch[]; // Manual bracket overrides (for Bracket mode)
+  bracketPairings?: BracketPairing[]; // Group pairings (for Usage mode)
 }
 
 // Pokemon data from dracoviz.com API
