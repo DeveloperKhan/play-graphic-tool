@@ -2,13 +2,14 @@ import { z } from "zod";
 
 // Pokemon schema
 export const pokemonSchema = z.object({
-  id: z.string().min(1, "Pokemon ID required"),
-  isShadow: z.boolean().default(false),
+  id: z.string(),
+  isShadow: z.boolean(),
 });
 
 // Player schema
 export const playerSchema = z.object({
   id: z.string().min(1, "Player ID required"),
+  name: z.string().min(1, "Player name required"),
   placement: z.union([
     z.literal(1),
     z.literal(2),
@@ -46,7 +47,7 @@ export const tournamentSchema = z
     eventName: z.string().min(1, "Event name required"),
     eventType: z.enum(["Regional", "Generic", "International", "Worlds"]),
     overviewType: z.enum(["Usage", "Bracket", "None"]),
-    bracketReset: z.boolean().default(false),
+    bracketReset: z.boolean(),
     players: z.record(z.string(), playerSchema),
     playerOrder: z.array(z.string()),
     bracketMatches: z.array(bracketMatchSchema).optional(),

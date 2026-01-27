@@ -22,7 +22,16 @@ async function fetchPokemonData(): Promise<Map<string, PokemonMetadata>> {
     const cache = new Map<string, PokemonMetadata>();
 
     // Parse the Pokemon data - only extract what we need
-    Object.entries(data).forEach(([key, value]: [string, any]) => {
+    // Skip shadow Pokemon variants (they're handled via isShadow flag)
+    Object.entries(data).forEach(([, value]: [string, any]) => {
+      // Skip entries with "_shadow" in the ID or name
+      if (
+        value.speciesId?.includes("_shadow") ||
+        value.speciesName?.includes("_shadow")
+      ) {
+        return;
+      }
+
       const pokemon: PokemonMetadata = {
         speciesName: value.speciesName,
         speciesId: value.speciesId,
@@ -144,13 +153,9 @@ export async function searchPokemon(
 /**
  * Get the sprite URL for a Pokemon by ID
  * @param id - Pokemon species ID
- * @param isShadow - Whether this is a shadow Pokemon (used for CSS styling)
  * @returns The sprite URL from CloudFront
  */
-export async function getPokemonSprite(
-  id: string,
-  isShadow: boolean = false
-): Promise<string> {
+export async function getPokemonSprite(id: string): Promise<string> {
   if (!id) {
     return ""; // Return empty string for missing Pokemon
   }
@@ -173,7 +178,7 @@ export async function getPokemonSprite(
  * Use this for direct sprite access when you already have the SID
  */
 export function getPokemonSpriteBySid(sid: number): string {
-  return `https://imagedelivery.net/2qzpDFW7Yl3NqBaOSqBaOSqtWxQ/home_${sid}.png/public`;
+  return `https://imagedelivery.net/2qzpDFW7Yl3NqBaOSqtWxQ/home_${sid}.png/public`;
 }
 
 /**

@@ -11,6 +11,7 @@ export interface Pokemon {
 
 export interface Player {
   id: string; // unique player identifier
+  name: string; // player's name
   placement: Placement;
   team: Pokemon[]; // exactly 6
   flags: string[]; // 1-2 ISO country codes (ISO 3166-1 alpha-2)
