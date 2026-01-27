@@ -19,6 +19,7 @@ export function TournamentForm({
 }: TournamentFormProps) {
   const form = useTournamentForm(playerCount);
   const playerOrder = form.watch("playerOrder");
+  const currentPlayerCount = form.watch("playerCount");
 
   // Notify parent of form changes
   React.useEffect(() => {
@@ -32,10 +33,10 @@ export function TournamentForm({
 
   // Group players by placement for better organization
   const top4Players = playerOrder.slice(0, 4);
-  const place5to8 = playerOrder.slice(4, 8);
-  const place9to16 = playerCount >= 16 ? playerOrder.slice(8, 16) : [];
-  const place17to24 = playerCount >= 24 ? playerOrder.slice(16, 24) : [];
-  const place25to32 = playerCount === 32 ? playerOrder.slice(24, 32) : [];
+  const place5to8 = currentPlayerCount >= 8 ? playerOrder.slice(4, 8) : [];
+  const place9to16 = currentPlayerCount >= 16 ? playerOrder.slice(8, 16) : [];
+  const place17to24 = currentPlayerCount >= 24 ? playerOrder.slice(16, 24) : [];
+  const place25to32 = currentPlayerCount === 32 ? playerOrder.slice(24, 32) : [];
 
   return (
     <Form {...form}>
@@ -45,16 +46,28 @@ export function TournamentForm({
 
         {/* Players organized by tabs */}
         <Tabs defaultValue="top4" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5">
+          <TabsList
+            className={`grid w-full ${
+              currentPlayerCount === 4
+                ? "grid-cols-1"
+                : currentPlayerCount === 8
+                ? "grid-cols-2"
+                : currentPlayerCount === 16
+                ? "grid-cols-3"
+                : "grid-cols-5"
+            }`}
+          >
             <TabsTrigger value="top4">Top 4</TabsTrigger>
-            <TabsTrigger value="5-8">5-8 Place</TabsTrigger>
-            {place9to16.length > 0 && (
+            {currentPlayerCount >= 8 && (
+              <TabsTrigger value="5-8">5-8 Place</TabsTrigger>
+            )}
+            {currentPlayerCount >= 16 && (
               <TabsTrigger value="9-16">9-16 Place</TabsTrigger>
             )}
-            {place17to24.length > 0 && (
+            {currentPlayerCount >= 24 && (
               <TabsTrigger value="17-24">17-24 Place</TabsTrigger>
             )}
-            {place25to32.length > 0 && (
+            {currentPlayerCount === 32 && (
               <TabsTrigger value="25-32">25-32 Place</TabsTrigger>
             )}
           </TabsList>
@@ -72,19 +85,21 @@ export function TournamentForm({
           </TabsContent>
 
           {/* 5-8 Place */}
-          <TabsContent value="5-8" className="space-y-4">
-            {place5to8.map((playerId, index) => (
-              <PlayerInputSection
-                key={playerId}
-                form={form}
-                playerId={playerId}
-                playerNumber={index + 5}
-              />
-            ))}
-          </TabsContent>
+          {currentPlayerCount >= 8 && (
+            <TabsContent value="5-8" className="space-y-4">
+              {place5to8.map((playerId, index) => (
+                <PlayerInputSection
+                  key={playerId}
+                  form={form}
+                  playerId={playerId}
+                  playerNumber={index + 5}
+                />
+              ))}
+            </TabsContent>
+          )}
 
           {/* 9-16 Place */}
-          {place9to16.length > 0 && (
+          {currentPlayerCount >= 16 && (
             <TabsContent value="9-16" className="space-y-4">
               {place9to16.map((playerId, index) => (
                 <PlayerInputSection
@@ -98,7 +113,7 @@ export function TournamentForm({
           )}
 
           {/* 17-24 Place */}
-          {place17to24.length > 0 && (
+          {currentPlayerCount >= 24 && (
             <TabsContent value="17-24" className="space-y-4">
               {place17to24.map((playerId, index) => (
                 <PlayerInputSection
@@ -112,7 +127,7 @@ export function TournamentForm({
           )}
 
           {/* 25-32 Place */}
-          {place25to32.length > 0 && (
+          {currentPlayerCount === 32 && (
             <TabsContent value="25-32" className="space-y-4">
               {place25to32.map((playerId, index) => (
                 <PlayerInputSection

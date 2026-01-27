@@ -56,6 +56,40 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
           )}
         />
 
+        {/* Player Count */}
+        <FormField
+          control={form.control}
+          name="playerCount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tournament Size</FormLabel>
+              <Select
+                onValueChange={(value) => field.onChange(Number(value))}
+                value={String(field.value)}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select tournament size" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="4" disabled>
+                    Top 4 (Coming Soon)
+                  </SelectItem>
+                  <SelectItem value="8" disabled>
+                    Top 8 (Coming Soon)
+                  </SelectItem>
+                  <SelectItem value="16">Top 16</SelectItem>
+                  <SelectItem value="32" disabled>
+                    Top 32 (Coming Soon)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* Event Type */}
         <FormField
           control={form.control}

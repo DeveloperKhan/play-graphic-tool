@@ -55,6 +55,7 @@ export function createDefaultTournamentData(
     eventName: "",
     eventType: "Regional",
     overviewType: "Usage",
+    playerCount: playerCount as 4 | 8 | 16 | 32,
     bracketReset: false,
     players,
     playerOrder,

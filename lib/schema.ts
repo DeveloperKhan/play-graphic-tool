@@ -47,6 +47,7 @@ export const tournamentSchema = z
     eventName: z.string().min(1, "Event name required"),
     eventType: z.enum(["Regional", "Generic", "International", "Worlds"]),
     overviewType: z.enum(["Usage", "Bracket", "None"]),
+    playerCount: z.union([z.literal(4), z.literal(8), z.literal(16), z.literal(32)]),
     bracketReset: z.boolean(),
     players: z.record(z.string(), playerSchema),
     playerOrder: z.array(z.string()),
@@ -63,6 +64,16 @@ export const tournamentSchema = z
     },
     {
       message: "playerOrder must match player IDs in players record",
+    }
+  )
+  .refine(
+    (data) => {
+      // Validate that player count matches number of players
+      const actualPlayerCount = Object.keys(data.players).length;
+      return actualPlayerCount === data.playerCount;
+    },
+    {
+      message: "Number of players must match selected tournament size",
     }
   )
   .refine(

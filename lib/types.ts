@@ -28,10 +28,13 @@ export interface BracketMatch {
   isGrandFinalsReset?: boolean; // true if this is the bracket reset match
 }
 
+export type PlayerCount = 4 | 8 | 16 | 32;
+
 export interface TournamentData {
   eventName: string;
   eventType: EventType;
   overviewType: OverviewType;
+  playerCount: PlayerCount; // Number of players in tournament
   bracketReset: boolean; // Was there a bracket reset in grand finals?
   players: Record<string, Player>; // player lookup by id
   playerOrder: string[]; // ordered list of player ids (for rendering order)
