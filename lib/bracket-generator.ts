@@ -25,7 +25,7 @@ export function generateBracket(
         placement === "5-8"
       );
     })
-    .sort((a, b) => comparePlacements(a.placement, b.placement));
+    .sort((a, b) => comparePlacements(a.placement ?? 1, b.placement ?? 1));
 
   if (top8Players.length < 8) {
     // Not enough players for a full bracket
