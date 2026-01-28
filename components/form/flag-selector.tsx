@@ -41,15 +41,15 @@ export function FlagSelector({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between min-w-0"
         >
           {value && FlagComponent ? (
-            <div className="flex items-center gap-2">
-              <FlagComponent className="h-4 w-6 rounded-sm" />
-              <span>{getCountryName(value)}</span>
+            <div className="flex items-center gap-2 min-w-0">
+              <FlagComponent className="h-4 w-6 rounded-sm shrink-0" />
+              <span className="truncate">{getCountryName(value)}</span>
             </div>
           ) : (
-            <span className="text-muted-foreground">{placeholder}</span>
+            <span className="text-muted-foreground truncate">{placeholder}</span>
           )}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>

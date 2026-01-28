@@ -89,11 +89,11 @@ export function PlayerInputSection({
   };
 
   return (
-    <Card>
+    <Card className="min-w-0 overflow-hidden">
       <CardHeader>
         <CardTitle>Player {playerNumber}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 min-w-0">
         {/* Player Name */}
         <FormField
           control={form.control}
@@ -228,12 +228,12 @@ export function PlayerInputSection({
             )}
           </div>
           {flags.map((_, index) => (
-            <div key={index} className="flex items-start gap-2">
+            <div key={index} className="flex items-start gap-2 min-w-0">
               <FormField
                 control={form.control}
                 name={`players.${playerId}.flags.${index}`}
                 render={({ field }) => (
-                  <FormItem className="flex-1">
+                  <FormItem className="flex-1 min-w-0">
                     <FormControl>
                       <FlagSelector
                         value={field.value}

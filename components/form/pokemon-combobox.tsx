@@ -67,9 +67,9 @@ export function PokemonCombobox({
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-3 min-w-0">
       {/* Pokemon Image - Left Side */}
-      <div className="shrink-0 w-24 h-24 border rounded-lg bg-muted/50 flex items-center justify-center overflow-hidden p-2">
+      <div className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 border rounded-lg bg-muted/50 flex items-center justify-center overflow-hidden p-2">
         {selectedPokemon ? (
           <Image
             src={getPokemonSpriteBySid(selectedPokemon.sid)}
@@ -89,21 +89,21 @@ export function PokemonCombobox({
       </div>
 
       {/* Pokemon Selector and Shadow Toggle - Right Side */}
-      <div className="flex-1 space-y-2">
+      <div className="flex-1 min-w-0 space-y-2">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-full justify-between"
+              className="w-full justify-between min-w-0"
             >
               {selectedPokemon ? (
-                <span>{selectedPokemon.speciesName}</span>
+                <span className="truncate">{selectedPokemon.speciesName}</span>
               ) : (
-                <span className="text-muted-foreground">{placeholder}</span>
+                <span className="text-muted-foreground truncate">{placeholder}</span>
               )}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 shrink-0 ml-2">
                 {value && (
                   <X
                     className="h-4 w-4 shrink-0 opacity-50 hover:opacity-100"

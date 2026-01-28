@@ -88,12 +88,12 @@ export function TournamentForm({
 
   return (
     <Form {...form}>
-      <form className="space-y-6">
+      <form className="space-y-6 min-w-0">
         {/* Event Info */}
         <EventInfoSection form={form} />
 
         {/* All Players - Simple List */}
-        <div className="space-y-4">
+        <div className="space-y-4 min-w-0">
           {playerOrder.map((playerId, index) => (
             <PlayerInputSection
               key={playerId}

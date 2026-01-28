@@ -21,14 +21,14 @@ export function TeamInput({ form, playerId }: TeamInputProps) {
   return (
     <div className="space-y-4">
       <FormLabel>Team (6 Pokemon)</FormLabel>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {Array.from({ length: 6 }).map((_, index) => (
           <FormField
             key={index}
             control={form.control}
             name={`players.${playerId}.team.${index}.id`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="min-w-0">
                 <FormLabel className="text-xs text-muted-foreground">
                   Pokemon {index + 1}
                 </FormLabel>

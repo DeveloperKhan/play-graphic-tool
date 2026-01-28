@@ -33,11 +33,11 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
   const showBracketReset = overviewType === "Bracket";
 
   return (
-    <Card>
+    <Card className="min-w-0 overflow-hidden">
       <CardHeader>
         <CardTitle>Event Information</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 min-w-0">
         {/* Event Name */}
         <FormField
           control={form.control}
