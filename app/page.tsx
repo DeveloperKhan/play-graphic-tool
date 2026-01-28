@@ -22,7 +22,7 @@ export default function Home() {
         {/* Form Section - scrolls independently */}
         <div className="flex flex-col min-h-0">
           <h2 className="text-xl sm:text-2xl font-semibold mb-4 shrink-0">Tournament Details</h2>
-          <div className="overflow-y-auto flex-1 pr-2">
+          <div id="form-scroll-container" className="overflow-y-auto flex-1 pr-2">
             <TournamentForm
               playerCount={16}
               onFormChange={(data) => setTournamentData(data)}

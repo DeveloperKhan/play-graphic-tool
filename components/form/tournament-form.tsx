@@ -4,6 +4,7 @@ import * as React from "react";
 import { Form } from "@/components/ui/form";
 import { EventInfoSection } from "./event-info-section";
 import { PlayerInputSection } from "./player-input-section";
+import { FormNavigation } from "./form-navigation";
 import { useTournamentForm } from "@/hooks/use-tournament-form";
 import type { TournamentData } from "@/lib/types";
 
@@ -20,6 +21,71 @@ export function TournamentForm({
   const playerOrder = form.watch("playerOrder");
   const currentPlayerCount = form.watch("playerCount");
   const overviewType = form.watch("overviewType");
+  const players = form.watch("players");
+
+  // Track which sections are open (all collapsed by default)
+  const [openSections, setOpenSections] = React.useState<Set<string>>(() => new Set());
+  const [activeSection, setActiveSection] = React.useState<string | null>(null);
+
+  // Get player names for navigation display
+  const playerNames = React.useMemo(() => {
+    const names: Record<string, string> = {};
+    if (players) {
+      Object.entries(players).forEach(([id, player]) => {
+        names[id] = player?.name?.trim() || "";
+      });
+    }
+    return names;
+  }, [players]);
+
+  const handleOpenChange = (sectionId: string, open: boolean) => {
+    setOpenSections((prev) => {
+      const next = new Set(prev);
+      if (open) {
+        next.add(sectionId);
+      } else {
+        next.delete(sectionId);
+      }
+      return next;
+    });
+  };
+
+  const handleNavigate = (sectionId: string) => {
+    // Open the section if it's a player
+    if (sectionId !== "event-info") {
+      setOpenSections((prev) => new Set(prev).add(sectionId));
+    }
+
+    // Set active section for highlighting
+    setActiveSection(sectionId);
+
+    // Scroll to section within the form's scroll container
+    // Use setTimeout to allow collapsible to open first
+    setTimeout(() => {
+      const elementId = sectionId === "event-info" ? "event-info" : `player-${sectionId}`;
+      const element = document.getElementById(elementId);
+      const scrollContainer = document.getElementById("form-scroll-container");
+
+      if (element && scrollContainer) {
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        const offset = elementRect.top - containerRect.top + scrollContainer.scrollTop;
+
+        scrollContainer.scrollTo({
+          top: offset - 80, // Account for sticky nav height
+          behavior: "smooth",
+        });
+      }
+    }, 50);
+  };
+
+  const handleExpandAll = () => {
+    setOpenSections(new Set(playerOrder));
+  };
+
+  const handleCollapseAll = () => {
+    setOpenSections(new Set());
+  };
 
   // Notify parent of form changes
   React.useEffect(() => {
@@ -89,10 +155,22 @@ export function TournamentForm({
   return (
     <Form {...form}>
       <form className="space-y-6 min-w-0">
-        {/* Event Info */}
-        <EventInfoSection form={form} />
+        {/* Sticky Navigation */}
+        <FormNavigation
+          playerOrder={playerOrder}
+          playerNames={playerNames}
+          activeSection={activeSection}
+          onNavigate={handleNavigate}
+          onExpandAll={handleExpandAll}
+          onCollapseAll={handleCollapseAll}
+        />
 
-        {/* All Players - Simple List */}
+        {/* Event Info */}
+        <div id="event-info">
+          <EventInfoSection form={form} />
+        </div>
+
+        {/* All Players - Collapsible List */}
         <div className="space-y-4 min-w-0">
           {playerOrder.map((playerId, index) => (
             <PlayerInputSection
@@ -100,6 +178,8 @@ export function TournamentForm({
               form={form}
               playerId={playerId}
               playerNumber={index + 1}
+              isOpen={openSections.has(playerId)}
+              onOpenChange={(open) => handleOpenChange(playerId, open)}
             />
           ))}
         </div>

@@ -6,16 +6,20 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { FlagSelector } from "./flag-selector";
 import { TeamInput } from "./team-input";
 import { Button } from "@/components/ui/button";
-import { Plus, X } from "lucide-react";
+import { Plus, X, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { TournamentData, Placement, BracketSide, BracketGroup } from "@/lib/types";
 
 interface PlayerInputSectionProps {
   form: UseFormReturn<TournamentData>;
   playerId: string;
   playerNumber: number;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 const PLACEMENT_OPTIONS: { value: Placement; label: string }[] = [
@@ -57,6 +61,8 @@ export function PlayerInputSection({
   form,
   playerId,
   playerNumber,
+  isOpen,
+  onOpenChange,
 }: PlayerInputSectionProps) {
   const player = form.watch(`players.${playerId}`);
   const overviewType = form.watch("overviewType");
@@ -65,6 +71,8 @@ export function PlayerInputSection({
   if (!player) {
     return null;
   }
+
+  const playerName = player.name?.trim();
 
   const flags = player.flags || [""];
   const canAddFlag = flags.length < 2;
@@ -89,180 +97,189 @@ export function PlayerInputSection({
   };
 
   return (
-    <Card className="min-w-0 overflow-hidden">
-      <CardHeader>
-        <CardTitle>Player {playerNumber}</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6 min-w-0">
-        {/* Player Name */}
-        <FormField
-          control={form.control}
-          name={`players.${playerId}.name`}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Player Name</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter player name"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Conditional fields based on overview type */}
-        {overviewType === "Bracket" ? (
-          // Placement field for Bracket mode
-          <FormField
-            control={form.control}
-            name={`players.${playerId}.placement`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Placement</FormLabel>
-                <Select
-                  onValueChange={(value) => {
-                    // Handle both number and string placements
-                    const placement = isNaN(Number(value))
-                      ? value
-                      : Number(value);
-                    field.onChange(placement as Placement);
-                  }}
-                  value={String(field.value)}
-                >
+    <Collapsible open={isOpen} onOpenChange={onOpenChange}>
+      <Card id={`player-${playerId}`} className="min-w-0 overflow-hidden">
+        <CollapsibleTrigger asChild>
+          <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+            <CardTitle className="flex items-center justify-between">
+              <span>
+                Player {playerNumber}
+                {playerName && (
+                  <span className="font-normal text-muted-foreground ml-2">
+                    — {playerName}
+                  </span>
+                )}
+              </span>
+              <ChevronDown
+                className={cn(
+                  "h-5 w-5 text-muted-foreground transition-transform duration-200",
+                  isOpen && "rotate-180"
+                )}
+              />
+            </CardTitle>
+          </CardHeader>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <CardContent className="space-y-6 min-w-0 pt-0">
+            {/* Player Name */}
+            <FormField
+              control={form.control}
+              name={`players.${playerId}.name`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Player Name</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select placement" />
-                    </SelectTrigger>
+                    <Input placeholder="Enter player name" {...field} />
                   </FormControl>
-                  <SelectContent>
-                    {PLACEMENT_OPTIONS.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        value={String(option.value)}
-                      >
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ) : (
-          // Bracket Side and Group for Usage mode
-          <>
-            <FormField
-              control={form.control}
-              name={`players.${playerId}.bracketSide`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bracket Side</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select bracket side" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {BRACKET_SIDE_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name={`players.${playerId}.group`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Group</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select group" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {availableGroups.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
-        )}
 
-        {/* Flags */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <FormLabel>Country Flags (1-2)</FormLabel>
-            {canAddFlag && (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addFlag}
-              >
-                <Plus className="h-4 w-4 mr-1" />
-                Add Flag
-              </Button>
-            )}
-          </div>
-          {flags.map((_, index) => (
-            <div key={index} className="flex items-start gap-2 min-w-0">
+            {/* Conditional fields based on overview type */}
+            {overviewType === "Bracket" ? (
               <FormField
                 control={form.control}
-                name={`players.${playerId}.flags.${index}`}
+                name={`players.${playerId}.placement`}
                 render={({ field }) => (
-                  <FormItem className="flex-1 min-w-0">
-                    <FormControl>
-                      <FlagSelector
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        placeholder={`Select flag ${index + 1}...`}
-                      />
-                    </FormControl>
+                  <FormItem>
+                    <FormLabel>Placement</FormLabel>
+                    <Select
+                      onValueChange={(value) => {
+                        const placement = isNaN(Number(value))
+                          ? value
+                          : Number(value);
+                        field.onChange(placement as Placement);
+                      }}
+                      value={String(field.value)}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select placement" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {PLACEMENT_OPTIONS.map((option) => (
+                          <SelectItem
+                            key={option.value}
+                            value={String(option.value)}
+                          >
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {canRemoveFlag && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeFlag(index)}
-                  className="mt-0"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
-          ))}
-        </div>
+            ) : (
+              <>
+                <FormField
+                  control={form.control}
+                  name={`players.${playerId}.bracketSide`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Bracket Side</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select bracket side" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {BRACKET_SIDE_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`players.${playerId}.group`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Group</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select group" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {availableGroups.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
 
-        {/* Team */}
-        <TeamInput form={form} playerId={playerId} />
-      </CardContent>
-    </Card>
+            {/* Flags */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <FormLabel>Country Flags (1-2)</FormLabel>
+                {canAddFlag && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addFlag}
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Flag
+                  </Button>
+                )}
+              </div>
+              {flags.map((_, index) => (
+                <div key={index} className="flex items-start gap-2 min-w-0">
+                  <FormField
+                    control={form.control}
+                    name={`players.${playerId}.flags.${index}`}
+                    render={({ field }) => (
+                      <FormItem className="flex-1 min-w-0">
+                        <FormControl>
+                          <FlagSelector
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            placeholder={`Select flag ${index + 1}...`}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {canRemoveFlag && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeFlag(index)}
+                      className="mt-0"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Team */}
+            <TeamInput form={form} playerId={playerId} />
+          </CardContent>
+        </CollapsibleContent>
+      </Card>
+    </Collapsible>
   );
 }
