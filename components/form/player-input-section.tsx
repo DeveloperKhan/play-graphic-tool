@@ -73,6 +73,16 @@ export function PlayerInputSection({
   }
 
   const playerName = player.name?.trim();
+  const placement = player.placement;
+  const bracketSide = player.bracketSide;
+  const group = player.group;
+
+  // Get placement label for display
+  const getPlacementLabel = (p: Placement | undefined) => {
+    if (p === undefined) return "";
+    const option = PLACEMENT_OPTIONS.find((opt) => opt.value === p);
+    return option ? option.label.replace(" Place", "") : String(p);
+  };
 
   const flags = player.flags || [""];
   const canAddFlag = flags.length < 2;
@@ -101,12 +111,22 @@ export function PlayerInputSection({
       <Card id={`player-${playerId}`} className="min-w-0 overflow-hidden">
         <CollapsibleTrigger asChild>
           <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-            <CardTitle className="flex items-center justify-between">
-              <span>
-                Player {playerNumber}
+            <CardTitle className="flex items-center justify-between gap-2">
+              <span className="flex items-center gap-2 min-w-0">
+                <span className="shrink-0">Player {playerNumber}</span>
                 {playerName && (
-                  <span className="font-normal text-muted-foreground ml-2">
+                  <span className="font-normal text-muted-foreground truncate">
                     — {playerName}
+                  </span>
+                )}
+                {overviewType === "Bracket" && placement !== undefined && (
+                  <span className="shrink-0 text-xs font-normal bg-muted px-2 py-0.5 rounded">
+                    {getPlacementLabel(placement)}
+                  </span>
+                )}
+                {overviewType === "Usage" && (bracketSide || group) && (
+                  <span className="shrink-0 text-xs font-normal bg-muted px-2 py-0.5 rounded">
+                    {bracketSide === "Winners" ? "W" : "L"}-{group}
                   </span>
                 )}
               </span>
