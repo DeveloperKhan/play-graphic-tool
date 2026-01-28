@@ -69,18 +69,26 @@ export function PokemonCombobox({
   return (
     <div className="flex gap-3 min-w-0">
       {/* Pokemon Image - Left Side */}
-      <div className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 border rounded-lg bg-muted/50 flex items-center justify-center overflow-hidden p-2">
+      <div className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 border rounded-lg bg-muted/50 flex items-center justify-center overflow-hidden p-2 relative">
         {selectedPokemon ? (
-          <Image
-            src={getPokemonSpriteBySid(selectedPokemon.sid)}
-            alt={selectedPokemon.speciesName}
-            width={80}
-            height={80}
-            className={cn(
-              "object-contain max-w-full max-h-full",
-              isShadow && "brightness-75 contrast-125"
+          <>
+            <Image
+              src={getPokemonSpriteBySid(selectedPokemon.sid)}
+              alt={selectedPokemon.speciesName}
+              width={80}
+              height={80}
+              className="object-contain max-w-full max-h-full"
+            />
+            {isShadow && (
+              <Image
+                src="/assets/shadow_icon.png"
+                alt="Shadow"
+                width={20}
+                height={20}
+                className="absolute bottom-1 right-1 w-4 h-4 sm:w-5 sm:h-5"
+              />
             )}
-          />
+          </>
         ) : (
           <div className="text-muted-foreground text-xs text-center px-2">
             No Pokemon
