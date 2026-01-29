@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, ArrowUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FormNavigationProps {
@@ -12,6 +12,7 @@ interface FormNavigationProps {
   onNavigate: (sectionId: string) => void;
   onExpandAll: () => void;
   onCollapseAll: () => void;
+  onSortPlayers: () => void;
 }
 
 export function FormNavigation({
@@ -21,6 +22,7 @@ export function FormNavigation({
   onNavigate,
   onExpandAll,
   onCollapseAll,
+  onSortPlayers,
 }: FormNavigationProps) {
   return (
     <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b pb-4 mb-4 pt-1">
@@ -45,6 +47,16 @@ export function FormNavigation({
         >
           <ChevronUp className="h-3 w-3 mr-1" />
           Collapse All
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={onSortPlayers}
+          className="text-xs"
+        >
+          <ArrowUpDown className="h-3 w-3 mr-1" />
+          Sort Players
         </Button>
       </div>
 

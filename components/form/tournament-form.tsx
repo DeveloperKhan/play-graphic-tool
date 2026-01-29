@@ -87,6 +87,52 @@ export function TournamentForm({
     setOpenSections(new Set());
   };
 
+  const handleSortPlayers = () => {
+    const currentPlayers = form.getValues("players");
+    const currentOrder = form.getValues("playerOrder");
+
+    // Define sort order for placements
+    const placementOrder: Record<string | number, number> = {
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      "5-8": 5,
+      "9-16": 6,
+      "17-24": 7,
+      "25-32": 8,
+    };
+
+    // Define sort order for groups
+    const groupOrder: Record<string, number> = {
+      A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8,
+      I: 9, J: 10, K: 11, L: 12, M: 13, N: 14, O: 15, P: 16,
+    };
+
+    const sortedOrder = [...currentOrder].sort((a, b) => {
+      const playerA = currentPlayers[a];
+      const playerB = currentPlayers[b];
+
+      if (overviewType === "Bracket") {
+        // Sort by placement
+        const placementA = placementOrder[playerA?.placement ?? "25-32"] ?? 99;
+        const placementB = placementOrder[playerB?.placement ?? "25-32"] ?? 99;
+        return placementA - placementB;
+      } else {
+        // Sort by bracket side (Winners first), then by group
+        const sideA = playerA?.bracketSide === "Winners" ? 0 : 1;
+        const sideB = playerB?.bracketSide === "Winners" ? 0 : 1;
+        if (sideA !== sideB) return sideA - sideB;
+
+        const groupA = groupOrder[playerA?.group ?? "P"] ?? 99;
+        const groupB = groupOrder[playerB?.group ?? "P"] ?? 99;
+        return groupA - groupB;
+      }
+    });
+
+    form.setValue("playerOrder", sortedOrder);
+  };
+
   // Notify parent of form changes
   React.useEffect(() => {
     if (onFormChange) {
@@ -163,6 +209,7 @@ export function TournamentForm({
           onNavigate={handleNavigate}
           onExpandAll={handleExpandAll}
           onCollapseAll={handleCollapseAll}
+          onSortPlayers={handleSortPlayers}
         />
 
         {/* Event Info */}
