@@ -24,7 +24,9 @@ export function PokemonSprite({
     getSpriteByName(name).then(setSpriteUrl);
   }, [name]);
 
-  const shadowSize = Math.min(width, height) * 0.35;
+  // Shadow icon dimensions for player Pokemon
+  const shadowIconWidth = 48.5;
+  const shadowIconHeight = 54.38;
 
   return (
     <div style={{ position: "relative", width, height }}>
@@ -67,8 +69,8 @@ export function PokemonSprite({
             position: "absolute",
             bottom: 0,
             right: 0,
-            width: shadowSize,
-            height: shadowSize,
+            width: shadowIconWidth,
+            height: shadowIconHeight,
           }}
         >
           <Image

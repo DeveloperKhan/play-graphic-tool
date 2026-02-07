@@ -80,54 +80,50 @@ export function TournamentGraphic({ data }: TournamentGraphicProps) {
           </div>
 
           {/* Usage Section - positioned at 352px from top */}
-          <div style={{ position: "absolute", top: 352, left: 32 }}>
+          <div style={{ position: "absolute", top: 352, left: 19 }}>
             <UsageSection
               usageStats={data.usageStats}
               totalPlayers={data.players.length}
             />
           </div>
 
-          {/* Right: Losers bracket column (first 4) */}
-          <div style={{ position: "absolute", top: 42, right: 42, width: 525 }}>
+          {/* Losers Bracket - First half at x=1440, y=169 */}
+          <div style={{ position: "absolute", top: 169, left: 1440 }}>
             <PlayerColumn
               title="Losers Bracket"
               players={losers.slice(0, 4)}
+              startPairIndex={0}
             />
           </div>
 
-          {/* Main section: 3 columns of players - first column at x=19, y=1050 */}
-          <div
-            style={{
-              position: "absolute",
-              top: 1050,
-              left: 19,
-              right: 19,
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
-              gap: 32,
-            }}
-          >
-            {/* Winners Bracket - Column 1 (Groups A-D) */}
+          {/* Losers Bracket - Second half (no header) at x=1440 */}
+          <div style={{ position: "absolute", top: 1115, left: 1440 }}>
+            <PlayerColumn
+              players={losers.slice(4)}
+              startPairIndex={2}
+            />
+          </div>
+
+          {/* Winners Bracket - Column 1 at x=19, y=1050 */}
+          <div style={{ position: "absolute", top: 1050, left: 19 }}>
             <PlayerColumn
               title="Winners Bracket"
               players={winnersCol1}
-            />
-
-            {/* Winners Bracket - Column 2 (Groups E-H) */}
-            <PlayerColumn
-              title="Winners Bracket"
-              players={winnersCol2}
-            />
-
-            {/* Losers Bracket - Column 3 (remaining) */}
-            <PlayerColumn
-              title="Losers Bracket"
-              players={losers.slice(4)}
+              startPairIndex={0}
             />
           </div>
 
-          {/* Footer - positioned at bottom */}
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+          {/* Winners Bracket - Column 2 at x=751, y=1050 */}
+          <div style={{ position: "absolute", top: 1050, left: 751 }}>
+            <PlayerColumn
+              title="Winners Bracket"
+              players={winnersCol2}
+              startPairIndex={Math.ceil(winnersCol1.length / 2)}
+            />
+          </div>
+
+          {/* Footer - positioned at y=1993 */}
+          <div style={{ position: "absolute", top: 1993, left: 0, right: 0 }}>
             <GraphicFooter />
           </div>
         </div>
