@@ -52,8 +52,8 @@ Form Input → React Hook Form → Zod Validation → Live Preview → Export to
 - **No database** - one-time generation tool
 
 ### Rendering Strategy
-- **Preview:** HTML/CSS rendered at 700x700px (scaled)
-- **Export:** HTML/CSS rendered at 2100x2100px using html2canvas
+- **Preview:** Canvas rendered at 700x700px (scaled down from 2100x2100)
+- **Export:** Canvas rendered at 2100x2100px using native Canvas API
 
 ## Phase 0: Project Setup
 
@@ -63,15 +63,14 @@ Form Input → React Hook Form → Zod Validation → Live Preview → Export to
 # Form management
 npm install react-hook-form zod @hookform/resolvers
 
-# Graphics export
-npm install html2canvas
-
 # UI components
 npm install country-flag-icons cmdk
 
 # shadcn/ui setup
 npx shadcn@latest init
 ```
+
+**Note:** No external graphics library needed - using native HTML Canvas API for rendering and export.
 
 **shadcn/ui configuration:**
 - Style: Default
@@ -105,12 +104,7 @@ components/
 │   ├── flag-selector.tsx            # Country flag dropdown
 │   └── bracket-builder-dialog.tsx   # Manual bracket editor
 ├── graphic/
-│   ├── graphic-preview.tsx          # Live preview wrapper
-│   ├── top16-graphic.tsx            # Main 2100x2100 graphic
-│   ├── usage-stats-section.tsx      # Pokemon usage chart
-│   ├── bracket-section.tsx          # Bracket visualization
-│   ├── player-team-row.tsx          # Single player display
-│   └── pokemon-sprite.tsx           # Pokemon image component
+│   └── tournament-canvas.tsx        # Canvas component with render/export
 └── layout/
     ├── mobile-form-tabs.tsx         # Responsive tab/accordion
     └── export-button.tsx            # Export & download handler
@@ -121,7 +115,14 @@ lib/
 ├── pokemon-data.ts                   # Pokemon data utilities
 ├── bracket-generator.ts              # Auto-generate brackets
 ├── usage-calculator.ts               # Calculate Pokemon usage
-└── graphic-exporter.ts               # html2canvas wrapper
+├── graphic-exporter.ts               # Canvas export utilities
+└── canvas/
+    ├── renderer.ts                   # Main canvas rendering engine
+    ├── draw-header.ts                # Draw event header
+    ├── draw-usage.ts                 # Draw usage stats section
+    ├── draw-bracket.ts               # Draw bracket visualization
+    ├── draw-players.ts               # Draw player team rows
+    └── draw-utils.ts                 # Shared drawing utilities
 
 data/
 ├── pokemon.json                      # Pokemon metadata (user provides)
@@ -129,7 +130,8 @@ data/
 
 hooks/
 ├── use-tournament-form.ts            # Form state hook
-└── use-graphic-export.ts             # Export logic hook
+├── use-graphic-export.ts             # Canvas export logic hook
+└── use-image-preloader.ts            # Preload sprites and flags
 
 public/
 └── sprites/                          # Pokemon sprite images
@@ -318,19 +320,43 @@ Features:
 
 Use shadcn's Command + Popover components with custom filtering.
 
-## Phase 3: Graphic Rendering
+## Phase 3: Graphic Rendering (Canvas-Based)
 
-### 3.1 Two-Tier Rendering
+### 3.1 Canvas Rendering Architecture
 
-**Live Preview:**
-- 700x700px (1/3 scale)
-- Debounced updates (300ms)
-- CSS transform for scaling
+**Single Canvas Approach:**
+- One `<canvas>` element at 2100x2100px native resolution
+- Preview: CSS scaled to 700x700px (or responsive container)
+- Export: Direct canvas export at full resolution
+- Debounced re-renders on form changes (300ms)
 
-**Export Render:**
-- 2100x2100px (full resolution)
-- Hidden off-screen
-- Rendered on export only
+**Canvas Rendering Engine:**
+```typescript
+// lib/canvas/renderer.ts
+export class GraphicRenderer {
+  private canvas: HTMLCanvasElement;
+  private ctx: CanvasRenderingContext2D;
+  private imageCache: Map<string, HTMLImageElement>;
+
+  constructor(canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d')!;
+    this.imageCache = new Map();
+  }
+
+  async render(data: TournamentData): Promise<void> {
+    // Clear canvas
+    // Draw background
+    // Draw header section
+    // Draw usage stats OR bracket
+    // Draw player rows
+  }
+
+  async preloadImages(urls: string[]): Promise<void> {
+    // Preload all Pokemon sprites and flags
+  }
+}
+```
 
 ### 3.2 Graphic Layout (2100x2100px)
 
@@ -349,13 +375,45 @@ Use shadcn's Command + Popover components with custom filtering.
 └───────────────────────────────┘
 ```
 
-**File: [components/graphic/top16-graphic.tsx](components/graphic/top16-graphic.tsx)**
+**File: [components/graphic/tournament-canvas.tsx](components/graphic/tournament-canvas.tsx)**
 
-Main graphic component that:
-- Accepts `TournamentData` prop
-- Accepts `width`, `height`, `isExport` props
-- Conditionally renders Usage/Bracket based on `overviewType`
-- Renders all 16 players with teams
+Main canvas component that:
+- Creates and manages the `<canvas>` element
+- Initializes `GraphicRenderer` on mount
+- Re-renders when `TournamentData` changes
+- Exposes `exportToPNG()` method via ref
+- Handles image preloading for sprites and flags
+
+```typescript
+export const TournamentCanvas = forwardRef<TournamentCanvasRef, Props>(
+  ({ data, className }, ref) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const rendererRef = useRef<GraphicRenderer | null>(null);
+
+    useImperativeHandle(ref, () => ({
+      exportToPNG: async () => {
+        return canvasRef.current?.toDataURL('image/png');
+      }
+    }));
+
+    useEffect(() => {
+      if (canvasRef.current) {
+        rendererRef.current = new GraphicRenderer(canvasRef.current);
+        rendererRef.current.render(data);
+      }
+    }, [data]);
+
+    return (
+      <canvas
+        ref={canvasRef}
+        width={2100}
+        height={2100}
+        className={cn("w-full max-w-[700px]", className)}
+      />
+    );
+  }
+);
+```
 
 ### 3.3 Usage Statistics
 
@@ -370,12 +428,13 @@ export function calculateUsageStats(players: Player[]): UsageStats[] {
 }
 ```
 
-**File: [components/graphic/usage-stats-section.tsx](components/graphic/usage-stats-section.tsx)**
+**File: [lib/canvas/draw-usage.ts](lib/canvas/draw-usage.ts)**
 
-Visual design:
-- Horizontal bar chart
-- Pokemon sprite + name
-- Percentage bar (color-coded)
+Visual design (drawn on canvas):
+- Horizontal bar chart using `ctx.fillRect()`
+- Pokemon sprite via `ctx.drawImage()`
+- Text labels with `ctx.fillText()`
+- Percentage bar (color-coded gradients)
 - Count number
 - Top 12 Pokemon only
 
@@ -392,13 +451,13 @@ export function generateBracket(players: Player[]): BracketMatch[] {
 }
 ```
 
-**File: [components/graphic/bracket-section.tsx](components/graphic/bracket-section.tsx)**
+**File: [lib/canvas/draw-bracket.ts](lib/canvas/draw-bracket.ts)**
 
 Visual design:
-- SVG-based rendering
+- Canvas-based rendering with lines and shapes
 - Winners bracket top, Losers bracket bottom
 - Player flags + placement
-- Connecting lines between matches
+- Connecting lines between matches using `ctx.lineTo()`
 - Grand finals reset indicator
 
 **File: [components/form/bracket-builder-dialog.tsx](components/form/bracket-builder-dialog.tsx)**
@@ -416,30 +475,35 @@ Manual editor:
 **File: [lib/graphic-exporter.ts](lib/graphic-exporter.ts)**
 
 ```typescript
-import html2canvas from "html2canvas";
-
 export async function exportGraphic(
-  elementId: string,
+  canvas: HTMLCanvasElement,
   filename: string
 ): Promise<void> {
-  // 1. Get hidden full-res element
-  // 2. Apply export styles
-  // 3. html2canvas with high DPI
-  // 4. Convert to blob
-  // 5. Trigger download
+  // 1. Get canvas data as blob
+  const blob = await new Promise<Blob>((resolve) => {
+    canvas.toBlob((blob) => resolve(blob!), 'image/png', 1.0);
+  });
+
+  // 2. Create download link
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+
+  // 3. Trigger download
+  link.click();
+
+  // 4. Cleanup
+  URL.revokeObjectURL(url);
 }
 ```
 
-**html2canvas config:**
-```typescript
-{
-  scale: 2,           // 2x DPI
-  useCORS: true,      // For Pokemon sprites
-  backgroundColor: "#ffffff",
-  width: 2100,
-  height: 2100,
-}
-```
+**Canvas advantages over html2canvas:**
+- Native browser API, no external dependencies
+- Pixel-perfect output at exact dimensions
+- Better performance for complex graphics
+- Full control over rendering order and anti-aliasing
+- No DOM-to-image conversion quirks
 
 ### 4.2 Export Button
 
@@ -455,12 +519,12 @@ Features:
 **File: [hooks/use-graphic-export.ts](hooks/use-graphic-export.ts)**
 
 Hook that manages:
-- Export state (idle, rendering, exporting, complete)
-- Progress tracking
-- Error handling
-- Validation
+- Canvas ref and export trigger
+- Export state (idle, exporting, complete)
+- Error handling for canvas operations
+- Filename generation
 
-### 4.3 Hidden Render Container
+### 4.3 Canvas Component Integration
 
 **File: [app/page.tsx](app/page.tsx)**
 
@@ -468,23 +532,22 @@ Hook that manages:
 <div>
   {/* Visible UI */}
   <TournamentForm />
-  <GraphicPreview />
 
-  {/* Hidden full-res render */}
-  <div
-    id="export-target"
-    className="fixed -left-[9999px]"
-    style={{ width: 2100, height: 2100 }}
-  >
-    <Top16Graphic
+  {/* Canvas preview - CSS scaled for display */}
+  <div className="w-full max-w-[700px] aspect-square">
+    <TournamentCanvas
+      ref={canvasRef}
       data={formData}
-      width={2100}
-      height={2100}
-      isExport={true}
+      className="w-full h-full"
     />
   </div>
+
+  {/* Export button triggers canvas.toBlob() */}
+  <ExportButton onExport={() => canvasRef.current?.exportToPNG()} />
 </div>
 ```
+
+**Note:** No hidden container needed - the canvas renders at full 2100x2100 resolution and CSS scales it for preview display.
 
 ## Phase 5: Data Integration
 
@@ -522,16 +585,18 @@ export const COUNTRIES = [
 ### 5.3 Asset Optimization
 
 **Strategy:**
-- Use Next.js Image in preview
-- Use regular `<img>` in export (html2canvas compatibility)
-- Preload sprites for selected Pokemon
+- Preload all Pokemon sprites as `HTMLImageElement` before canvas render
+- Cache loaded images in `Map<string, HTMLImageElement>`
+- Use `ctx.drawImage()` for sprite rendering on canvas
+- Apply shadow effect via canvas filters or manual pixel manipulation
 
-**File: [components/graphic/pokemon-sprite.tsx](components/graphic/pokemon-sprite.tsx)**
+**File: [lib/canvas/draw-utils.ts](lib/canvas/draw-utils.ts)**
 
-Component that:
-- Accepts `name`, `isShadow`, `size`, `isExport` props
-- Switches between Next Image and regular img
-- Applies shadow effect via CSS
+Utilities for:
+- `loadImage(url)`: Promise-based image loading
+- `drawSprite(ctx, image, x, y, size, isShadow)`: Draw Pokemon with optional shadow effect
+- `applyShadowEffect(ctx, x, y, w, h)`: Purple overlay for shadow Pokemon
+- `drawFlag(ctx, flagCode, x, y, size)`: Render country flag on canvas
 
 ## Phase 6: Styling & Polish
 
@@ -606,32 +671,31 @@ Components needing skeletons:
 17. ✅ Add validation feedback
 18. ✅ Test full form flow
 
-### Day 5: Graphic Rendering
-19. ✅ Build Top16Graphic container
-20. ✅ Build player team row display
-21. ✅ Build event header
-22. ✅ Add Pokemon sprite rendering
-23. ✅ Test preview scaling
+### Day 5: Canvas Rendering Foundation
+19. ✅ Build TournamentCanvas component
+20. ✅ Create GraphicRenderer class
+21. ✅ Implement image preloading system
+22. ✅ Build draw-header.ts (event header)
+23. ✅ Test canvas scaling for preview
 
-### Day 6: Usage Stats
+### Day 6: Canvas Drawing - Players & Usage
 24. ✅ Implement usage calculator
-25. ✅ Build UsageStatsSection
-26. ✅ Add bar chart visualization
+25. ✅ Build draw-usage.ts (bar chart on canvas)
+26. ✅ Build draw-players.ts (player rows with sprites)
 27. ✅ Test with various data
 
-### Day 7: Bracket System
+### Day 7: Canvas Drawing - Bracket
 28. ✅ Implement bracket generator
-29. ✅ Build BracketSection SVG rendering
-30. ✅ Build BracketBuilderDialog
+29. ✅ Build draw-bracket.ts (bracket lines and boxes)
+30. ✅ Build BracketBuilderDialog (form UI)
 31. ✅ Test bracket validation
 
 ### Day 8: Export & Polish
-32. ✅ Implement graphic exporter
+32. ✅ Implement canvas export (toBlob/toDataURL)
 33. ✅ Build ExportButton
-34. ✅ Add hidden render container
-35. ✅ Add loading states
-36. ✅ Fine-tune styling
-37. ✅ Test export quality
+34. ✅ Add loading states for image preloading
+35. ✅ Fine-tune canvas rendering
+36. ✅ Test export quality at 2100x2100
 
 ## Critical Implementation Details
 
@@ -639,13 +703,13 @@ Components needing skeletons:
 
 1. **[lib/schema.ts](lib/schema.ts)** - Core validation logic; everything depends on this
 2. **[hooks/use-tournament-form.ts](hooks/use-tournament-form.ts)** - Central state management
-3. **[components/graphic/top16-graphic.tsx](components/graphic/top16-graphic.tsx)** - Main rendering component
+3. **[lib/canvas/renderer.ts](lib/canvas/renderer.ts)** - Main canvas rendering engine
 4. **[lib/pokemon-data.ts](lib/pokemon-data.ts)** - Pokemon data access layer
-5. **[lib/graphic-exporter.ts](lib/graphic-exporter.ts)** - Export engine (highest risk)
+5. **[components/graphic/tournament-canvas.tsx](components/graphic/tournament-canvas.tsx)** - Canvas component wrapper
 
 ### Key Technical Decisions
 
-✅ **Rendering:** HTML/CSS → html2canvas (user confirmed)
+✅ **Rendering:** Native HTML Canvas API
 ✅ **Pokemon Data:** Custom data source (user provides JSON)
 ✅ **Persistence:** None (one-time generation)
 ✅ **Flags:** country-flag-icons library
@@ -654,10 +718,11 @@ Components needing skeletons:
 
 ## Risk Mitigation
 
-### Risk 1: html2canvas rendering issues
-- **Test early** with complex graphics
-- **Fallback:** Consider dom-to-image library
-- **Validate:** Sprite rendering, fonts, SVG support
+### Risk 1: Canvas rendering complexity
+- **Modularize** drawing functions for maintainability
+- **Test early** with sprite and text rendering
+- **Validate:** Image loading, font rendering, anti-aliasing
+- **Image preloading:** Cache sprites before render to avoid flickering
 
 ### Risk 2: Performance (96 Pokemon inputs)
 - **Use** React Hook Form (optimized for large forms)
@@ -719,5 +784,5 @@ Components needing skeletons:
 
 **Plan Created:** 2026-01-26
 **Estimated Timeline:** 8 days for MVP
-**Primary Risk:** html2canvas rendering quality
+**Primary Risk:** Canvas image preloading and font rendering
 **Blocker:** Awaiting Figma template for pixel-perfect design
