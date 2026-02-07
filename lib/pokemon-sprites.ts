@@ -40,8 +40,19 @@ async function initLocalCache(): Promise<Set<string>> {
 
 /**
  * Get local sprite path for a Pokemon name
+ * Handles names like "corsola (galarian)" -> "Pokemon=Corsola (Galarian).svg"
  */
 function getLocalSpritePath(name: string): string {
+  // Handle parenthetical forms - keep the parentheses with proper casing
+  if (name.includes("(")) {
+    const match = name.match(/^(.+?)\s*\((.+?)\)$/);
+    if (match) {
+      const baseName = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+      const formName = match[2].charAt(0).toUpperCase() + match[2].slice(1).toLowerCase();
+      return `/assets/graphic/pokemons/Pokemon=${baseName} (${formName}).svg`;
+    }
+  }
+
   // Capitalize first letter of each word for the filename
   const formattedName = name
     .split(/[\s-]+/)
@@ -85,15 +96,28 @@ export async function getSpriteByName(name: string): Promise<string> {
   // First, try to find a local SVG file
   const localCache = await initLocalCache();
 
-  // Extract base name for lookup (handle parenthetical forms)
-  let lookupName = normalizedName;
-  if (normalizedName.includes("(")) {
-    // For forms like "Moltres (Galarian)", try the base name first
-    lookupName = normalizedName.split("(")[0].trim();
+  // Try direct match first (e.g., "stunfisk" or "corsola (galarian)")
+  if (localCache.has(normalizedName)) {
+    return getLocalSpritePath(normalizedName);
   }
 
-  if (localCache.has(lookupName)) {
-    return getLocalSpritePath(lookupName);
+  // Try converting speciesId format (e.g., "corsola_galarian") to display format (e.g., "corsola (galarian)")
+  if (normalizedName.includes("_")) {
+    const parts = normalizedName.split("_");
+    if (parts.length === 2) {
+      const displayFormat = `${parts[0]} (${parts[1]})`;
+      if (localCache.has(displayFormat)) {
+        return getLocalSpritePath(displayFormat);
+      }
+    }
+  }
+
+  // For parenthetical forms, try base name (e.g., "moltres (galarian)" -> "moltres")
+  if (normalizedName.includes("(")) {
+    const baseName = normalizedName.split("(")[0].trim();
+    if (localCache.has(baseName)) {
+      return getLocalSpritePath(baseName);
+    }
   }
 
   // Fall back to API-based lookup
