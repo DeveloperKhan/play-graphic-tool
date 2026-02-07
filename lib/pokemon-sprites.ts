@@ -9,6 +9,47 @@ import type { PokemonMetadata } from "./types";
 // Cache for Pokemon name -> metadata lookup
 let pokemonNameCache: Map<string, PokemonMetadata> | null = null;
 
+// Cache for local Pokemon SVG files
+let localPokemonCache: Set<string> | null = null;
+
+/**
+ * Initialize the local Pokemon SVG cache
+ */
+async function initLocalCache(): Promise<Set<string>> {
+  if (localPokemonCache) {
+    return localPokemonCache;
+  }
+
+  // Fetch the list of available local Pokemon SVGs
+  try {
+    const response = await fetch("/api/pokemon-list");
+    if (response.ok) {
+      const files: string[] = await response.json();
+      localPokemonCache = new Set(
+        files.map((f) => f.replace("Pokemon=", "").replace(".svg", "").toLowerCase())
+      );
+    } else {
+      localPokemonCache = new Set();
+    }
+  } catch {
+    localPokemonCache = new Set();
+  }
+
+  return localPokemonCache;
+}
+
+/**
+ * Get local sprite path for a Pokemon name
+ */
+function getLocalSpritePath(name: string): string {
+  // Capitalize first letter of each word for the filename
+  const formattedName = name
+    .split(/[\s-]+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join("");
+  return `/assets/graphic/pokemons/Pokemon=${formattedName}.svg`;
+}
+
 /**
  * Initialize the Pokemon name cache
  */
@@ -34,12 +75,29 @@ async function initCache(): Promise<Map<string, PokemonMetadata>> {
 /**
  * Get sprite URL for a Pokemon by name or species ID
  * Handles various name formats like "Altaria", "altaria", "Moltres (Galarian)"
+ * First checks for local SVG files, then falls back to API
  */
 export async function getSpriteByName(name: string): Promise<string> {
   if (!name) return "";
 
-  const cache = await initCache();
   const normalizedName = name.toLowerCase().trim();
+
+  // First, try to find a local SVG file
+  const localCache = await initLocalCache();
+
+  // Extract base name for lookup (handle parenthetical forms)
+  let lookupName = normalizedName;
+  if (normalizedName.includes("(")) {
+    // For forms like "Moltres (Galarian)", try the base name first
+    lookupName = normalizedName.split("(")[0].trim();
+  }
+
+  if (localCache.has(lookupName)) {
+    return getLocalSpritePath(lookupName);
+  }
+
+  // Fall back to API-based lookup
+  const cache = await initCache();
 
   // Try direct lookup
   let pokemon = cache.get(normalizedName);

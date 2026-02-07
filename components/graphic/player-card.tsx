@@ -8,59 +8,84 @@ import * as Flags from "country-flag-icons/react/3x2";
 
 interface PlayerCardProps {
   player: GraphicPlayer;
-  compact?: boolean;
 }
 
 // Type for flag component lookup
 type FlagCode = keyof typeof Flags;
 
-function FlagIcon({ code, size = 24 }: { code: string; size?: number }) {
+// Flag size for 2100x2100 canvas: 60x60, no border
+function FlagIcon({ code }: { code: string }) {
+  const size = 60;
   const FlagComponent = Flags[code.toUpperCase() as FlagCode];
 
   if (!FlagComponent) {
     // Fallback for unknown flag codes
     return (
       <div
-        className="bg-gray-400 rounded-sm"
-        style={{ width: size * 1.5, height: size }}
+        style={{
+          width: size,
+          height: size,
+          borderRadius: "50%",
+          backgroundColor: "#9ca3af",
+        }}
       />
     );
   }
 
   return (
-    <FlagComponent
-      style={{ width: size * 1.5, height: size }}
-      className="rounded-sm shadow-sm"
-    />
+    <div
+      style={{
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        overflow: "hidden",
+      }}
+    >
+      <FlagComponent
+        style={{
+          width: size * 1.5,
+          height: size * 1.5,
+          marginLeft: -size * 0.25,
+          marginTop: -size * 0.25,
+        }}
+      />
+    </div>
   );
 }
 
-export function PlayerCard({ player, compact = false }: PlayerCardProps) {
-  const spriteSize = compact ? 32 : 40;
-  const flagSize = compact ? 16 : 20;
+// Dimensions for 2100x2100 canvas
+// Pokemon: 90.88 x 88, Flags: 60x60
+const POKEMON_WIDTH = 90.88;
+const POKEMON_HEIGHT = 88;
 
+export function PlayerCard({ player }: PlayerCardProps) {
   return (
-    <div className="flex flex-col gap-1">
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
       {/* Flag(s) and Player Name */}
-      <div className="flex items-center gap-2">
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         {player.flags.map((flag) => (
-          <FlagIcon key={flag} code={flag} size={flagSize} />
+          <FlagIcon key={flag} code={flag} />
         ))}
         <span
-          className={`text-white font-bold ${compact ? "text-sm" : "text-base"}`}
+          style={{
+            color: "white",
+            fontWeight: 700,
+            fontSize: 32,
+          }}
         >
           {player.name}
         </span>
       </div>
 
       {/* Pokemon Team (6 sprites in a row) */}
-      <div className="flex gap-1">
+      <div style={{ display: "flex", gap: 8 }}>
         {player.team.map((pokemon, index) => (
           <PokemonSprite
             key={`${pokemon.name}-${index}`}
             name={pokemon.name}
             isShadow={pokemon.isShadow}
-            size={spriteSize}
+            width={POKEMON_WIDTH}
+            height={POKEMON_HEIGHT}
           />
         ))}
       </div>

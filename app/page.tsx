@@ -9,9 +9,6 @@ import type { TournamentData } from "@/lib/types";
 export default function Home() {
   const [tournamentData, setTournamentData] = useState<TournamentData | null>(null);
 
-  // Calculate scale to fit graphic in preview area (max 700px width)
-  const graphicScale = 700 / 2100; // ~0.333
-
   return (
     <div className="h-screen bg-background overflow-hidden flex flex-col">
       <div className="px-4 sm:px-6 lg:px-8 py-6 shrink-0">
@@ -38,13 +35,8 @@ export default function Home() {
         {/* Preview Section - shows graphic */}
         <div className="flex flex-col min-h-0">
           <h2 className="text-xl sm:text-2xl font-semibold mb-4 shrink-0">Preview</h2>
-          <div className="border rounded-lg bg-muted/50 flex-1 overflow-auto">
-            <div className="p-4">
-              <TournamentGraphic
-                data={lasVegasData}
-                scale={graphicScale}
-              />
-            </div>
+          <div className="border rounded-lg bg-muted/50 flex-1 overflow-hidden">
+            <TournamentGraphic data={lasVegasData} />
           </div>
           {tournamentData && (
             <div className="text-xs text-muted-foreground space-y-1 mt-4 shrink-0">

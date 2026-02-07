@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect, useState } from "react";
 import { GraphicHeader } from "./graphic-header";
 import { UsageSection } from "./usage-section";
 import { PlayerColumn } from "./player-column";
@@ -7,55 +8,79 @@ import { GraphicFooter } from "./graphic-footer";
 import type { GraphicData } from "@/lib/graphic-data";
 import { getPlayersByColumn } from "@/lib/las-vegas-data";
 
+// Base canvas dimensions
+const CANVAS_WIDTH = 2100;
+const CANVAS_HEIGHT = 2100;
+
 interface TournamentGraphicProps {
   data: GraphicData;
-  scale?: number;
 }
 
-export function TournamentGraphic({ data, scale = 1 }: TournamentGraphicProps) {
+export function TournamentGraphic({ data }: TournamentGraphicProps) {
   const { winnersCol1, winnersCol2, losers } = getPlayersByColumn(data);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
 
-  // The graphic is designed for 2100x2100, but we render at a smaller scale for preview
-  const baseWidth = 2100;
-  const baseHeight = 2100;
+  // Calculate scale based on container width
+  useEffect(() => {
+    const updateScale = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        setScale(containerWidth / CANVAS_WIDTH);
+      }
+    };
+
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, []);
 
   return (
     <div
-      className="relative overflow-hidden"
+      ref={containerRef}
       style={{
-        width: baseWidth * scale,
-        height: baseHeight * scale,
-        transform: `scale(${scale})`,
-        transformOrigin: "top left",
+        width: "100%",
+        aspectRatio: "1 / 1",
+        overflow: "hidden",
+        position: "relative",
       }}
     >
-      {/* Background */}
+      {/* Scaled canvas - renders at 2100x2100 and scales down */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
         style={{
+          width: CANVAS_WIDTH,
+          height: CANVAS_HEIGHT,
+          transform: `scale(${scale})`,
+          transformOrigin: "top left",
           backgroundImage: "url('/assets/graphic/background.png')",
-          width: baseWidth,
-          height: baseHeight,
-        }}
-      />
-
-      {/* Content container */}
-      <div
-        className="relative flex flex-col"
-        style={{
-          width: baseWidth,
-          height: baseHeight,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          position: "absolute",
+          top: 0,
+          left: 0,
         }}
       >
-        {/* Top section: Header + Usage + Losers bracket preview */}
-        <div className="flex">
-          {/* Left: Header and Usage */}
-          <div className="flex-1">
+        {/* Content container */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
+        >
+          {/* Header - logo at x=33, y=87 */}
+          <div style={{ position: "absolute", top: 87, left: 33 }}>
             <GraphicHeader
               eventName={data.eventName}
               eventYear={data.eventYear}
               eventType={data.eventType}
             />
+          </div>
+
+          {/* Usage Section - positioned at 352px from top */}
+          <div style={{ position: "absolute", top: 352, left: 32 }}>
             <UsageSection
               usageStats={data.usageStats}
               totalPlayers={data.players.length}
@@ -63,40 +88,48 @@ export function TournamentGraphic({ data, scale = 1 }: TournamentGraphicProps) {
           </div>
 
           {/* Right: Losers bracket column (first 4) */}
-          <div className="w-[500px] pt-4 pr-4">
+          <div style={{ position: "absolute", top: 42, right: 42, width: 525 }}>
             <PlayerColumn
               title="Losers Bracket"
               players={losers.slice(0, 4)}
-              compact
             />
           </div>
-        </div>
 
-        {/* Main section: 3 columns of players */}
-        <div className="flex-1 grid grid-cols-3 gap-4 px-4 pt-6">
-          {/* Winners Bracket - Column 1 (Groups A-D) */}
-          <PlayerColumn
-            title="Winners Bracket"
-            players={winnersCol1}
-          />
+          {/* Main section: 3 columns of players - first column at x=19, y=1050 */}
+          <div
+            style={{
+              position: "absolute",
+              top: 1050,
+              left: 19,
+              right: 19,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: 32,
+            }}
+          >
+            {/* Winners Bracket - Column 1 (Groups A-D) */}
+            <PlayerColumn
+              title="Winners Bracket"
+              players={winnersCol1}
+            />
 
-          {/* Winners Bracket - Column 2 (Groups E-H) */}
-          <PlayerColumn
-            title="Winners Bracket"
-            players={winnersCol2}
-          />
+            {/* Winners Bracket - Column 2 (Groups E-H) */}
+            <PlayerColumn
+              title="Winners Bracket"
+              players={winnersCol2}
+            />
 
-          {/* Losers Bracket - Column 3 (Groups A-H) */}
-          <PlayerColumn
-            title="Losers Bracket"
-            players={losers.slice(4)}
-            compact
-          />
-        </div>
+            {/* Losers Bracket - Column 3 (remaining) */}
+            <PlayerColumn
+              title="Losers Bracket"
+              players={losers.slice(4)}
+            />
+          </div>
 
-        {/* Footer */}
-        <div className="mt-auto">
-          <GraphicFooter />
+          {/* Footer - positioned at bottom */}
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+            <GraphicFooter />
+          </div>
         </div>
       </div>
     </div>

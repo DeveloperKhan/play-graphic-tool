@@ -6,24 +6,30 @@ import type { GraphicPlayer } from "@/lib/graphic-data";
 interface PlayerColumnProps {
   title: string;
   players: GraphicPlayer[];
-  compact?: boolean;
 }
 
-export function PlayerColumn({ title, players, compact = false }: PlayerColumnProps) {
+export function PlayerColumn({ title, players }: PlayerColumnProps) {
   return (
-    <div className="flex flex-col gap-3">
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {/* Column header */}
-      <p className="text-white/70 text-xs uppercase tracking-wider">
+      <p
+        style={{
+          color: "rgba(255, 255, 255, 0.7)",
+          fontSize: 24,
+          fontWeight: 600,
+          textTransform: "uppercase",
+          letterSpacing: "0.05em",
+        }}
+      >
         {title}
       </p>
 
       {/* Player cards */}
-      <div className={`flex flex-col ${compact ? "gap-2" : "gap-3"}`}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         {players.map((player) => (
           <PlayerCard
             key={`${player.bracketSide}-${player.group}`}
             player={player}
-            compact={compact}
           />
         ))}
       </div>
