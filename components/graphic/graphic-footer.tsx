@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 // Dimensions for 2100x2100 canvas
 const LOGO_WIDTH = 200;
 const LOGO_HEIGHT = 60;
@@ -29,11 +27,15 @@ export function GraphicFooter() {
           height: LOGO_HEIGHT,
         }}
       >
-        <Image
+        <img
           src="/assets/graphic/dracoviz-full-logo.png"
           alt="Dracoviz"
-          fill
-          style={{ objectFit: "contain", objectPosition: "left" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            objectPosition: "left",
+          }}
         />
       </div>
 

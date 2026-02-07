@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getSpriteByName } from "@/lib/pokemon-sprites";
 
@@ -51,13 +50,12 @@ export function UsageItem({
           }}
         >
           {spriteUrl ? (
-            <Image
+            <img
               src={spriteUrl}
               alt={pokemonName}
               width={SPRITE_WIDTH}
               height={SPRITE_HEIGHT}
               style={{ objectFit: "cover" }}
-              unoptimized
             />
           ) : (
             <div
@@ -81,7 +79,7 @@ export function UsageItem({
               height: SHADOW_ICON_HEIGHT,
             }}
           >
-            <Image
+            <img
               src="/assets/shadow_icon.png"
               alt="Shadow"
               width={SHADOW_ICON_WIDTH}
@@ -125,7 +123,7 @@ export function UsageItem({
               whiteSpace: "nowrap",
             }}
           >
-            <Image
+            <img
               src="/assets/shadow_icon.png"
               alt="Shadow"
               width={26.54}

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getSpriteByName } from "@/lib/pokemon-sprites";
 
@@ -42,7 +41,7 @@ export function PokemonSprite({
         }}
       >
         {spriteUrl ? (
-          <Image
+          <img
             src={spriteUrl}
             alt={name}
             width={width}
@@ -50,7 +49,6 @@ export function PokemonSprite({
             style={{
               objectFit: "cover",
             }}
-            unoptimized
           />
         ) : (
           <div
@@ -73,11 +71,14 @@ export function PokemonSprite({
             height: shadowIconHeight,
           }}
         >
-          <Image
+          <img
             src="/assets/shadow_icon.png"
             alt="Shadow"
-            fill
-            style={{ objectFit: "contain" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+            }}
           />
         </div>
       )}

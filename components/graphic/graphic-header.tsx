@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 
 interface GraphicHeaderProps {
@@ -158,7 +157,7 @@ export function GraphicHeader({
           flexShrink: 0,
         }}
       >
-        <Image
+        <img
           src={logoSrc}
           alt={`${eventType} Championship`}
           width={LOGO_WIDTH}

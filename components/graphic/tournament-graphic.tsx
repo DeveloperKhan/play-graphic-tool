@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { GraphicHeader } from "./graphic-header";
 import { UsageSection } from "./usage-section";
 import { PlayerColumn } from "./player-column";
@@ -9,17 +9,27 @@ import type { GraphicData } from "@/lib/graphic-data";
 import { getPlayersByColumn } from "@/lib/las-vegas-data";
 
 // Base canvas dimensions
-const CANVAS_WIDTH = 2100;
-const CANVAS_HEIGHT = 2100;
+export const CANVAS_WIDTH = 2100;
+export const CANVAS_HEIGHT = 2100;
 
 interface TournamentGraphicProps {
   data: GraphicData;
 }
 
-export function TournamentGraphic({ data }: TournamentGraphicProps) {
+export interface TournamentGraphicRef {
+  getCanvasElement: () => HTMLDivElement | null;
+}
+
+export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGraphicProps>(
+  function TournamentGraphic({ data }, ref) {
   const { winnersCol1, winnersCol2, losers } = getPlayersByColumn(data);
   const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+
+  useImperativeHandle(ref, () => ({
+    getCanvasElement: () => canvasRef.current,
+  }));
 
   // Calculate scale based on container width
   useEffect(() => {
@@ -47,19 +57,30 @@ export function TournamentGraphic({ data }: TournamentGraphicProps) {
     >
       {/* Scaled canvas - renders at 2100x2100 and scales down */}
       <div
+        ref={canvasRef}
         style={{
           width: CANVAS_WIDTH,
           height: CANVAS_HEIGHT,
           transform: `scale(${scale})`,
           transformOrigin: "top left",
-          backgroundImage: "url('/assets/graphic/background.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
           position: "absolute",
           top: 0,
           left: 0,
         }}
       >
+        {/* Background image as img element for export compatibility */}
+        <img
+          src="/assets/graphic/background.png"
+          alt=""
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
         {/* Content container */}
         <div
           style={{
@@ -130,4 +151,4 @@ export function TournamentGraphic({ data }: TournamentGraphicProps) {
       </div>
     </div>
   );
-}
+});
