@@ -26,10 +26,29 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [backgroundDataUrl, setBackgroundDataUrl] = useState<string>("/assets/graphic/background.jpg");
 
   useImperativeHandle(ref, () => ({
     getCanvasElement: () => canvasRef.current,
   }));
+
+  // Preload background as base64 for reliable export
+  useEffect(() => {
+    const loadBackground = async () => {
+      try {
+        const response = await fetch("/assets/graphic/background.jpg");
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setBackgroundDataUrl(reader.result as string);
+        };
+        reader.readAsDataURL(blob);
+      } catch {
+        // Keep original URL if conversion fails
+      }
+    };
+    loadBackground();
+  }, []);
 
   // Calculate scale based on container width
   useEffect(() => {
@@ -70,7 +89,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
       >
         {/* Background image as img element for export compatibility */}
         <img
-          src="/assets/graphic/background.png"
+          src={backgroundDataUrl}
           alt=""
           style={{
             position: "absolute",
@@ -143,8 +162,8 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
             />
           </div>
 
-          {/* Footer - positioned at y=1993 */}
-          <div style={{ position: "absolute", top: 1993, left: 0, right: 0 }}>
+          {/* Footer - positioned 20px from bottom */}
+          <div style={{ position: "absolute", top: 1964, left: 0, right: 0 }}>
             <GraphicFooter />
           </div>
         </div>
