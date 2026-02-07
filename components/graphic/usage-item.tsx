@@ -70,14 +70,13 @@ export function UsageItem({
           )}
         </div>
 
-        {/* Shadow icon overlay (if all shadow) - horizontally centered */}
+        {/* Shadow icon overlay (if all shadow) */}
         {isAllShadow && (
           <div
             style={{
               position: "absolute",
               bottom: 0,
-              left: "50%",
-              transform: "translateX(-50%)",
+              right: 0,
               width: SHADOW_ICON_WIDTH,
               height: SHADOW_ICON_HEIGHT,
             }}
