@@ -76,6 +76,7 @@ export function createDefaultTournamentData(
 
   return {
     eventName: "",
+    eventYear: new Date().getFullYear().toString(),
     eventType: "Regional",
     overviewType,
     playerCount: playerCount as 4 | 8 | 16 | 32,

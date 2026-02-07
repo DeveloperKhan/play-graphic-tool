@@ -51,6 +51,7 @@ export type PlayerCount = 4 | 8 | 16 | 32;
 
 export interface TournamentData {
   eventName: string;
+  eventYear: string;
   eventType: EventType;
   overviewType: OverviewType;
   playerCount: PlayerCount; // Number of players in tournament

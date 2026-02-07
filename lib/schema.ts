@@ -57,6 +57,7 @@ export const bracketPairingSchema = z.object({
 export const tournamentSchema = z
   .object({
     eventName: z.string().min(1, "Event name required"),
+    eventYear: z.string().min(4, "Event year required"),
     eventType: z.enum(["Regional", "Generic", "International", "Worlds"]),
     overviewType: z.enum(["Usage", "Bracket", "None"]),
     playerCount: z.union([z.literal(4), z.literal(8), z.literal(16), z.literal(32)]),

@@ -2,7 +2,7 @@
  * Graphic data utilities for parsing CSV and preparing graphic data
  */
 
-import type { BracketSide, BracketGroup, UsageStats } from "./types";
+import type { BracketSide, BracketGroup, UsageStats, TournamentData } from "./types";
 
 export interface GraphicPlayer {
   name: string;
@@ -147,4 +147,52 @@ export function parseCSVData(csvContent: string): GraphicPlayer[] {
   }
 
   return players;
+}
+
+/**
+ * Convert TournamentData (from form) to GraphicData (for graphic rendering)
+ */
+export function convertToGraphicData(tournamentData: TournamentData): GraphicData {
+  const graphicPlayers: GraphicPlayer[] = tournamentData.playerOrder
+    .map((playerId) => {
+      const player = tournamentData.players[playerId];
+      if (!player) return null;
+
+      return {
+        name: player.name || "",
+        bracketSide: player.bracketSide || "Winners",
+        group: player.group || "A",
+        flags: player.flags.filter((f) => f.length > 0),
+        team: player.team.map((pokemon) => ({
+          // Use the speciesId as the name - the sprite component will handle lookup
+          name: pokemon.id,
+          speciesId: pokemon.id,
+          isShadow: pokemon.isShadow,
+        })),
+      };
+    })
+    .filter((p): p is GraphicPlayer => p !== null);
+
+  return {
+    eventName: tournamentData.eventName,
+    eventYear: tournamentData.eventYear,
+    eventType: tournamentData.eventType,
+    players: graphicPlayers,
+    usageStats: calculateUsageStats(graphicPlayers, 12),
+  };
+}
+
+/**
+ * Get players organized by bracket side and column
+ */
+export function getPlayersByColumn(data: GraphicData) {
+  const winnersCol1 = data.players.filter(
+    (p) => p.bracketSide === "Winners" && ["A", "B", "C", "D"].includes(p.group)
+  );
+  const winnersCol2 = data.players.filter(
+    (p) => p.bracketSide === "Winners" && ["E", "F", "G", "H"].includes(p.group)
+  );
+  const losers = data.players.filter((p) => p.bracketSide === "Losers");
+
+  return { winnersCol1, winnersCol2, losers };
 }

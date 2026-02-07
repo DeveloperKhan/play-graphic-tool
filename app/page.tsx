@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { toPng } from "html-to-image";
 import { TournamentForm } from "@/components/form/tournament-form";
 import {
@@ -9,13 +9,19 @@ import {
   CANVAS_HEIGHT,
   type TournamentGraphicRef,
 } from "@/components/graphic/tournament-graphic";
-import { lasVegasData } from "@/lib/las-vegas-data";
+import { convertToGraphicData } from "@/lib/graphic-data";
 import type { TournamentData } from "@/lib/types";
 
 export default function Home() {
   const [tournamentData, setTournamentData] = useState<TournamentData | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const graphicRef = useRef<TournamentGraphicRef>(null);
+
+  // Convert form data to graphic data
+  const graphicData = useMemo(() => {
+    if (!tournamentData) return null;
+    return convertToGraphicData(tournamentData);
+  }, [tournamentData]);
 
   const handleExport = async () => {
     const canvasElement = graphicRef.current?.getCanvasElement();
@@ -88,7 +94,13 @@ export default function Home() {
             </button>
           </div>
           <div className="border rounded-lg bg-muted/50 flex-1 overflow-auto">
-            <TournamentGraphic ref={graphicRef} data={lasVegasData} />
+            {graphicData ? (
+              <TournamentGraphic ref={graphicRef} data={graphicData} />
+            ) : (
+              <div className="flex items-center justify-center h-full text-muted-foreground">
+                Fill in the form to generate a graphic preview
+              </div>
+            )}
           </div>
           {tournamentData && (
             <div className="text-xs text-muted-foreground space-y-1 mt-4 shrink-0">

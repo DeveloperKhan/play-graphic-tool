@@ -47,7 +47,25 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
               <FormLabel>Event Name</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="e.g., EUIC 2024"
+                  placeholder="e.g., Las Vegas Regional"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Event Year */}
+        <FormField
+          control={form.control}
+          name="eventYear"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Event Year</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="e.g., 2026"
                   {...field}
                 />
               </FormControl>

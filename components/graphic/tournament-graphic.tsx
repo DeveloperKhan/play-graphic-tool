@@ -5,8 +5,7 @@ import { GraphicHeader } from "./graphic-header";
 import { UsageSection } from "./usage-section";
 import { PlayerColumn } from "./player-column";
 import { GraphicFooter } from "./graphic-footer";
-import type { GraphicData } from "@/lib/graphic-data";
-import { getPlayersByColumn } from "@/lib/las-vegas-data";
+import { getPlayersByColumn, type GraphicData } from "@/lib/graphic-data";
 
 // Base canvas dimensions
 export const CANVAS_WIDTH = 2100;
