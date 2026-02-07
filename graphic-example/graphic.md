@@ -36,3 +36,7 @@ All pokemon icons can be fetched from `getPokemonSpriteBySid`
 All flags from `import * as flags from "country-flag-icons/react/3x2";`
 Dracoviz logo from ../public/assets/graphic/dracoviz-full-logo.png
 Regional championship logo ..public/assets/graphic/regional.png
+
+## Fonts
+All components: ../public/assets/fonts/Urbane-DemiBold.ttf
+Footer: ../public/assets/fonts/proximanova_regular.otf
