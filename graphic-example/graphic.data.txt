@@ -1,0 +1,17 @@
+Group,Name,Pokemon 1,Pokemon 2,Pokemon 3,Pokemon 4,Pokemon 5,Pokemon 6,Sorted by Usage. Formula in Column I,,,,,
+A Winner,OutOfPoket,Annihilape (Shadow),Gastrodon,Steelix,Altaria (Shadow),Wigglytuff,Scizor (Shadow),Altaria (Shadow),Scizor (Shadow),Wigglytuff,Annihilape (Shadow),Gastrodon,Steelix
+B Winner,Reis2Occasion,Moltres (Galarian),Dusknoir (Shadow),Gastrodon,Empoleon,Stunfisk,Florges,Stunfisk,Dusknoir (Shadow),Empoleon,Florges,Gastrodon,Moltres (Galarian)
+C Winner,Doonebug97,Stunfisk,Primeape (Shadow),Corsola (Galarian),Talonflame (Shadow),Wigglytuff,Cradily,Stunfisk,Wigglytuff,Corsola (Galarian),Cradily,Talonflame (Shadow),Primeape (Shadow)
+D Winner,Auburnnnn,Altaria,Stunfisk,Scizor (Shadow),Furret,Florges,Empoleon,Stunfisk,Altaria,Scizor (Shadow),Furret,Empoleon,Florges
+E Winner,HabibiEX,Furret,Dusknoir (Shadow),Empoleon,Stunfisk,Altaria,Scizor (Shadow),Stunfisk,Altaria,Scizor (Shadow),Furret,Dusknoir (Shadow),Empoleon
+F Winner,RockHaven703,Scizor (Shadow),Bastiodon,Azumarill,Goodra,Marowak (Shadow),Corviknight,Scizor (Shadow),Corviknight,Marowak (Shadow),Azumarill,Goodra,Bastiodon
+G Winner,puffleguy1,Corsola (Galarian),Quagsire (Shadow),Forretress,Clodsire,Moltres (Galarian),Goodra,Corsola (Galarian),Clodsire,Forretress,Goodra,Moltres (Galarian),Quagsire (Shadow)
+H Winner,ItsAXN,Altaria,Cradily,Corviknight,Dusknoir (Shadow),Wigglytuff,Stunfisk,Stunfisk,Altaria,Corviknight,Wigglytuff,Cradily,Dusknoir (Shadow)
+A Loser,Firestar73,Talonflame (Shadow),Corviknight,Stunfisk,Mightyena (Shadow),Cradily,Altaria,Stunfisk,Altaria,Corviknight,Cradily,Talonflame (Shadow),Mightyena (Shadow)
+B Loser,TrentSzcz,Corviknight,Feraligatr,Corsola (Galarian),Forretress,Stunfisk,Wigglytuff,Stunfisk,Corviknight,Wigglytuff,Corsola (Galarian),Feraligatr,Forretress
+C Loser,NHoff,Aurorus (Shadow),Clodsire,Corviknight,Corsola (Galarian),Wigglytuff,Marowak (Shadow),Corviknight,Wigglytuff,Corsola (Galarian),Marowak (Shadow),Clodsire,Aurorus (Shadow)
+D Loser,uoynehc,Steelix (Shadow),Altaria (Shadow),Wigglytuff,Annihilape (Shadow),Scizor (Shadow),Gastrodon,Altaria (Shadow),Scizor (Shadow),Wigglytuff,Annihilape (Shadow),Gastrodon,Steelix (Shadow)
+E Loser,NiteTimeClasher,Furret,Scizor (Shadow),Corviknight,Stunfisk,Altaria,Malamar (Shadow),Stunfisk,Altaria,Scizor (Shadow),Corviknight,Furret,Malamar (Shadow)
+F Loser,Ashtonash,Cradily,Stunfisk,Azumarill,Talonflame (Shadow),Annihilape (Shadow),Furret,Stunfisk,Furret,Annihilape (Shadow),Cradily,Talonflame (Shadow),Azumarill
+G Loser,STUDMUFFINS,Furret,Stunfisk,Corviknight,Altaria,Scizor (Shadow),Florges,Stunfisk,Altaria,Scizor (Shadow),Corviknight,Furret,Florges
+H Lower,Sceptileice25,Annihilape (Shadow),Marowak (Shadow),Feraligatr,Scizor (Shadow),Altaria,Wigglytuff,Altaria,Scizor (Shadow),Wigglytuff,Annihilape (Shadow),Marowak (Shadow),Feraligatr

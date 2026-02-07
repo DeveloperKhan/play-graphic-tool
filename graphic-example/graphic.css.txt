@@ -1,0 +1,7721 @@
+/* 2026 Las Vegas Top 16 Bracket Graphic */
+
+position: relative;
+width: 2100px;
+height: 2100px;
+
+background: #FFFFFF;
+
+
+/* Play_background_2025 1 */
+
+position: absolute;
+width: 2100px;
+height: 2109px;
+left: 0px;
+top: -9px;
+
+background: url(Play_background_orange.png);
+
+
+/* Footer */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 5px 0px;
+
+position: absolute;
+width: 2005px;
+height: 69px;
+left: 55px;
+top: 1993px;
+
+
+
+/* Bracket_Header */
+
+margin: 0 auto;
+width: 328.14px;
+height: 68.13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 24.81%;
+right: -0.1%;
+top: 13.94%;
+bottom: 16.7%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 79.76%;
+top: 0%;
+bottom: 0.01%;
+
+background: #FFFFFF;
+
+
+/* Pokémon GO data insights and infographics. Find more at: */
+
+margin: 0 auto;
+width: 850px;
+height: 45px;
+
+font-family: 'Prompt';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 45px;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Website */
+
+margin: 0 auto;
+width: 229px;
+height: 34.95px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* dracoviz.com */
+
+position: absolute;
+width: 174px;
+height: 30px;
+left: 1359.07px;
+top: 20.03px;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 37px;
+
+color: #FFFFFF;
+
+
+
+/* Bracket_Header */
+
+position: absolute;
+width: 34.95px;
+height: 34.95px;
+left: 1304.07px;
+top: 17.03px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 13.13%;
+right: 13.16%;
+top: 64.26%;
+bottom: 20.54%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0.03%;
+top: 0%;
+bottom: 0.03%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 13.13%;
+right: 13.16%;
+top: 20.51%;
+bottom: 64.29%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.86%;
+top: 0%;
+bottom: 0.03%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 1.37%;
+right: 1.4%;
+top: 47.44%;
+bottom: 47.44%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 47.44%;
+right: 47.44%;
+top: 1.37%;
+bottom: 1.4%;
+
+background: #FFFFFF;
+
+
+/* Twitter */
+
+margin: 0 auto;
+width: 164px;
+height: 31px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* dracoviz */
+
+position: absolute;
+width: 111px;
+height: 30px;
+left: 1649.04px;
+top: 20px;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 37px;
+
+color: #FFFFFF;
+
+
+
+/* Bracket_Header */
+
+position: absolute;
+left: 79.6%;
+right: 18.73%;
+top: 27.54%;
+bottom: 27.55%;
+
+
+
+/* Vector */
+
+position: absolute;
+visibility: hidden;
+left: -0.03%;
+right: 0%;
+top: 0.08%;
+bottom: -0.05%;
+
+background: #FFFFFF;
+
+
+/* X_logo_2023_(white) 1 */
+
+position: absolute;
+left: -0.11%;
+right: 1.42%;
+top: 0%;
+bottom: -16.17%;
+
+background: url(X_logo_2023_(white).png);
+
+
+/* Instagram */
+
+margin: 0 auto;
+width: 182px;
+height: 33.66px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 0;
+
+
+/* _dracoviz */
+
+position: absolute;
+width: 128px;
+height: 30px;
+left: 1877px;
+top: 19.67px;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 37px;
+
+color: #FFFFFF;
+
+
+
+/* Bracket_Header */
+
+position: absolute;
+left: 90.92%;
+right: 7.4%;
+top: 25.61%;
+bottom: 25.61%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 24.27%;
+right: 24.27%;
+top: 24.48%;
+bottom: 24.06%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 70.8%;
+right: 17.32%;
+top: 17.44%;
+bottom: 70.68%;
+
+background: #FFFFFF;
+
+
+/* Bracket_Header */
+
+position: absolute;
+left: -974.45%;
+right: 99.58%;
+top: 879.38%;
+bottom: -981.79%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 24.71%;
+right: 0%;
+top: 13.94%;
+bottom: 16.7%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 79.76%;
+top: 0%;
+bottom: 0.01%;
+
+background: #FFFFFF;
+
+
+/* Lines */
+
+position: absolute;
+width: 1639px;
+height: 1762.17px;
+left: 19px;
+top: 169px;
+
+
+
+/* Losers Lines */
+
+position: absolute;
+width: 218px;
+height: 1762.17px;
+left: 1440px;
+top: 169px;
+
+
+
+/* Rectangle 13 */
+
+position: absolute;
+width: 7.33px;
+height: 381.17px;
+left: 0px;
+top: 1381px;
+
+background: #FF9CD0;
+border-radius: 4.58132px 0px 0px 4.58132px;
+
+
+/* Rectangle 11 */
+
+position: absolute;
+width: 7.33px;
+height: 381.17px;
+left: 0px;
+top: 942px;
+
+background: #FF9CD0;
+border-radius: 4.58132px 0px 0px 4.58132px;
+
+
+/* Rectangle 10 */
+
+position: absolute;
+width: 7.33px;
+height: 381.17px;
+left: 0px;
+top: 503px;
+
+background: #B5FEB0;
+border-radius: 4.58132px 0px 0px 4.58132px;
+
+
+/* Rectangle 9 */
+
+position: absolute;
+width: 7.33px;
+height: 381.17px;
+left: 0px;
+top: 64px;
+
+background: #B5FEB0;
+border-radius: 4.58132px 0px 0px 4.58132px;
+
+
+/* Losers Bracket */
+
+position: absolute;
+width: 218px;
+height: 34px;
+left: 0px;
+top: 0px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 28px;
+line-height: 34px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+
+/* Winners Line 2 */
+
+position: absolute;
+width: 243px;
+height: 881.17px;
+left: 751px;
+top: 1050px;
+
+
+
+/* Rectangle 15 */
+
+position: absolute;
+width: 7.33px;
+height: 381.17px;
+left: 0px;
+top: 500px;
+
+background: #97FFFF;
+border-radius: 4.58132px 0px 0px 4.58132px;
+
+
+/* Rectangle 14 */
+
+position: absolute;
+width: 7.33px;
+height: 381.17px;
+left: 0px;
+top: 61px;
+
+background: #97FFFF;
+border-radius: 4.58132px 0px 0px 4.58132px;
+
+
+/* Winners Bracket */
+
+position: absolute;
+width: 243px;
+height: 34px;
+left: 0px;
+top: 0px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 28px;
+line-height: 34px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+
+/* Winners Line 1 */
+
+position: absolute;
+width: 243px;
+height: 881.17px;
+left: 19px;
+top: 1050px;
+
+
+
+/* Rectangle 17 */
+
+position: absolute;
+width: 7.33px;
+height: 381.17px;
+left: 0px;
+top: 500px;
+
+background: #DDE06F;
+border-radius: 4.58132px 0px 0px 4.58132px;
+
+
+/* Rectangle 16 */
+
+position: absolute;
+width: 7.33px;
+height: 381.17px;
+left: 0px;
+top: 61px;
+
+background: #DDE06F;
+border-radius: 4.58132px 0px 0px 4.58132px;
+
+
+/* Winners Bracket */
+
+position: absolute;
+width: 243px;
+height: 34px;
+left: 0px;
+top: 0px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 28px;
+line-height: 34px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+
+/* Player 16 */
+
+position: absolute;
+left: 69.71%;
+right: 1.57%;
+top: 83.9%;
+bottom: 8.14%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(wigglytuff.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corviknight.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corsola_galar.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(clodsire.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(marowak.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(aurorus.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 16 Name */
+
+position: absolute;
+left: 73.38%;
+right: 1.57%;
+top: 83.43%;
+bottom: 13.1%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 15 */
+
+position: absolute;
+left: 69.76%;
+right: 1.52%;
+top: 73.43%;
+bottom: 18.62%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(scizor.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corviknight.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(furret.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(malamar.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 15 Name */
+
+position: absolute;
+left: 73.43%;
+right: 1.52%;
+top: 72.95%;
+bottom: 23.57%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 60px;
+line-height: 72px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 14 */
+
+position: absolute;
+left: 69.71%;
+right: 1.57%;
+top: 62.95%;
+bottom: 29.1%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corviknight.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(cradily.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(talonflame.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(mightyena.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 14 Name */
+
+position: absolute;
+left: 73.38%;
+right: 1.57%;
+top: 62.48%;
+bottom: 34.05%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 13 */
+
+position: absolute;
+left: 69.76%;
+right: 1.52%;
+top: 52.48%;
+bottom: 39.57%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(scizor.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corviknight.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(furret.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(florges_orange.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 13 Name */
+
+position: absolute;
+left: 73.43%;
+right: 1.52%;
+top: 52%;
+bottom: 44.52%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 12 */
+
+position: absolute;
+left: 69.71%;
+right: 1.57%;
+top: 42%;
+bottom: 50.05%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* Taiwan */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(Taiwannn.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(scizor.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(wigglytuff.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(annihilape.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(gastrodon_east.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(steelix.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 12 Name */
+
+position: absolute;
+left: 73.38%;
+right: 1.57%;
+top: 41.52%;
+bottom: 55%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 11 */
+
+position: absolute;
+left: 69.76%;
+right: 1.52%;
+top: 31.52%;
+bottom: 60.52%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* Mexico */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2409-flag-of-mexico.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(cradily.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(annihilape.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(furret.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(talonflame.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(azumarill.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 11 Name */
+
+position: absolute;
+left: 73.43%;
+right: 1.52%;
+top: 31.05%;
+bottom: 65.48%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 10 */
+
+position: absolute;
+left: 69.71%;
+right: 1.57%;
+top: 21.05%;
+bottom: 71%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(wigglytuff.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corviknight.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corsola_galar.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(feraligatr.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(forretress.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 10 Name */
+
+position: absolute;
+left: 73.38%;
+right: 1.57%;
+top: 20.57%;
+bottom: 75.95%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 9 */
+
+position: absolute;
+left: 69.76%;
+right: 1.52%;
+top: 10.57%;
+bottom: 81.48%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(scizor.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(wigglytuff.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(annihilape.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(marowak.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(feraligatr.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 9 Name */
+
+position: absolute;
+left: 73.43%;
+right: 1.52%;
+top: 10.1%;
+bottom: 86.43%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 8 */
+
+position: absolute;
+left: 36.9%;
+right: 34.38%;
+top: 83.9%;
+bottom: 8.14%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(scizor.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corviknight.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(marowak.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(azumarill.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(goodra.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(bastiodon.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 8 Name */
+
+position: absolute;
+left: 40.57%;
+right: 34.38%;
+top: 83.43%;
+bottom: 13.1%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 7 */
+
+position: absolute;
+left: 36.95%;
+right: 34.33%;
+top: 73.43%;
+bottom: 18.62%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(scizor.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(furret.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(empoleon.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(florges_orange.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 7 Name */
+
+position: absolute;
+left: 40.62%;
+right: 34.33%;
+top: 72.95%;
+bottom: 23.57%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 6 */
+
+position: absolute;
+left: 36.9%;
+right: 34.38%;
+top: 62.95%;
+bottom: 29.1%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(wigglytuff.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corviknight.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(cradily.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(dusknoir.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 6 Name */
+
+position: absolute;
+left: 40.57%;
+right: 34.38%;
+top: 62.48%;
+bottom: 34.05%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 5 */
+
+position: absolute;
+left: 36.95%;
+right: 34.33%;
+top: 52.48%;
+bottom: 39.57%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(dusknoir.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(empoleon.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(florges_orange.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(gastrodon_east.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(moltres_galar.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 5 Name */
+
+position: absolute;
+left: 40.62%;
+right: 34.33%;
+top: 52%;
+bottom: 44.52%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 4 */
+
+position: absolute;
+left: 2.05%;
+right: 69.24%;
+top: 83.9%;
+bottom: 8.14%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 4px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(scizor.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(furret.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(dusknoir.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(empoleon.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 4 Name */
+
+position: absolute;
+left: 5.71%;
+right: 69.24%;
+top: 83.43%;
+bottom: 13.1%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 3 */
+
+position: absolute;
+left: 2.1%;
+right: 69.19%;
+top: 73.43%;
+bottom: 18.62%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 5px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* Flags */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* Pokemon */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(wigglytuff.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corsola_galar.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(cradily.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(talonflame.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(primeape.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 3 Name */
+
+position: absolute;
+left: 5.76%;
+right: 69.19%;
+top: 72.95%;
+bottom: 23.57%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 2 */
+
+position: absolute;
+left: 2.05%;
+right: 69.24%;
+top: 62.95%;
+bottom: 29.1%;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 2px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* #Flag */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corsola_galar.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(clodsire.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(forretress.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(goodra.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(moltres_galar.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(quagsire.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 2 Name */
+
+position: absolute;
+left: 5.71%;
+right: 69.24%;
+top: 62.48%;
+bottom: 34.05%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Player 1 */
+
+position: absolute;
+width: 603px;
+height: 167px;
+left: 43px;
+top: 1102px;
+
+
+
+/* Description */
+
+position: absolute;
+visibility: hidden;
+left: 0%;
+right: 90.88%;
+top: 104.19%;
+bottom: -20.96%;
+
+font-family: 'Proxima Nova';
+font-style: normal;
+font-weight: 400;
+font-size: 22.6px;
+line-height: 28px;
+/* identical to box height */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Placement Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 10px;
+gap: 10px;
+
+position: absolute;
+visibility: hidden;
+width: 53px;
+height: 53px;
+left: 528px;
+top: 5px;
+
+
+
+/* Flags */
+
+position: absolute;
+width: 60px;
+height: 60px;
+left: 0px;
+top: 0px;
+
+
+
+/* USA */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2490-flag-of-united-states.png);
+
+
+/* #Pokemon1 */
+
+position: absolute;
+left: 0%;
+right: 84.93%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon2 */
+
+position: absolute;
+left: 16.99%;
+right: 67.94%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(scizor.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon3 */
+
+position: absolute;
+left: 33.97%;
+right: 50.96%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(wigglytuff.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon4 */
+
+position: absolute;
+left: 50.96%;
+right: 33.97%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(annihilape.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon5 */
+
+position: absolute;
+left: 67.94%;
+right: 16.99%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(gastrodon_east.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* #Pokemon6 */
+
+position: absolute;
+left: 84.93%;
+right: 0%;
+top: 47.31%;
+bottom: 0%;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(steelix.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Player 1 Name */
+
+position: absolute;
+left: 5.71%;
+right: 69.24%;
+top: 52%;
+bottom: 44.52%;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 61px;
+line-height: 73px;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Top Cut Usage Line */
+
+position: absolute;
+width: 1381px;
+height: 653px;
+left: 19px;
+top: 352px;
+
+
+
+/* Line */
+
+position: absolute;
+width: 1146px;
+height: 636px;
+left: 0px;
+top: 17px;
+
+
+
+/* Rectangle 12 */
+
+position: absolute;
+width: 4px;
+height: 636px;
+left: 0px;
+top: 0px;
+
+background: #15FFA0;
+
+
+/* Rectangle 13 */
+
+position: absolute;
+width: 4px;
+height: 1142px;
+left: 4px;
+top: 0px;
+
+background: #15FFA0;
+transform: rotate(-90deg);
+
+
+/* Top Cut Usage */
+
+position: absolute;
+width: 215px;
+height: 34px;
+left: 1166px;
+top: 0px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 28px;
+line-height: 34px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+
+/* Pokemon Usage */
+
+position: absolute;
+width: 1356.65px;
+height: 581px;
+left: 43px;
+top: 393px;
+
+
+
+/* Usage 12 */
+
+position: absolute;
+left: 84.56%;
+right: 0%;
+top: 56.45%;
+bottom: 0%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 106px;
+height: 41px;
+left: calc(50% - 106px/2 + 0.28px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(florges_orange.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 11 */
+
+position: absolute;
+left: 67.65%;
+right: 16.91%;
+top: 56.45%;
+bottom: 0%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 106px;
+height: 41px;
+left: calc(50% - 106px/2 + 0.28px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(empoleon.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 10 */
+
+position: absolute;
+left: 50.74%;
+right: 33.82%;
+top: 56.45%;
+bottom: 0%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 106px;
+height: 41px;
+left: calc(50% - 106px/2 + 0.28px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(dusknoir.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 9 */
+
+position: absolute;
+left: 33.82%;
+right: 50.74%;
+top: 56.45%;
+bottom: 0%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 117px;
+height: 41px;
+left: calc(50% - 117px/2 - 5.22px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(cradily.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 8 */
+
+position: absolute;
+left: 16.91%;
+right: 67.65%;
+top: 56.45%;
+bottom: 0%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 117px;
+height: 41px;
+left: calc(50% - 117px/2 - 5.22px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corsola_galar.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 7 */
+
+position: absolute;
+left: 0%;
+right: 84.56%;
+top: 56.45%;
+bottom: 0%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 117px;
+height: 41px;
+left: calc(50% - 117px/2 - 5.22px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(annihilape.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 6 */
+
+position: absolute;
+left: 84.56%;
+right: 0%;
+top: 0%;
+bottom: 56.45%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 105px;
+height: 41px;
+left: calc(50% - 105px/2 + 0.78px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(furret.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 5 */
+
+position: absolute;
+left: 67.65%;
+right: 16.91%;
+top: 0%;
+bottom: 56.45%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 116px;
+height: 41px;
+left: calc(50% - 116px/2 - 4.72px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(corviknight.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 4 */
+
+position: absolute;
+left: 50.74%;
+right: 33.82%;
+top: 0%;
+bottom: 56.45%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 116px;
+height: 41px;
+left: calc(50% - 116px/2 - 4.72px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(wigglytuff.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 3 */
+
+position: absolute;
+left: 33.82%;
+right: 50.74%;
+top: 0%;
+bottom: 56.45%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 119px;
+height: 41px;
+left: calc(50% - 119px/2 - 6.22px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(scizor.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 2 */
+
+position: absolute;
+left: 16.91%;
+right: 67.65%;
+top: 0%;
+bottom: 56.45%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+width: 85.54px;
+height: 30px;
+left: calc(50% - 85.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Shadow Icon */
+
+width: 26.54px;
+height: 30px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group */
+
+position: absolute;
+left: 0.01%;
+right: 79.2%;
+top: 17.05%;
+bottom: 52.85%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 1.8%;
+right: 83.11%;
+top: 19.42%;
+bottom: 54.42%;
+
+background: #9065FF;
+
+
+/* Vector */
+
+position: absolute;
+left: 0.01%;
+right: 79.2%;
+top: 17.05%;
+bottom: 52.85%;
+
+background: #FFFFFF;
+
+
+/* Group */
+
+position: absolute;
+left: 6.56%;
+right: 11.59%;
+top: 0%;
+bottom: 2.82%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 8.44%;
+right: 13.44%;
+top: 3.14%;
+bottom: 4.36%;
+
+background: #9065FF;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.56%;
+right: 11.59%;
+top: 0%;
+bottom: 2.82%;
+
+background: #FFFFFF;
+
+
+/* Group */
+
+position: absolute;
+left: 75.96%;
+right: 0.02%;
+top: 71.79%;
+bottom: -0.02%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 77.75%;
+right: 1.8%;
+top: 74.3%;
+bottom: 1.66%;
+
+background: #9065FF;
+
+
+/* Vector */
+
+position: absolute;
+left: 75.96%;
+right: 0.02%;
+top: 71.79%;
+bottom: -0.02%;
+
+background: #FFFFFF;
+
+
+/* Shadow Text */
+
+width: 54px;
+height: 26px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 22px;
+line-height: 26px;
+text-align: right;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Usage */
+
+position: absolute;
+width: 116px;
+height: 41px;
+left: calc(50% - 116px/2 - 4.72px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(altaria.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Usage 1 */
+
+position: absolute;
+left: 0%;
+right: 84.56%;
+top: 0%;
+bottom: 56.45%;
+
+
+
+/* Shadow Usage */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+position: absolute;
+visibility: hidden;
+width: 96.54px;
+height: 30px;
+left: calc(50% - 96.54px/2 - 0.45px);
+top: 254px;
+
+
+
+/* Usage */
+
+position: absolute;
+width: 115px;
+height: 41px;
+left: calc(50% - 115px/2 - 4.22px);
+top: 212px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 41px;
+/* identical to box height */
+text-align: right;
+
+color: #FFFFFF;
+
+
+
+/* Pokemon */
+
+position: absolute;
+width: 209.44px;
+height: 200px;
+left: 0px;
+top: 0px;
+
+
+
+/* BG */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: #C1D4FF;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+left: 2.25%;
+right: 2.25%;
+top: 2.25%;
+bottom: 2.25%;
+
+background: url(stunfisk.png);
+border: 3px solid #FFFFFF;
+
+
+/* draco_icon_shadow 1 */
+
+position: absolute;
+visibility: hidden;
+left: 44.94%;
+right: 1.69%;
+top: 39.33%;
+bottom: -1.12%;
+
+background: url(draco_icon_shadow.png);
+
+
+/* Title */
+
+position: absolute;
+width: 821px;
+height: 264px;
+left: 311px;
+top: 90px;
+
+
+
+/* Las Vegas Regional Championships */
+
+position: absolute;
+width: 783px;
+height: 228px;
+left: 19px;
+top: 36px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 63px;
+line-height: 76px;
+text-align: center;
+letter-spacing: 0.3em;
+text-transform: uppercase;
+
+color: #FFFFFF;
+
+
+
+/* 2026 POKÉMON GO CHAMPIONSHIP SERIES */
+
+position: absolute;
+width: 822px;
+height: 36px;
+left: 0px;
+top: 0px;
+
+font-family: 'Urbane';
+font-style: normal;
+font-weight: 600;
+font-size: 30px;
+line-height: 36px;
+/* identical to box height */
+letter-spacing: 0.15em;
+
+color: #FFFFFF;
+
+
+
+/* Championship Logo */
+
+position: absolute;
+width: 255px;
+height: 253px;
+left: 33px;
+top: 101px;
+
+
+
+/* Pokemon_International_Championship_allmode 1 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(2025 Logo.png);
