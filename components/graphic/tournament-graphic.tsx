@@ -17,7 +17,6 @@ interface TournamentGraphicProps {
 
 export interface TournamentGraphicRef {
   getCanvasElement: () => HTMLDivElement | null;
-  waitForBackground: () => Promise<void>;
 }
 
 export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGraphicProps>(
@@ -26,43 +25,10 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
-  const [backgroundDataUrl, setBackgroundDataUrl] = useState<string>("/assets/graphic/background.jpg");
-  const [backgroundReady, setBackgroundReady] = useState(false);
-  const backgroundPromiseRef = useRef<{ resolve: () => void } | null>(null);
 
   useImperativeHandle(ref, () => ({
     getCanvasElement: () => canvasRef.current,
-    waitForBackground: () => {
-      if (backgroundReady) {
-        return Promise.resolve();
-      }
-      return new Promise<void>((resolve) => {
-        backgroundPromiseRef.current = { resolve };
-      });
-    },
   }));
-
-  // Preload background as base64 for reliable export
-  useEffect(() => {
-    const loadBackground = async () => {
-      try {
-        const response = await fetch("/assets/graphic/background.jpg");
-        const blob = await response.blob();
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setBackgroundDataUrl(reader.result as string);
-          setBackgroundReady(true);
-          backgroundPromiseRef.current?.resolve();
-        };
-        reader.readAsDataURL(blob);
-      } catch {
-        // Keep original URL if conversion fails
-        setBackgroundReady(true);
-        backgroundPromiseRef.current?.resolve();
-      }
-    };
-    loadBackground();
-  }, []);
 
   // Calculate scale based on container width
   useEffect(() => {
@@ -101,16 +67,16 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
           left: 0,
         }}
       >
-        {/* Background image as img element for export compatibility */}
+        {/* Background image */}
         <img
-          src={backgroundDataUrl}
+          src="/assets/graphic/background.jpg"
           alt=""
           style={{
             position: "absolute",
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
+            width: CANVAS_WIDTH,
+            height: CANVAS_HEIGHT,
             objectFit: "cover",
           }}
         />
