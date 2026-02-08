@@ -17,6 +17,7 @@ interface TournamentGraphicProps {
 
 export interface TournamentGraphicRef {
   getCanvasElement: () => HTMLDivElement | null;
+  waitForBackground: () => Promise<void>;
 }
 
 export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGraphicProps>(
@@ -26,9 +27,19 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
   const canvasRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [backgroundDataUrl, setBackgroundDataUrl] = useState<string>("/assets/graphic/background.jpg");
+  const [backgroundReady, setBackgroundReady] = useState(false);
+  const backgroundPromiseRef = useRef<{ resolve: () => void } | null>(null);
 
   useImperativeHandle(ref, () => ({
     getCanvasElement: () => canvasRef.current,
+    waitForBackground: () => {
+      if (backgroundReady) {
+        return Promise.resolve();
+      }
+      return new Promise<void>((resolve) => {
+        backgroundPromiseRef.current = { resolve };
+      });
+    },
   }));
 
   // Preload background as base64 for reliable export
@@ -40,10 +51,14 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
         const reader = new FileReader();
         reader.onloadend = () => {
           setBackgroundDataUrl(reader.result as string);
+          setBackgroundReady(true);
+          backgroundPromiseRef.current?.resolve();
         };
         reader.readAsDataURL(blob);
       } catch {
         // Keep original URL if conversion fails
+        setBackgroundReady(true);
+        backgroundPromiseRef.current?.resolve();
       }
     };
     loadBackground();

@@ -5,8 +5,6 @@ import { toPng } from "html-to-image";
 import { TournamentForm } from "@/components/form/tournament-form";
 import {
   TournamentGraphic,
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
   type TournamentGraphicRef,
 } from "@/components/graphic/tournament-graphic";
 import { convertToGraphicData } from "@/lib/graphic-data";
@@ -29,6 +27,9 @@ export default function Home() {
 
     setIsExporting(true);
     try {
+      // Wait for background image to be loaded as base64
+      await graphicRef.current?.waitForBackground();
+
       // Store original transform and temporarily remove it for capture
       const originalTransform = canvasElement.style.transform;
       canvasElement.style.transform = "none";
@@ -49,10 +50,12 @@ export default function Home() {
       await new Promise((resolve) => requestAnimationFrame(resolve));
 
       const dataUrl = await toPng(canvasElement, {
-        width: CANVAS_WIDTH,
-        height: CANVAS_HEIGHT,
-        pixelRatio: 1,
-        cacheBust: false, // Must be false - true adds timestamps that break image URLs
+        // Render at 2x resolution for crisp SVGs and images on social media/retina displays
+        // Output will be 4200x4200 which platforms will downsample as needed
+        pixelRatio: 2,
+        // Don't add cache-busting timestamps - breaks image URLs
+        cacheBust: false,
+        // Skip auto-scaling since we're setting pixelRatio explicitly
         skipAutoScale: true,
       });
 
