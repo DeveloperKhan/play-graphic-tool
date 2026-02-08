@@ -86,10 +86,10 @@ export function createDefaultTournamentData(
     bracketMatches: [],
     bracketPairings: [],
     columnWrappers: {
-      winners1: { enabled: false, text: "" },
-      winners2: { enabled: false, text: "" },
-      losers1: { enabled: false, text: "" },
-      losers2: { enabled: false, text: "" },
+      winners1: { mode: "lines", text: "" },
+      winners2: { mode: "lines", text: "" },
+      losers1: { mode: "lines", text: "" },
+      losers2: { mode: "lines", text: "" },
     },
   };
 }

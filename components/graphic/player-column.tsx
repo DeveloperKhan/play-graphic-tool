@@ -3,13 +3,14 @@
 import { PlayerCard } from "./player-card";
 import { ColumnWrapper } from "./column-wrapper";
 import type { GraphicPlayer } from "@/lib/graphic-data";
+import type { ColumnDisplayMode } from "@/lib/types";
 
 interface PlayerColumnProps {
   title?: string;
   players: GraphicPlayer[];
   startPairIndex?: number;
   wrapper?: {
-    enabled: boolean;
+    mode: ColumnDisplayMode;
     text: string;
   };
 }
@@ -53,9 +54,42 @@ export function PlayerColumn({
 
   // Get the wrapper color (uses the first pair's color)
   const wrapperColor = PAIR_COLORS[startPairIndex % PAIR_COLORS.length];
+  const mode = wrapper?.mode ?? "lines";
 
-  // If wrapper is enabled, render all players without individual pair lines
-  if (wrapper?.enabled) {
+  // Hidden mode - render players without any lines or wrapper
+  if (mode === "hidden") {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        {/* Column header - only show if title is provided */}
+        {title && (
+          <p
+            style={{
+              color: "white",
+              fontSize: 28,
+              fontFamily: "Urbane, sans-serif",
+              fontWeight: 600,
+              letterSpacing: "0.05em",
+            }}
+          >
+            {title}
+          </p>
+        )}
+
+        {/* Players without any lines - add margin to maintain alignment */}
+        <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP, marginLeft: PAIR_LINE_OFFSET }}>
+          {players.map((player) => (
+            <PlayerCard
+              key={`${player.bracketSide}-${player.group}`}
+              player={player}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Wrapper mode - render all players with L-shaped wrapper
+  if (mode === "wrapper") {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         {/* Column header - only show if title is provided */}
@@ -74,7 +108,7 @@ export function PlayerColumn({
         )}
 
         {/* Wrapped players - no individual pair lines, add margin to match pair line offset */}
-        <ColumnWrapper text={wrapper.text} color={wrapperColor}>
+        <ColumnWrapper text={wrapper?.text ?? ""} color={wrapperColor}>
           <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP, marginLeft: PAIR_LINE_OFFSET }}>
             {players.map((player) => (
               <PlayerCard
@@ -88,7 +122,7 @@ export function PlayerColumn({
     );
   }
 
-  // Default rendering with individual pair lines
+  // Lines mode (default) - render with individual pair lines
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {/* Column header - only show if title is provided */}

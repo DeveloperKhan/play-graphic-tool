@@ -8,9 +8,9 @@ import {
   FormControl,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import type { TournamentData, ColumnId } from "@/lib/types";
+import type { TournamentData, ColumnId, ColumnDisplayMode } from "@/lib/types";
 import { PAIR_COLORS } from "@/components/graphic/player-column";
 
 interface ColumnWrapperSectionProps {
@@ -34,9 +34,9 @@ export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg">Column Wrappers</CardTitle>
+        <CardTitle className="text-lg">Column Display</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Enable L-shaped borders around player columns with custom text labels
+          Choose how to display player columns: pair lines, L-shaped wrapper, or hidden
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -67,7 +67,7 @@ function ColumnWrapperField({
   label,
   colorIndex,
 }: ColumnWrapperFieldProps) {
-  const enabled = form.watch(`columnWrappers.${columnId}.enabled`);
+  const mode = form.watch(`columnWrappers.${columnId}.mode`);
   const color = PAIR_COLORS[colorIndex];
 
   return (
@@ -78,29 +78,43 @@ function ColumnWrapperField({
         style={{ backgroundColor: color }}
       />
 
-      {/* Enable toggle */}
-      <FormField
-        control={form.control}
-        name={`columnWrappers.${columnId}.enabled`}
-        render={({ field }) => (
-          <FormItem className="flex items-center gap-2 space-y-0">
-            <FormControl>
-              <Switch
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-
       {/* Column label */}
       <FormLabel className="text-sm font-medium min-w-[160px]">
         {label}
       </FormLabel>
 
-      {/* Text input - only shown when enabled */}
-      {enabled && (
+      {/* Mode selector */}
+      <FormField
+        control={form.control}
+        name={`columnWrappers.${columnId}.mode`}
+        render={({ field }) => (
+          <FormItem className="flex items-center gap-2 space-y-0">
+            <FormControl>
+              <ToggleGroup
+                type="single"
+                value={field.value}
+                onValueChange={(value) => {
+                  if (value) field.onChange(value as ColumnDisplayMode);
+                }}
+                className="justify-start"
+              >
+                <ToggleGroupItem value="lines" aria-label="Show pair lines" className="text-xs px-3">
+                  Lines
+                </ToggleGroupItem>
+                <ToggleGroupItem value="wrapper" aria-label="Show wrapper" className="text-xs px-3">
+                  Wrapper
+                </ToggleGroupItem>
+                <ToggleGroupItem value="hidden" aria-label="Hide all" className="text-xs px-3">
+                  Hidden
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </FormControl>
+          </FormItem>
+        )}
+      />
+
+      {/* Text input - only shown when wrapper mode */}
+      {mode === "wrapper" && (
         <FormField
           control={form.control}
           name={`columnWrappers.${columnId}.text`}

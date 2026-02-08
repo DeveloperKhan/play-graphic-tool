@@ -55,7 +55,7 @@ export const bracketPairingSchema = z.object({
 
 // Column wrapper config schema
 export const columnWrapperConfigSchema = z.object({
-  enabled: z.boolean(),
+  mode: z.enum(["lines", "wrapper", "hidden"]),
   text: z.string(),
 });
 

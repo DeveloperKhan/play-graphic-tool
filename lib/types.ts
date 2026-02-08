@@ -52,8 +52,11 @@ export type PlayerCount = 4 | 8 | 16 | 32;
 // Column identifiers for wrapper configuration
 export type ColumnId = "winners1" | "winners2" | "losers1" | "losers2";
 
+// Column display modes: lines (default pair lines), wrapper (L-shaped border), hidden (no lines)
+export type ColumnDisplayMode = "lines" | "wrapper" | "hidden";
+
 export interface ColumnWrapperConfig {
-  enabled: boolean;
+  mode: ColumnDisplayMode;
   text: string;
 }
 
