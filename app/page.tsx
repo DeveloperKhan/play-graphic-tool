@@ -33,6 +33,18 @@ export default function Home() {
       const originalTransform = canvasElement.style.transform;
       canvasElement.style.transform = "none";
 
+      // Wait for all images in the canvas to be fully loaded
+      const images = canvasElement.querySelectorAll("img");
+      await Promise.all(
+        Array.from(images).map((img) => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve; // Continue even if image fails
+          });
+        })
+      );
+
       // Wait a frame for the transform change to apply
       await new Promise((resolve) => requestAnimationFrame(resolve));
 

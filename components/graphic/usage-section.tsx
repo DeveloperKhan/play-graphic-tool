@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { UsageStats } from "@/lib/types";
 import { UsageItem } from "./usage-item";
 
@@ -26,8 +25,8 @@ export function UsageSection({ usageStats, totalPlayers }: UsageSectionProps) {
         height: SVG_HEIGHT,
       }}
     >
-      {/* Usage line SVG wrapper */}
-      <Image
+      {/* Usage line SVG wrapper - using regular img for export compatibility */}
+      <img
         src="/assets/graphic/usage-line.svg"
         alt="Top Cut Usage"
         width={SVG_WIDTH}

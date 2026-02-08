@@ -12,6 +12,60 @@ let pokemonNameCache: Map<string, PokemonMetadata> | null = null;
 // Cache for local Pokemon SVG files
 let localPokemonCache: Set<string> | null = null;
 
+// Forms that are visually distinct and should NOT fall back to base sprite
+// Regional forms, Deoxys forms, type variants, etc.
+const DISTINCT_FORMS = new Set([
+  // Regional forms
+  "galarian",
+  "alolan",
+  "hisuian",
+  "paldean",
+  // Deoxys forms
+  "attack",
+  "defense",
+  "speed",
+  "normal",
+  // Type variants (Wormadam, Rotom, etc.)
+  "plant",
+  "sandy",
+  "trash",
+  "heat",
+  "wash",
+  "frost",
+  "fan",
+  "mow",
+  // Legendary/mythical forms
+  "origin",
+  "altered",
+  "therian",
+  "incarnate",
+  "aria",
+  "pirouette",
+  "midnight",
+  "midday",
+  "dusk",
+  "zen",
+  // Other distinct forms
+  "mega",
+  "primal",
+  "black",
+  "white",
+  "crowned",
+  "ice",
+  "shadow", // Shadow Rider Calyrex
+  "complete",
+  "10%",
+  "50%",
+  "resolute",
+]);
+
+/**
+ * Check if a form is a distinct variant that should not fall back to base sprite
+ */
+function isDistinctForm(formName: string): boolean {
+  return DISTINCT_FORMS.has(formName.toLowerCase());
+}
+
 /**
  * Initialize the local Pokemon SVG cache
  */
@@ -104,18 +158,28 @@ export async function getSpriteByName(name: string): Promise<string> {
   // Try converting speciesId format (e.g., "corsola_galarian") to display format (e.g., "corsola (galarian)")
   if (normalizedName.includes("_")) {
     const parts = normalizedName.split("_");
-    if (parts.length === 2) {
-      const displayFormat = `${parts[0]} (${parts[1]})`;
+    if (parts.length >= 2) {
+      // Try variant format first (e.g., "gourgeist_large" -> "gourgeist (large)")
+      const baseName = parts[0];
+      const formName = parts.slice(1).join("_");
+      const displayFormat = `${baseName} (${formName})`;
       if (localCache.has(displayFormat)) {
         return getLocalSpritePath(displayFormat);
+      }
+
+      // Only fall back to base name for non-distinct forms (size/color variants)
+      // Do NOT fall back for regional forms (Galarian, Alolan, etc.) or other distinct variants
+      if (!isDistinctForm(formName) && localCache.has(baseName)) {
+        return getLocalSpritePath(baseName);
       }
     }
   }
 
-  // For parenthetical forms, try base name (e.g., "moltres (galarian)" -> "moltres")
+  // For parenthetical forms, try base name only if NOT a distinct form
   if (normalizedName.includes("(")) {
     const baseName = normalizedName.split("(")[0].trim();
-    if (localCache.has(baseName)) {
+    const formName = normalizedName.match(/\(([^)]+)\)/)?.[1] || "";
+    if (!isDistinctForm(formName) && localCache.has(baseName)) {
       return getLocalSpritePath(baseName);
     }
   }
