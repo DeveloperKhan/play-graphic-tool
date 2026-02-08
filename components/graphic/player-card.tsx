@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useLayoutEffect, useState } from "react";
 import { PokemonSprite } from "./pokemon-sprite";
 import type { GraphicPlayer } from "@/lib/graphic-data";
 
@@ -33,6 +32,10 @@ function FlagIcon({ code }: { code: string }) {
     );
   }
 
+  // Use absolute positioning to center flag within circle (html2canvas-pro doesn't handle negative margins well)
+  const flagSize = size * 1.5;
+  const offset = (flagSize - size) / 2;
+
   return (
     <div
       style={{
@@ -40,16 +43,25 @@ function FlagIcon({ code }: { code: string }) {
         height: size,
         borderRadius: "50%",
         overflow: "hidden",
+        position: "relative",
       }}
     >
-      <FlagComponent
+      <div
         style={{
-          width: size * 1.5,
-          height: size * 1.5,
-          marginLeft: -size * 0.25,
-          marginTop: -size * 0.25,
+          position: "absolute",
+          top: -offset,
+          left: -offset,
+          width: flagSize,
+          height: flagSize,
         }}
-      />
+      >
+        <FlagComponent
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        />
+      </div>
     </div>
   );
 }
@@ -71,50 +83,28 @@ interface DynamicPlayerNameProps {
 }
 
 function DynamicPlayerName({ name, flagCount }: DynamicPlayerNameProps) {
-  const [scale, setScale] = useState(1);
-  const textRef = useRef<HTMLSpanElement>(null);
-
   // Calculate available width based on flag count
   const availableWidth = POKEMON_ROW_WIDTH - (flagCount * FLAG_SIZE + flagCount * GAP);
 
-  useLayoutEffect(() => {
-    if (!textRef.current) return;
+  // Estimate font size based on character count (approximate width per character)
+  // This avoids DOM measurement and works reliably with html2canvas-pro
+  const estimatedCharWidth = BASE_FONT_SIZE * 0.6; // Approximate width per character
+  const estimatedTextWidth = name.length * estimatedCharWidth;
 
-    // Measure text width at base font size
-    const measureSpan = document.createElement("span");
-    measureSpan.style.cssText = `
-      position: absolute;
-      visibility: hidden;
-      white-space: nowrap;
-      font-family: Urbane, sans-serif;
-      font-weight: 600;
-      font-size: ${BASE_FONT_SIZE}px;
-    `;
-    measureSpan.textContent = name;
-    document.body.appendChild(measureSpan);
-
-    const textWidth = measureSpan.offsetWidth;
-    document.body.removeChild(measureSpan);
-
-    // Calculate scale needed to fit
-    if (textWidth > availableWidth) {
-      setScale(availableWidth / textWidth);
-    } else {
-      setScale(1);
-    }
-  }, [name, availableWidth]);
+  let fontSize = BASE_FONT_SIZE;
+  if (estimatedTextWidth > availableWidth) {
+    const scale = availableWidth / estimatedTextWidth;
+    fontSize = Math.floor(BASE_FONT_SIZE * scale);
+  }
 
   return (
     <span
-      ref={textRef}
       style={{
         color: "white",
         fontFamily: "Urbane, sans-serif",
         fontWeight: 600,
-        fontSize: BASE_FONT_SIZE,
+        fontSize: fontSize,
         whiteSpace: "nowrap",
-        transform: `scale(${scale})`,
-        transformOrigin: "left center",
         display: "inline-flex",
         alignItems: "center",
         height: FLAG_SIZE,
