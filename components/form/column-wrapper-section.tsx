@@ -8,10 +8,109 @@ import {
   FormControl,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import type { TournamentData, ColumnId, ColumnDisplayMode } from "@/lib/types";
 import { PAIR_COLORS } from "@/components/graphic/player-column";
+
+// Bracket labels section
+interface BracketLabelsSectionProps {
+  form: UseFormReturn<TournamentData>;
+}
+
+export function BracketLabelsSection({ form }: BracketLabelsSectionProps) {
+  const winnersEnabled = form.watch("bracketLabels.winners.enabled");
+  const losersEnabled = form.watch("bracketLabels.losers.enabled");
+
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg">Bracket Labels</CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Toggle and customize the Winners/Losers bracket header labels
+        </p>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Winners label */}
+        <div className="flex items-center gap-4 p-3 rounded-lg border bg-muted/30">
+          <FormField
+            control={form.control}
+            name="bracketLabels.winners.enabled"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 space-y-0">
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormLabel className="text-sm font-medium min-w-[120px]">
+            Winners Label
+          </FormLabel>
+          {winnersEnabled && (
+            <FormField
+              control={form.control}
+              name="bracketLabels.winners.text"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormControl>
+                    <Input
+                      placeholder="Winners Bracket"
+                      {...field}
+                      className="h-8"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          )}
+        </div>
+
+        {/* Losers label */}
+        <div className="flex items-center gap-4 p-3 rounded-lg border bg-muted/30">
+          <FormField
+            control={form.control}
+            name="bracketLabels.losers.enabled"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 space-y-0">
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormLabel className="text-sm font-medium min-w-[120px]">
+            Losers Label
+          </FormLabel>
+          {losersEnabled && (
+            <FormField
+              control={form.control}
+              name="bracketLabels.losers.text"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormControl>
+                    <Input
+                      placeholder="Losers Bracket"
+                      {...field}
+                      className="h-8"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 interface ColumnWrapperSectionProps {
   form: UseFormReturn<TournamentData>;

@@ -5,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import { EventInfoSection } from "./event-info-section";
 import { PlayerInputSection } from "./player-input-section";
 import { FormNavigation } from "./form-navigation";
-import { ColumnWrapperSection } from "./column-wrapper-section";
+import { ColumnWrapperSection, BracketLabelsSection } from "./column-wrapper-section";
 import { useTournamentForm } from "@/hooks/use-tournament-form";
 import { sortTeam } from "@/lib/pokemon-sort";
 import type { TournamentData, Pokemon } from "@/lib/types";
@@ -275,6 +275,9 @@ export function TournamentForm({
         <div id="event-info">
           <EventInfoSection form={form} />
         </div>
+
+        {/* Bracket Labels */}
+        <BracketLabelsSection form={form} />
 
         {/* Column Wrapper Settings */}
         <ColumnWrapperSection form={form} />

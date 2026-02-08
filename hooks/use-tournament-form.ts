@@ -91,6 +91,10 @@ export function createDefaultTournamentData(
       losers1: { mode: "lines", text: "" },
       losers2: { mode: "lines", text: "" },
     },
+    bracketLabels: {
+      winners: { enabled: true, text: "Winners" },
+      losers: { enabled: true, text: "Losers" },
+    },
   };
 }
 

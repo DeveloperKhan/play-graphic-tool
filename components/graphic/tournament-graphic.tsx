@@ -144,7 +144,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
           {/* Losers Bracket - First half at x=1440, y=169 */}
           <div style={{ position: "absolute", top: 169, left: 1440 }}>
             <PlayerColumn
-              title="Losers Bracket"
+              title={data.bracketLabels?.losers?.enabled ? data.bracketLabels.losers.text : undefined}
               players={losers.slice(0, 4)}
               startPairIndex={0}
               wrapper={data.columnWrappers?.losers1}
@@ -163,7 +163,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
           {/* Winners Bracket - Column 1 at x=19, y=1050 */}
           <div style={{ position: "absolute", top: 1050, left: 19 }}>
             <PlayerColumn
-              title="Winners Bracket"
+              title={data.bracketLabels?.winners?.enabled ? data.bracketLabels.winners.text : undefined}
               players={winnersCol1}
               startPairIndex={0}
               wrapper={data.columnWrappers?.winners1}
@@ -173,7 +173,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
           {/* Winners Bracket - Column 2 at x=751, y=1050 */}
           <div style={{ position: "absolute", top: 1050, left: 751 }}>
             <PlayerColumn
-              title="Winners Bracket"
+              title={data.bracketLabels?.winners?.enabled ? data.bracketLabels.winners.text : undefined}
               players={winnersCol2}
               startPairIndex={Math.ceil(winnersCol1.length / 2)}
               wrapper={data.columnWrappers?.winners2}

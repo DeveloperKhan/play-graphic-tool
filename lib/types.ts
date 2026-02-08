@@ -60,6 +60,16 @@ export interface ColumnWrapperConfig {
   text: string;
 }
 
+export interface BracketLabelConfig {
+  enabled: boolean;
+  text: string;
+}
+
+export interface BracketLabels {
+  winners: BracketLabelConfig;
+  losers: BracketLabelConfig;
+}
+
 export interface TournamentData {
   eventName: string;
   eventYear: string;
@@ -72,6 +82,7 @@ export interface TournamentData {
   bracketMatches?: BracketMatch[]; // Manual bracket overrides (for Bracket mode)
   bracketPairings?: BracketPairing[]; // Group pairings (for Usage mode)
   columnWrappers?: Record<ColumnId, ColumnWrapperConfig>; // Wrapper config for each column
+  bracketLabels?: BracketLabels; // Labels for Winners/Losers bracket headers
 }
 
 // Pokemon data from dracoviz.com API

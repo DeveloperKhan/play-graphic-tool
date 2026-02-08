@@ -67,6 +67,18 @@ export const columnWrappersSchema = z.object({
   losers2: columnWrapperConfigSchema,
 });
 
+// Bracket label config schema
+export const bracketLabelConfigSchema = z.object({
+  enabled: z.boolean(),
+  text: z.string(),
+});
+
+// Bracket labels schema
+export const bracketLabelsSchema = z.object({
+  winners: bracketLabelConfigSchema,
+  losers: bracketLabelConfigSchema,
+});
+
 // Tournament data schema
 export const tournamentSchema = z
   .object({
@@ -81,6 +93,7 @@ export const tournamentSchema = z
     bracketMatches: z.array(bracketMatchSchema).optional(),
     bracketPairings: z.array(bracketPairingSchema).optional(),
     columnWrappers: columnWrappersSchema.optional(),
+    bracketLabels: bracketLabelsSchema.optional(),
   })
   .refine(
     (data) => {
