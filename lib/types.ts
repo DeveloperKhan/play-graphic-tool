@@ -49,6 +49,14 @@ export interface BracketPairing {
 
 export type PlayerCount = 4 | 8 | 16 | 32;
 
+// Column identifiers for wrapper configuration
+export type ColumnId = "winners1" | "winners2" | "losers1" | "losers2";
+
+export interface ColumnWrapperConfig {
+  enabled: boolean;
+  text: string;
+}
+
 export interface TournamentData {
   eventName: string;
   eventYear: string;
@@ -60,6 +68,7 @@ export interface TournamentData {
   playerOrder: string[]; // ordered list of player ids (for rendering order)
   bracketMatches?: BracketMatch[]; // Manual bracket overrides (for Bracket mode)
   bracketPairings?: BracketPairing[]; // Group pairings (for Usage mode)
+  columnWrappers?: Record<ColumnId, ColumnWrapperConfig>; // Wrapper config for each column
 }
 
 // Pokemon data from dracoviz.com API

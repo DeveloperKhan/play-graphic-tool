@@ -132,6 +132,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
               title="Losers Bracket"
               players={losers.slice(0, 4)}
               startPairIndex={0}
+              wrapper={data.columnWrappers?.losers1}
             />
           </div>
 
@@ -140,6 +141,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
             <PlayerColumn
               players={losers.slice(4)}
               startPairIndex={2}
+              wrapper={data.columnWrappers?.losers2}
             />
           </div>
 
@@ -149,6 +151,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
               title="Winners Bracket"
               players={winnersCol1}
               startPairIndex={0}
+              wrapper={data.columnWrappers?.winners1}
             />
           </div>
 
@@ -158,6 +161,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
               title="Winners Bracket"
               players={winnersCol2}
               startPairIndex={Math.ceil(winnersCol1.length / 2)}
+              wrapper={data.columnWrappers?.winners2}
             />
           </div>
 
