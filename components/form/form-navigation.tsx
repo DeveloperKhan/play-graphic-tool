@@ -2,9 +2,30 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, ArrowUpDown, Sparkles } from "lucide-react";
+import { ChevronDown, ChevronUp, ArrowUpDown, Sparkles, RotateCcw, Copy, Upload, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ImportedPlayer {
   name: string;
@@ -22,6 +43,9 @@ interface FormNavigationProps {
   onSortPlayers: () => void;
   onSortAllPokemon: () => void;
   onImport: (players: ImportedPlayer[]) => void;
+  onResetForm: () => void;
+  onCopyJson: () => Promise<boolean>;
+  onImportJson: (json: string) => boolean;
   isSortingPokemon?: boolean;
 }
 
@@ -35,12 +59,39 @@ export function FormNavigation({
   onSortPlayers,
   onSortAllPokemon,
   onImport,
+  onResetForm,
+  onCopyJson,
+  onImportJson,
   isSortingPokemon = false,
 }: FormNavigationProps) {
+  const [copied, setCopied] = React.useState(false);
+  const [importDialogOpen, setImportDialogOpen] = React.useState(false);
+  const [importJson, setImportJson] = React.useState("");
+  const [importError, setImportError] = React.useState<string | null>(null);
+
+  const handleCopy = async () => {
+    const success = await onCopyJson();
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleImportJson = () => {
+    setImportError(null);
+    const success = onImportJson(importJson);
+    if (success) {
+      setImportDialogOpen(false);
+      setImportJson("");
+    } else {
+      setImportError("Invalid JSON format. Please check and try again.");
+    }
+  };
+
   return (
     <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b pb-4 mb-4 pt-1">
-      {/* Expand/Collapse buttons */}
-      <div className="flex gap-2 mb-3">
+      {/* Row 1: Expand/Collapse and Sort buttons */}
+      <div className="flex gap-2 mb-2">
         <Button
           type="button"
           variant="outline"
@@ -82,7 +133,109 @@ export function FormNavigation({
           <Sparkles className="h-3 w-3 mr-1" />
           {isSortingPokemon ? "Sorting..." : "Sort All Pokemon"}
         </Button>
+      </div>
+
+      {/* Row 2: Import/Export buttons */}
+      <div className="flex gap-2 mb-3">
         <ImportDialog onImport={onImport} />
+
+        {/* Import JSON Dialog */}
+        <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+          <DialogTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="text-xs"
+            >
+              <Upload className="h-3 w-3 mr-1" />
+              Import JSON
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Import Form Data</DialogTitle>
+              <DialogDescription>
+                Paste previously exported JSON data to restore form state.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Textarea
+                placeholder="Paste JSON here..."
+                value={importJson}
+                onChange={(e) => {
+                  setImportJson(e.target.value);
+                  setImportError(null);
+                }}
+                className="min-h-[200px] font-mono text-xs"
+              />
+              {importError && (
+                <p className="text-sm text-destructive">{importError}</p>
+              )}
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setImportDialogOpen(false);
+                  setImportJson("");
+                  setImportError(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button type="button" onClick={handleImportJson}>
+                Import
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Copy JSON Button */}
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleCopy}
+          className="text-xs"
+        >
+          {copied ? (
+            <Check className="h-3 w-3 mr-1" />
+          ) : (
+            <Copy className="h-3 w-3 mr-1" />
+          )}
+          {copied ? "Copied!" : "Copy JSON"}
+        </Button>
+
+        {/* Reset Form Dialog */}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="text-xs text-destructive hover:text-destructive"
+            >
+              <RotateCcw className="h-3 w-3 mr-1" />
+              Reset
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Reset Form Data?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will clear all form data and reset to defaults. This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={onResetForm}>
+                Reset Form
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
       {/* Navigation chips */}

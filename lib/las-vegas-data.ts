@@ -239,6 +239,7 @@ export const lasVegasData: GraphicData = {
   eventName: "Las Vegas Regional",
   eventYear: "2026",
   eventType: "Regional",
+  overviewType: "Usage",
   players,
   usageStats: calculateUsageStats(players, 12),
 };

@@ -6,9 +6,11 @@ import { EventInfoSection } from "./event-info-section";
 import { PlayerInputSection } from "./player-input-section";
 import { FormNavigation } from "./form-navigation";
 import { ColumnWrapperSection, BracketLabelsSection } from "./column-wrapper-section";
-import { useTournamentForm } from "@/hooks/use-tournament-form";
+import { useTournamentForm, createDefaultTournamentData } from "@/hooks/use-tournament-form";
 import { sortTeam } from "@/lib/pokemon-sort";
 import type { TournamentData, Pokemon } from "@/lib/types";
+
+const STORAGE_KEY = "tournament-form-data";
 
 interface TournamentFormProps {
   playerCount?: number;
@@ -29,6 +31,40 @@ export function TournamentForm({
   const [openSections, setOpenSections] = React.useState<Set<string>>(() => new Set());
   const [activeSection, setActiveSection] = React.useState<string | null>(null);
   const [isSortingAllPokemon, setIsSortingAllPokemon] = React.useState(false);
+  const [hasLoadedFromStorage, setHasLoadedFromStorage] = React.useState(false);
+
+  // Load saved form data from localStorage on mount
+  React.useEffect(() => {
+    if (hasLoadedFromStorage) return;
+
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsedData = JSON.parse(saved) as TournamentData;
+        // Reset the form with saved data
+        form.reset(parsedData);
+        // Explicitly notify parent to update graphic immediately
+        onFormChange?.(parsedData);
+      }
+    } catch (error) {
+      console.error("Failed to load saved form data:", error);
+    }
+    setHasLoadedFromStorage(true);
+  }, [form, hasLoadedFromStorage, onFormChange]);
+
+  // Save form data to localStorage whenever it changes
+  React.useEffect(() => {
+    if (!hasLoadedFromStorage) return;
+
+    const subscription = form.watch((data) => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (error) {
+        console.error("Failed to save form data:", error);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, hasLoadedFromStorage]);
 
   // Get player names for navigation display
   const playerNames = React.useMemo(() => {
@@ -189,6 +225,35 @@ export function TournamentForm({
     }
   };
 
+  const handleResetForm = () => {
+    // Clear localStorage and reset form to defaults
+    localStorage.removeItem(STORAGE_KEY);
+    const defaultData = createDefaultTournamentData(playerCount);
+    form.reset(defaultData);
+  };
+
+  const handleCopyJson = async () => {
+    const data = form.getValues();
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+      return true;
+    } catch (error) {
+      console.error("Failed to copy to clipboard:", error);
+      return false;
+    }
+  };
+
+  const handleImportJson = (jsonString: string) => {
+    try {
+      const data = JSON.parse(jsonString) as TournamentData;
+      form.reset(data);
+      return true;
+    } catch (error) {
+      console.error("Failed to parse JSON:", error);
+      return false;
+    }
+  };
+
   // Notify parent of form changes
   React.useEffect(() => {
     if (onFormChange) {
@@ -268,6 +333,9 @@ export function TournamentForm({
           onSortPlayers={handleSortPlayers}
           onSortAllPokemon={handleSortAllPokemon}
           onImport={handleImport}
+          onResetForm={handleResetForm}
+          onCopyJson={handleCopyJson}
+          onImportJson={handleImportJson}
           isSortingPokemon={isSortingAllPokemon}
         />
 
