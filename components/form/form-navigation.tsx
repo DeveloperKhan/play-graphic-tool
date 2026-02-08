@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, ArrowUpDown } from "lucide-react";
+import { ChevronDown, ChevronUp, ArrowUpDown, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FormNavigationProps {
@@ -13,6 +13,8 @@ interface FormNavigationProps {
   onExpandAll: () => void;
   onCollapseAll: () => void;
   onSortPlayers: () => void;
+  onSortAllPokemon: () => void;
+  isSortingPokemon?: boolean;
 }
 
 export function FormNavigation({
@@ -23,6 +25,8 @@ export function FormNavigation({
   onExpandAll,
   onCollapseAll,
   onSortPlayers,
+  onSortAllPokemon,
+  isSortingPokemon = false,
 }: FormNavigationProps) {
   return (
     <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b pb-4 mb-4 pt-1">
@@ -57,6 +61,17 @@ export function FormNavigation({
         >
           <ArrowUpDown className="h-3 w-3 mr-1" />
           Sort Players
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={onSortAllPokemon}
+          disabled={isSortingPokemon}
+          className="text-xs"
+        >
+          <Sparkles className="h-3 w-3 mr-1" />
+          {isSortingPokemon ? "Sorting..." : "Sort All Pokemon"}
         </Button>
       </div>
 

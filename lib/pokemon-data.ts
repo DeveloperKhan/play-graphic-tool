@@ -32,10 +32,17 @@ async function fetchPokemonData(): Promise<Map<string, PokemonMetadata>> {
         return;
       }
 
+      // Extract types array, normalize to lowercase
+      const types: string[] = [];
+      if (Array.isArray(value.types)) {
+        types.push(...value.types.map((t: string) => t.toLowerCase()));
+      }
+
       const pokemon: PokemonMetadata = {
         speciesName: value.speciesName,
         speciesId: value.speciesId,
         sid: value.sid,
+        types,
       };
       // Use speciesId as the key for consistent lookup
       cache.set(value.speciesId, pokemon);

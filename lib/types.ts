@@ -67,6 +67,7 @@ export interface PokemonMetadata {
   speciesName: string;
   speciesId: string;
   sid: number; // Sprite ID for image fetching
+  types: string[]; // Pokemon types (e.g., ["ground", "steel"])
 }
 
 export interface UsageStats {

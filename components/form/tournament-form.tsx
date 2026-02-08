@@ -6,7 +6,8 @@ import { EventInfoSection } from "./event-info-section";
 import { PlayerInputSection } from "./player-input-section";
 import { FormNavigation } from "./form-navigation";
 import { useTournamentForm } from "@/hooks/use-tournament-form";
-import type { TournamentData } from "@/lib/types";
+import { sortTeam } from "@/lib/pokemon-sort";
+import type { TournamentData, Pokemon } from "@/lib/types";
 
 interface TournamentFormProps {
   playerCount?: number;
@@ -26,6 +27,7 @@ export function TournamentForm({
   // Track which sections are open (all collapsed by default)
   const [openSections, setOpenSections] = React.useState<Set<string>>(() => new Set());
   const [activeSection, setActiveSection] = React.useState<string | null>(null);
+  const [isSortingAllPokemon, setIsSortingAllPokemon] = React.useState(false);
 
   // Get player names for navigation display
   const playerNames = React.useMemo(() => {
@@ -133,6 +135,30 @@ export function TournamentForm({
     form.setValue("playerOrder", sortedOrder);
   };
 
+  const handleSortAllPokemon = async () => {
+    const currentOrder = form.getValues("playerOrder");
+
+    setIsSortingAllPokemon(true);
+    try {
+      // Sort each player's team sequentially to avoid race conditions
+      for (const playerId of currentOrder) {
+        // Get fresh team data for each player
+        const team = form.getValues(`players.${playerId}.team`) as Pokemon[];
+        if (!team) continue;
+
+        const sortedTeam = await sortTeam(team);
+        // Update each Pokemon slot for this player
+        for (let index = 0; index < sortedTeam.length; index++) {
+          const pokemon = sortedTeam[index];
+          form.setValue(`players.${playerId}.team.${index}.id`, pokemon.id);
+          form.setValue(`players.${playerId}.team.${index}.isShadow`, pokemon.isShadow);
+        }
+      }
+    } finally {
+      setIsSortingAllPokemon(false);
+    }
+  };
+
   // Notify parent of form changes
   React.useEffect(() => {
     if (onFormChange) {
@@ -210,6 +236,8 @@ export function TournamentForm({
           onExpandAll={handleExpandAll}
           onCollapseAll={handleCollapseAll}
           onSortPlayers={handleSortPlayers}
+          onSortAllPokemon={handleSortAllPokemon}
+          isSortingPokemon={isSortingAllPokemon}
         />
 
         {/* Event Info */}
