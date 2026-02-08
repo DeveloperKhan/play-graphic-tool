@@ -124,22 +124,26 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
             bottom: 0,
           }}
         >
-          {/* Header - logo at x=33, y=87 */}
-          <div style={{ position: "absolute", top: 87, left: 33 }}>
-            <GraphicHeader
-              eventName={data.eventName}
-              eventYear={data.eventYear}
-              eventType={data.eventType}
-            />
-          </div>
+          {/* Header - logo at x=33, y=87 (hidden when overviewType is "None") */}
+          {data.overviewType !== "None" && (
+            <div style={{ position: "absolute", top: 87, left: 33 }}>
+              <GraphicHeader
+                eventName={data.eventName}
+                eventYear={data.eventYear}
+                eventType={data.eventType}
+              />
+            </div>
+          )}
 
-          {/* Usage Section - positioned at 352px from top */}
-          <div style={{ position: "absolute", top: 352, left: 19 }}>
-            <UsageSection
-              usageStats={data.usageStats}
-              totalPlayers={data.players.length}
-            />
-          </div>
+          {/* Usage Section - positioned at 352px from top (hidden when overviewType is "None") */}
+          {data.overviewType !== "None" && (
+            <div style={{ position: "absolute", top: 352, left: 19 }}>
+              <UsageSection
+                usageStats={data.usageStats}
+                totalPlayers={data.players.length}
+              />
+            </div>
+          )}
 
           {/* Losers Bracket - First half at x=1440, y=169 */}
           <div style={{ position: "absolute", top: 169, left: 1440 }}>
@@ -157,6 +161,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
               players={losers.slice(4)}
               startPairIndex={2}
               wrapper={data.columnWrappers?.losers2}
+              reserveTitleSpace={false}
             />
           </div>
 

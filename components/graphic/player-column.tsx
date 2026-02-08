@@ -13,6 +13,8 @@ interface PlayerColumnProps {
     mode: ColumnDisplayMode;
     text: string;
   };
+  /** Whether to reserve space for title when not shown (default: true) */
+  reserveTitleSpace?: boolean;
 }
 
 // Colors for the pair rectangles
@@ -40,11 +42,15 @@ const PLAYER_GAP = 53;
 // Total left offset from pair line (used to maintain position when wrapper replaces pair lines)
 const PAIR_LINE_OFFSET = RECT_WIDTH + RECT_GAP;
 
+// Title height (fontSize 28 with line-height ~1.4)
+const TITLE_HEIGHT = 41;
+
 export function PlayerColumn({
   title,
   players,
   startPairIndex = 0,
   wrapper,
+  reserveTitleSpace = true,
 }: PlayerColumnProps) {
   // Group players into pairs
   const pairs: GraphicPlayer[][] = [];
@@ -60,8 +66,8 @@ export function PlayerColumn({
   if (mode === "hidden") {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        {/* Column header - only show if title is provided */}
-        {title && (
+        {/* Column header - show title or placeholder to maintain spacing */}
+        {title ? (
           <p
             style={{
               color: "white",
@@ -73,7 +79,9 @@ export function PlayerColumn({
           >
             {title}
           </p>
-        )}
+        ) : reserveTitleSpace ? (
+          <div style={{ height: TITLE_HEIGHT }} />
+        ) : null}
 
         {/* Players without any lines - add margin to maintain alignment */}
         <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP, marginLeft: PAIR_LINE_OFFSET }}>
@@ -92,8 +100,8 @@ export function PlayerColumn({
   if (mode === "wrapper") {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        {/* Column header - only show if title is provided */}
-        {title && (
+        {/* Column header - show title or placeholder to maintain spacing */}
+        {title ? (
           <p
             style={{
               color: "white",
@@ -105,7 +113,9 @@ export function PlayerColumn({
           >
             {title}
           </p>
-        )}
+        ) : reserveTitleSpace ? (
+          <div style={{ height: TITLE_HEIGHT }} />
+        ) : null}
 
         {/* Wrapped players - no individual pair lines, add margin to match pair line offset */}
         <ColumnWrapper text={wrapper?.text ?? ""} color={wrapperColor}>
@@ -125,8 +135,8 @@ export function PlayerColumn({
   // Lines mode (default) - render with individual pair lines
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      {/* Column header - only show if title is provided */}
-      {title && (
+      {/* Column header - show title or placeholder to maintain spacing */}
+      {title ? (
         <p
           style={{
             color: "white",
@@ -138,7 +148,9 @@ export function PlayerColumn({
         >
           {title}
         </p>
-      )}
+      ) : reserveTitleSpace ? (
+        <div style={{ height: TITLE_HEIGHT }} />
+      ) : null}
 
       {/* Player pairs with colored rectangles */}
       <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP }}>
