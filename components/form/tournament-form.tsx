@@ -159,6 +159,35 @@ export function TournamentForm({
     }
   };
 
+  const handleImport = (importedPlayers: Array<{
+    name: string;
+    flags: string[];
+    team: Array<{ id: string; isShadow: boolean }>;
+  }>) => {
+    const currentOrder = form.getValues("playerOrder");
+
+    // Update players up to the number of imported players or available slots
+    const maxPlayers = Math.min(importedPlayers.length, currentOrder.length);
+
+    for (let i = 0; i < maxPlayers; i++) {
+      const playerId = currentOrder[i];
+      const imported = importedPlayers[i];
+
+      // Update player name
+      form.setValue(`players.${playerId}.name`, imported.name);
+
+      // Update player flags
+      form.setValue(`players.${playerId}.flags`, imported.flags);
+
+      // Update player team
+      for (let j = 0; j < 6; j++) {
+        const pokemon = imported.team[j] || { id: "", isShadow: false };
+        form.setValue(`players.${playerId}.team.${j}.id`, pokemon.id);
+        form.setValue(`players.${playerId}.team.${j}.isShadow`, pokemon.isShadow);
+      }
+    }
+  };
+
   // Notify parent of form changes
   React.useEffect(() => {
     if (onFormChange) {
@@ -237,6 +266,7 @@ export function TournamentForm({
           onCollapseAll={handleCollapseAll}
           onSortPlayers={handleSortPlayers}
           onSortAllPokemon={handleSortAllPokemon}
+          onImport={handleImport}
           isSortingPokemon={isSortingAllPokemon}
         />
 

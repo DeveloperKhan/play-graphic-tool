@@ -4,6 +4,13 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, ArrowUpDown, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ImportDialog } from "./import-dialog";
+
+interface ImportedPlayer {
+  name: string;
+  flags: string[];
+  team: Array<{ id: string; isShadow: boolean }>;
+}
 
 interface FormNavigationProps {
   playerOrder: string[];
@@ -14,6 +21,7 @@ interface FormNavigationProps {
   onCollapseAll: () => void;
   onSortPlayers: () => void;
   onSortAllPokemon: () => void;
+  onImport: (players: ImportedPlayer[]) => void;
   isSortingPokemon?: boolean;
 }
 
@@ -26,6 +34,7 @@ export function FormNavigation({
   onCollapseAll,
   onSortPlayers,
   onSortAllPokemon,
+  onImport,
   isSortingPokemon = false,
 }: FormNavigationProps) {
   return (
@@ -73,6 +82,7 @@ export function FormNavigation({
           <Sparkles className="h-3 w-3 mr-1" />
           {isSortingPokemon ? "Sorting..." : "Sort All Pokemon"}
         </Button>
+        <ImportDialog onImport={onImport} />
       </div>
 
       {/* Navigation chips */}
