@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useMemo } from "react";
-import { toPng } from "html-to-image";
+import html2canvas from "html2canvas-pro";
 import { TournamentForm } from "@/components/form/tournament-form";
 import {
   TournamentGraphic,
@@ -27,9 +27,6 @@ export default function Home() {
 
     setIsExporting(true);
     try {
-      // Wait for background image to be loaded as base64
-      await graphicRef.current?.waitForBackground();
-
       // Store original transform and temporarily remove it for capture
       const originalTransform = canvasElement.style.transform;
       canvasElement.style.transform = "none";
@@ -49,15 +46,15 @@ export default function Home() {
       // Wait a frame for the transform change to apply
       await new Promise((resolve) => requestAnimationFrame(resolve));
 
-      const dataUrl = await toPng(canvasElement, {
-        // Render at 2x resolution for crisp SVGs and images on social media/retina displays
-        // Output will be 4200x4200 which platforms will downsample as needed
-        pixelRatio: 2,
-        // Don't add cache-busting timestamps - breaks image URLs
-        cacheBust: false,
-        // Skip auto-scaling since we're setting pixelRatio explicitly
-        skipAutoScale: true,
+      const canvas = await html2canvas(canvasElement, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: null,
+        logging: false,
       });
+
+      const dataUrl = canvas.toDataURL("image/png");
 
       // Restore original transform
       canvasElement.style.transform = originalTransform;

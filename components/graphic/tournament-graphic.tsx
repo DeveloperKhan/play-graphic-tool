@@ -57,6 +57,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
       {/* Scaled canvas - renders at 2100x2100 and scales down */}
       <div
         ref={canvasRef}
+        data-canvas
         style={{
           width: CANVAS_WIDTH,
           height: CANVAS_HEIGHT,
