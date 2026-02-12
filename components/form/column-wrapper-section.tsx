@@ -120,13 +120,14 @@ interface ColumnConfig {
   id: ColumnId;
   label: string;
   colorIndex: number; // Index into PAIR_COLORS
+  defaultWrapperText: string; // Default text when wrapper mode is selected
 }
 
 const COLUMNS: ColumnConfig[] = [
-  { id: "winners1", label: "Winners Column 1 (A-D)", colorIndex: 0 },
-  { id: "winners2", label: "Winners Column 2 (E-H)", colorIndex: 2 },
-  { id: "losers1", label: "Losers Column 1 (A-D)", colorIndex: 0 },
-  { id: "losers2", label: "Losers Column 2 (E-H)", colorIndex: 2 },
+  { id: "winners1", label: "Winners Column 1 (A-D)", colorIndex: 0, defaultWrapperText: "1st-4th" },
+  { id: "winners2", label: "Winners Column 2 (E-H)", colorIndex: 2, defaultWrapperText: "5th-8th" },
+  { id: "losers1", label: "Losers Column 1 (A-D)", colorIndex: 0, defaultWrapperText: "9th-12th" },
+  { id: "losers2", label: "Losers Column 2 (E-H)", colorIndex: 2, defaultWrapperText: "13th-16th" },
 ];
 
 export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
@@ -146,6 +147,7 @@ export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
             columnId={column.id}
             label={column.label}
             colorIndex={column.colorIndex}
+            defaultWrapperText={column.defaultWrapperText}
           />
         ))}
       </CardContent>
@@ -158,6 +160,7 @@ interface ColumnWrapperFieldProps {
   columnId: ColumnId;
   label: string;
   colorIndex: number;
+  defaultWrapperText: string;
 }
 
 function ColumnWrapperField({
@@ -165,6 +168,7 @@ function ColumnWrapperField({
   columnId,
   label,
   colorIndex,
+  defaultWrapperText,
 }: ColumnWrapperFieldProps) {
   const mode = form.watch(`columnWrappers.${columnId}.mode`);
   const color = PAIR_COLORS[colorIndex];
@@ -193,7 +197,16 @@ function ColumnWrapperField({
                 type="single"
                 value={field.value}
                 onValueChange={(value) => {
-                  if (value) field.onChange(value as ColumnDisplayMode);
+                  if (value) {
+                    field.onChange(value as ColumnDisplayMode);
+                    // Set default text when switching to wrapper mode
+                    if (value === "wrapper") {
+                      const currentText = form.getValues(`columnWrappers.${columnId}.text`);
+                      if (!currentText) {
+                        form.setValue(`columnWrappers.${columnId}.text`, defaultWrapperText);
+                      }
+                    }
+                  }
                 }}
                 className="justify-start"
               >
