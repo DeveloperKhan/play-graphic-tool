@@ -95,7 +95,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
           {data.overviewType !== "None" && (
             <div style={{ position: "absolute", top: 87, left: 33 }}>
               <GraphicHeader
-                eventName={data.eventName}
+                titleLines={data.titleLines}
                 eventYear={data.eventYear}
                 eventType={data.eventType}
               />

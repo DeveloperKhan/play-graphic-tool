@@ -82,7 +82,7 @@ export const bracketLabelsSchema = z.object({
 // Tournament data schema
 export const tournamentSchema = z
   .object({
-    eventName: z.string().min(1, "Event name required"),
+    titleLines: z.tuple([z.string(), z.string(), z.string()]),
     eventYear: z.string().min(4, "Event year required"),
     eventType: z.enum(["Regional", "Generic", "International", "Worlds"]),
     overviewType: z.enum(["Usage", "Bracket", "None"]),

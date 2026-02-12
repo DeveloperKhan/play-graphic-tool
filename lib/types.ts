@@ -71,7 +71,7 @@ export interface BracketLabels {
 }
 
 export interface TournamentData {
-  eventName: string;
+  titleLines: [string, string, string]; // 3 lines for the title (e.g., ["Las Vegas", "Regional", "Championships"])
   eventYear: string;
   eventType: EventType;
   overviewType: OverviewType;

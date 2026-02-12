@@ -17,7 +17,7 @@ export interface GraphicPlayer {
 }
 
 export interface GraphicData {
-  eventName: string;
+  titleLines: [string, string, string]; // 3 lines for the title
   eventYear: string;
   eventType: "Regional" | "International" | "Worlds" | "Generic";
   overviewType: OverviewType;
@@ -177,7 +177,7 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
     .filter((p): p is GraphicPlayer => p !== null);
 
   return {
-    eventName: tournamentData.eventName,
+    titleLines: tournamentData.titleLines || ["", "", ""],
     eventYear: tournamentData.eventYear,
     eventType: tournamentData.eventType,
     overviewType: tournamentData.overviewType,

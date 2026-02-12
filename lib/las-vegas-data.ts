@@ -236,7 +236,7 @@ const players: GraphicPlayer[] = [
 ];
 
 export const lasVegasData: GraphicData = {
-  eventName: "Las Vegas Regional",
+  titleLines: ["Las Vegas", "Regional", "Championships"],
   eventYear: "2026",
   eventType: "Regional",
   overviewType: "Usage",

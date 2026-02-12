@@ -38,23 +38,58 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
         <CardTitle>Event Information</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6 min-w-0">
-        {/* Event Name */}
-        <FormField
-          control={form.control}
-          name="eventName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Event Name</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="e.g., Las Vegas Regional"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Title Lines (3 lines for the graphic title) */}
+        <div className="space-y-3">
+          <FormLabel>Title Lines</FormLabel>
+          <FormDescription className="text-xs">
+            Enter the title text for each line of the graphic header
+          </FormDescription>
+          <FormField
+            control={form.control}
+            name="titleLines.0"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder="Line 1 (e.g., Las Vegas)"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="titleLines.1"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder="Line 2 (e.g., Regional)"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="titleLines.2"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder="Line 3 (e.g., Championships)"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* Event Year */}
         <FormField

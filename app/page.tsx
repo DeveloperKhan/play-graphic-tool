@@ -116,7 +116,7 @@ export default function Home() {
           </div>
           {tournamentData && (
             <div className="text-xs text-muted-foreground space-y-1 mt-4 shrink-0">
-              <p>Event: {tournamentData.eventName || "Not set"}</p>
+              <p>Title: {tournamentData.titleLines?.filter(l => l).join(" ") || "Not set"}</p>
               <p>Type: {tournamentData.eventType}</p>
               <p>Overview: {tournamentData.overviewType}</p>
             </div>

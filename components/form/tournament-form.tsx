@@ -40,11 +40,20 @@ export function TournamentForm({
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        const parsedData = JSON.parse(saved) as TournamentData;
+        const parsedData = JSON.parse(saved);
+        // Migrate old eventName to titleLines if needed
+        if (!parsedData.titleLines && parsedData.eventName !== undefined) {
+          parsedData.titleLines = [parsedData.eventName, "", ""];
+          delete parsedData.eventName;
+        }
+        // Ensure titleLines exists
+        if (!parsedData.titleLines) {
+          parsedData.titleLines = ["", "", ""];
+        }
         // Reset the form with saved data
-        form.reset(parsedData);
+        form.reset(parsedData as TournamentData);
         // Explicitly notify parent to update graphic immediately
-        onFormChange?.(parsedData);
+        onFormChange?.(parsedData as TournamentData);
       }
     } catch (error) {
       console.error("Failed to load saved form data:", error);

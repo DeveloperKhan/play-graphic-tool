@@ -75,7 +75,7 @@ export function createDefaultTournamentData(
   }
 
   return {
-    eventName: "",
+    titleLines: ["", "", ""],
     eventYear: new Date().getFullYear().toString(),
     eventType: "Regional",
     overviewType,
