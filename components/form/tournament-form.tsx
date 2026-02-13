@@ -42,11 +42,6 @@ export function TournamentForm({
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsedData = JSON.parse(saved);
-        console.log("[localStorage] Raw saved data:", parsedData);
-        console.log("[localStorage] playerCount:", parsedData.playerCount);
-        console.log("[localStorage] players count:", Object.keys(parsedData.players || {}).length);
-        console.log("[localStorage] playerOrder:", parsedData.playerOrder?.length);
-        console.log("[localStorage] overviewType:", parsedData.overviewType);
 
         // Migrate old eventName to titleLines if needed
         if (!parsedData.titleLines && parsedData.eventName !== undefined) {

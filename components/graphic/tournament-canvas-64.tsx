@@ -120,7 +120,7 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
             }}
           >
             {/* Calendar Badge - top left corner */}
-            {data.eventDateRange.startDate && data.eventDateRange.endDate && (
+            {data.eventDateRange?.startDate && data.eventDateRange?.endDate && (
               <div style={{ position: "absolute", top: 87, left: 33 }}>
                 <CalendarBadge
                   startDate={data.eventDateRange.startDate}
@@ -134,7 +134,7 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
               <div style={{
                 position: "absolute",
                 top: 50,
-                left: data.eventDateRange.startDate && data.eventDateRange.endDate ? 301 : 33
+                left: data.eventDateRange?.startDate && data.eventDateRange?.endDate ? 301 : 33
               }}>
                 <GraphicHeader
                   titleLines={data.titleLines}
