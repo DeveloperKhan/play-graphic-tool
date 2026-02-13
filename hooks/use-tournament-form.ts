@@ -115,8 +115,8 @@ export function createDefaultTournamentData(
       } : {}),
     },
     bracketLabels: {
-      winners: { enabled: true, text: "Winners" },
-      losers: { enabled: true, text: "Losers" },
+      winners: { enabled: true, text: "Winners Bracket" },
+      losers: { enabled: true, text: "Losers Bracket" },
     },
   };
 }

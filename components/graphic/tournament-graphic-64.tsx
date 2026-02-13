@@ -35,14 +35,22 @@ export const TournamentGraphic64 = forwardRef<TournamentGraphic64Ref, Tournament
           <TabsTrigger value="winners">Winners Bracket</TabsTrigger>
           <TabsTrigger value="losers">Losers Bracket</TabsTrigger>
         </TabsList>
-        <TabsContent value="winners" className="mt-0">
+        <TabsContent
+          value="winners"
+          className="mt-0 data-[state=inactive]:absolute data-[state=inactive]:left-[-9999px] data-[state=inactive]:pointer-events-none"
+          forceMount
+        >
           <TournamentCanvas64
             ref={winnersRef}
             data={winnersData}
             bracketType="winners"
           />
         </TabsContent>
-        <TabsContent value="losers" className="mt-0">
+        <TabsContent
+          value="losers"
+          className="mt-0 data-[state=inactive]:absolute data-[state=inactive]:left-[-9999px] data-[state=inactive]:pointer-events-none"
+          forceMount
+        >
           <TournamentCanvas64
             ref={losersRef}
             data={losersData}
