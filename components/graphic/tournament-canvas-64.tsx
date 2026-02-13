@@ -33,17 +33,31 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
     }));
 
     // Calculate scale based on container width
+    // Use ResizeObserver to detect when tab becomes visible (width changes from 0)
     useEffect(() => {
       const updateScale = () => {
         if (containerRef.current) {
           const containerWidth = containerRef.current.offsetWidth;
-          setScale(containerWidth / CANVAS_WIDTH_64);
+          if (containerWidth > 0) {
+            setScale(containerWidth / CANVAS_WIDTH_64);
+          }
         }
       };
 
       updateScale();
-      window.addEventListener("resize", updateScale);
-      return () => window.removeEventListener("resize", updateScale);
+
+      // ResizeObserver handles both window resize and visibility changes
+      const resizeObserver = new ResizeObserver(() => {
+        updateScale();
+      });
+
+      if (containerRef.current) {
+        resizeObserver.observe(containerRef.current);
+      }
+
+      return () => {
+        resizeObserver.disconnect();
+      };
     }, []);
 
     // Get bracket label based on type
