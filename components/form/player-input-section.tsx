@@ -9,11 +9,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { FlagSelector } from "./flag-selector";
 import { TeamInput } from "./team-input";
+import { RK9ImportDialog } from "./rk9-import-dialog";
 import { Button } from "@/components/ui/button";
 import { Plus, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getFlagsForPlayer } from "@/lib/player-flag-config";
-import type { TournamentData, Placement, BracketSide, BracketGroup } from "@/lib/types";
+import type { TournamentData, Placement, BracketSide, BracketGroup, Pokemon } from "@/lib/types";
 
 interface PlayerInputSectionProps {
   form: UseFormReturn<TournamentData>;
@@ -120,6 +121,13 @@ export function PlayerInputSection({
     }
   };
 
+  const handleRK9Import = (data: { name: string; team: Pokemon[] }) => {
+    // Update player name
+    form.setValue(`players.${playerId}.name`, data.name);
+    // Update team
+    form.setValue(`players.${playerId}.team`, data.team);
+  };
+
   const removeFlag = (index: number) => {
     if (canRemoveFlag) {
       const newFlags = flags.filter((_, i) => i !== index);
@@ -163,19 +171,24 @@ export function PlayerInputSection({
         <CollapsibleContent>
           <CardContent className="space-y-6 min-w-0 pt-0">
             {/* Player Name */}
-            <FormField
-              control={form.control}
-              name={`players.${playerId}.name`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Player Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter player name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <FormLabel>Player Name</FormLabel>
+                <RK9ImportDialog onImport={handleRK9Import} />
+              </div>
+              <FormField
+                control={form.control}
+                name={`players.${playerId}.name`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Enter player name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             {/* Conditional fields based on overview type */}
             {overviewType === "Bracket" ? (
