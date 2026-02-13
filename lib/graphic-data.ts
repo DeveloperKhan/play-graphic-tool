@@ -2,12 +2,13 @@
  * Graphic data utilities for parsing CSV and preparing graphic data
  */
 
-import type { BracketSide, BracketGroup, UsageStats, TournamentData, ColumnId, ColumnWrapperConfig, BracketLabels, OverviewType } from "./types";
+import type { BracketSide, BracketGroup, UsageStats, TournamentData, ColumnId, ColumnWrapperConfig, BracketLabels, OverviewType, Placement } from "./types";
 
 export interface GraphicPlayer {
   name: string;
   bracketSide: BracketSide;
   group: BracketGroup;
+  placement?: Placement;
   flags: string[];
   team: Array<{
     name: string;
@@ -25,6 +26,7 @@ export interface GraphicData {
   usageStats: UsageStats[];
   columnWrappers?: Record<ColumnId, ColumnWrapperConfig>;
   bracketLabels?: BracketLabels;
+  bracketReset?: boolean;
 }
 
 /**
@@ -161,7 +163,7 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
       const player = tournamentData.players[playerId];
       if (!player) return null;
 
-      return {
+      const graphicPlayer: GraphicPlayer = {
         name: player.name || "",
         bracketSide: player.bracketSide || "Winners",
         group: player.group || "A",
@@ -173,6 +175,13 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
           isShadow: pokemon.isShadow,
         })),
       };
+
+      // Add placement if in bracket mode
+      if (player.placement !== undefined) {
+        graphicPlayer.placement = player.placement;
+      }
+
+      return graphicPlayer;
     })
     .filter((p): p is GraphicPlayer => p !== null);
 
@@ -185,6 +194,7 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
     usageStats: calculateUsageStats(graphicPlayers, 12),
     columnWrappers: tournamentData.columnWrappers,
     bracketLabels: tournamentData.bracketLabels,
+    bracketReset: tournamentData.bracketReset,
   };
 }
 

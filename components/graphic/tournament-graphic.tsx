@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { GraphicHeader } from "./graphic-header";
 import { UsageSection } from "./usage-section";
+import { BracketSection } from "./bracket-section";
 import { PlayerColumn } from "./player-column";
 import { GraphicFooter } from "./graphic-footer";
 import { getPlayersByColumn, type GraphicData } from "@/lib/graphic-data";
@@ -95,19 +96,34 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
           {data.overviewType !== "None" && (
             <div style={{ position: "absolute", top: 87, left: 33 }}>
               <GraphicHeader
-                titleLines={data.titleLines}
+                titleLines={
+                  // In bracket mode, only show the first title line
+                  data.overviewType === "Bracket"
+                    ? [data.titleLines[0], "", ""]
+                    : data.titleLines
+                }
                 eventYear={data.eventYear}
                 eventType={data.eventType}
               />
             </div>
           )}
 
-          {/* Usage Section - positioned at 352px from top (hidden when overviewType is "None") */}
-          {data.overviewType !== "None" && (
+          {/* Usage Section - positioned at 352px from top (only for Usage mode) */}
+          {data.overviewType === "Usage" && (
             <div style={{ position: "absolute", top: 352, left: 19 }}>
               <UsageSection
                 usageStats={data.usageStats}
                 totalPlayers={data.players.length}
+              />
+            </div>
+          )}
+
+          {/* Bracket Section - positioned at x=43, y=224 (only for Bracket mode) */}
+          {data.overviewType === "Bracket" && (
+            <div style={{ position: "absolute", top: 224, left: 43 }}>
+              <BracketSection
+                players={data.players}
+                bracketReset={data.bracketReset ?? false}
               />
             </div>
           )}
