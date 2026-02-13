@@ -53,6 +53,11 @@ export function TournamentForm({
           parsedData.titleLines = ["", "", ""];
         }
 
+        // Ensure eventDateRange exists with empty defaults
+        if (!parsedData.eventDateRange) {
+          parsedData.eventDateRange = { startDate: "", endDate: "" };
+        }
+
         // Ensure playerCount is a valid number (coerce from string if needed)
         const validPlayerCounts = [4, 8, 16, 32, 64];
         let savedPlayerCount = Number(parsedData.playerCount) || 16;
