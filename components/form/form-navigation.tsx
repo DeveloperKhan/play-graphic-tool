@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, ArrowUpDown, Sparkles, RotateCcw, Copy, Upload, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import-dialog";
+import { RK9RosterImportDialog } from "./rk9-roster-import-dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,6 +37,7 @@ interface ImportedPlayer {
 interface FormNavigationProps {
   playerOrder: string[];
   playerNames: Record<string, string>;
+  getPlayerNames: () => Record<string, string>;
   activeSection: string | null;
   onNavigate: (sectionId: string) => void;
   onExpandAll: () => void;
@@ -43,6 +45,7 @@ interface FormNavigationProps {
   onSortPlayers: () => void;
   onSortAllPokemon: () => void;
   onImport: (players: ImportedPlayer[]) => void;
+  onImportFlags: (updates: Array<{ playerId: string; flags: string[] }>) => void;
   onResetForm: () => void;
   onCopyJson: () => Promise<boolean>;
   onImportJson: (json: string) => boolean;
@@ -52,6 +55,7 @@ interface FormNavigationProps {
 export function FormNavigation({
   playerOrder,
   playerNames,
+  getPlayerNames,
   activeSection,
   onNavigate,
   onExpandAll,
@@ -59,6 +63,7 @@ export function FormNavigation({
   onSortPlayers,
   onSortAllPokemon,
   onImport,
+  onImportFlags,
   onResetForm,
   onCopyJson,
   onImportJson,
@@ -136,8 +141,9 @@ export function FormNavigation({
       </div>
 
       {/* Row 2: Import/Export buttons */}
-      <div className="flex gap-2 mb-3">
+      <div className="flex gap-2 mb-3 flex-wrap">
         <ImportDialog onImport={onImport} />
+        <RK9RosterImportDialog getPlayerNames={getPlayerNames} onImportFlags={onImportFlags} />
 
         {/* Import JSON Dialog */}
         <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>

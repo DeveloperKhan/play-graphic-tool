@@ -197,6 +197,18 @@ export function TournamentForm({
     return names;
   }, [players]);
 
+  // Callback to get fresh player names (avoids stale React Hook Form watch data)
+  const getPlayerNames = React.useCallback(() => {
+    const names: Record<string, string> = {};
+    const currentPlayers = form.getValues("players");
+    if (currentPlayers) {
+      Object.entries(currentPlayers).forEach(([id, player]) => {
+        names[id] = (player as { name?: string })?.name?.trim() || "";
+      });
+    }
+    return names;
+  }, [form]);
+
   const handleOpenChange = (sectionId: string, open: boolean) => {
     setOpenSections((prev) => {
       const next = new Set(prev);
@@ -343,6 +355,12 @@ export function TournamentForm({
         form.setValue(`players.${playerId}.team.${j}.id`, pokemon.id);
         form.setValue(`players.${playerId}.team.${j}.isShadow`, pokemon.isShadow);
       }
+    }
+  };
+
+  const handleImportFlags = (updates: Array<{ playerId: string; flags: string[] }>) => {
+    for (const update of updates) {
+      form.setValue(`players.${update.playerId}.flags`, update.flags);
     }
   };
 
@@ -581,6 +599,7 @@ export function TournamentForm({
         <FormNavigation
           playerOrder={playerOrder}
           playerNames={playerNames}
+          getPlayerNames={getPlayerNames}
           activeSection={activeSection}
           onNavigate={handleNavigate}
           onExpandAll={handleExpandAll}
@@ -588,6 +607,7 @@ export function TournamentForm({
           onSortPlayers={handleSortPlayers}
           onSortAllPokemon={handleSortAllPokemon}
           onImport={handleImport}
+          onImportFlags={handleImportFlags}
           onResetForm={handleResetForm}
           onCopyJson={handleCopyJson}
           onImportJson={handleImportJson}
