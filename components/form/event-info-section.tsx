@@ -117,7 +117,12 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
             <FormItem>
               <FormLabel>Tournament Size</FormLabel>
               <Select
-                onValueChange={(value) => field.onChange(Number(value))}
+                onValueChange={(value) => {
+                  // Guard against empty values (can happen during re-renders)
+                  if (value && Number(value) > 0) {
+                    field.onChange(Number(value));
+                  }
+                }}
                 value={String(field.value)}
               >
                 <FormControl>

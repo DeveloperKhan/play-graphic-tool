@@ -8,21 +8,18 @@ import { FormNavigation } from "./form-navigation";
 import { ColumnWrapperSection, BracketLabelsSection } from "./column-wrapper-section";
 import { useTournamentForm, createDefaultTournamentData } from "@/hooks/use-tournament-form";
 import { sortTeam } from "@/lib/pokemon-sort";
-import { tournamentSchema } from "@/lib/schema";
 import type { TournamentData, Pokemon } from "@/lib/types";
 
 const STORAGE_KEY = "tournament-form-data";
 
 interface TournamentFormProps {
-  playerCount?: number;
   onFormChange?: (data: TournamentData) => void;
 }
 
 export function TournamentForm({
-  playerCount = 16,
   onFormChange,
 }: TournamentFormProps) {
-  const form = useTournamentForm(playerCount);
+  const form = useTournamentForm();
   const playerOrder = form.watch("playerOrder");
   const currentPlayerCount = form.watch("playerCount");
   const overviewType = form.watch("overviewType");
@@ -153,25 +150,6 @@ export function TournamentForm({
           if (!parsedData.columnWrappers.losers3) parsedData.columnWrappers.losers3 = defaultWrapper;
           if (!parsedData.columnWrappers.losers4) parsedData.columnWrappers.losers4 = defaultWrapper;
           if (!parsedData.columnWrappers.losers5) parsedData.columnWrappers.losers5 = defaultWrapper;
-        }
-
-        // Reset the form with saved data (no validation - always load user's data)
-        console.log("[localStorage] Final data to load:", parsedData);
-        console.log("[localStorage] Final players:", Object.keys(parsedData.players).map(id => {
-          const p = parsedData.players[id];
-          return { id, bracketSide: p.bracketSide, group: p.group, name: p.name };
-        }));
-
-        // Debug: Run Zod validation to see exact errors
-        const validationResult = tournamentSchema.safeParse(parsedData);
-        if (!validationResult.success) {
-          console.log("[Zod] Validation FAILED:");
-          console.log("[Zod] Issues:", JSON.stringify(validationResult.error.issues, null, 2));
-          validationResult.error.issues.forEach((issue, i) => {
-            console.log(`[Zod] Issue ${i + 1}: path="${issue.path.join('.')}", code="${issue.code}", message="${issue.message}"`);
-          });
-        } else {
-          console.log("[Zod] Validation PASSED");
         }
 
         form.reset(parsedData as TournamentData);
@@ -371,7 +349,7 @@ export function TournamentForm({
   const handleResetForm = () => {
     // Clear localStorage and reset form to defaults
     localStorage.removeItem(STORAGE_KEY);
-    const defaultData = createDefaultTournamentData(playerCount);
+    const defaultData = createDefaultTournamentData(currentPlayerCount);
     form.reset(defaultData);
   };
 

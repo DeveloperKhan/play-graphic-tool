@@ -12,7 +12,7 @@ function generatePlayerId(index: number): string {
 
 /**
  * Create default tournament data for form initialization
- * @param playerCount - Number of players (4, 8, 16, or 32)
+ * @param playerCount - Number of players (4, 8, 16, 32, or 64)
  * @param overviewType - Overview type (defaults to "Usage")
  */
 export function createDefaultTournamentData(
