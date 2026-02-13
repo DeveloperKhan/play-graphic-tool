@@ -10,14 +10,53 @@ interface PlayerCardProps {
 
 // Flag size for 2100x2100 canvas
 const FLAG_SIZE = 60;
+const SMALL_FLAG_SIZE = 40; // Size when 2 flags are shown
 
-function FlagIcon({ code }: { code: string }) {
+interface FlagDisplayProps {
+  flags: string[];
+}
+
+function FlagDisplay({ flags }: FlagDisplayProps) {
+  if (flags.length === 0) return null;
+
+  // Single flag - render at full size
+  if (flags.length === 1) {
+    return (
+      <CircleFlag
+        countryCode={flags[0].toLowerCase()}
+        width={FLAG_SIZE}
+        height={FLAG_SIZE}
+      />
+    );
+  }
+
+  // Two flags - render within same 60x60 bounding box
+  // Flag 1 in top-left, Flag 2 in bottom-right (in front)
   return (
-    <CircleFlag
-      countryCode={code.toLowerCase()}
-      width={FLAG_SIZE}
-      height={FLAG_SIZE}
-    />
+    <div
+      style={{
+        position: "relative",
+        width: FLAG_SIZE,
+        height: FLAG_SIZE,
+      }}
+    >
+      {/* Flag 1 - top left, behind */}
+      <div style={{ position: "absolute", top: 0, left: 0 }}>
+        <CircleFlag
+          countryCode={flags[0].toLowerCase()}
+          width={SMALL_FLAG_SIZE}
+          height={SMALL_FLAG_SIZE}
+        />
+      </div>
+      {/* Flag 2 - bottom right, in front */}
+      <div style={{ position: "absolute", bottom: 0, right: 0 }}>
+        <CircleFlag
+          countryCode={flags[1].toLowerCase()}
+          width={SMALL_FLAG_SIZE}
+          height={SMALL_FLAG_SIZE}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -75,10 +114,8 @@ export function PlayerCard({ player }: PlayerCardProps) {
     <div style={{ display: "flex", flexDirection: "column", gap: 19 }}>
       {/* Flag(s) and Player Name */}
       <div style={{ display: "flex", alignItems: "center", gap: GAP }}>
-        {player.flags.map((flag) => (
-          <FlagIcon key={flag} code={flag} />
-        ))}
-        <DynamicPlayerName name={player.name} flagCount={player.flags.length} />
+        <FlagDisplay flags={player.flags} />
+        <DynamicPlayerName name={player.name} flagCount={player.flags.length > 0 ? 1 : 0} />
       </div>
 
       {/* Pokemon Team (6 sprites in a row) */}
