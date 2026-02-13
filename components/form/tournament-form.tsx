@@ -152,13 +152,13 @@ export function TournamentForm({
           if (!parsedData.columnWrappers.losers5) parsedData.columnWrappers.losers5 = defaultWrapper;
         }
 
-        form.reset(parsedData as TournamentData);
-        // Clear any validation errors that might have been triggered
-        form.clearErrors();
-        // Update the player count ref to prevent the player count change effect from adding/removing players
+        // Update the player count ref BEFORE reset to prevent the player count change effect from resetting players
         if (parsedData.playerCount) {
           prevPlayerCountRef.current = parsedData.playerCount;
         }
+        form.reset(parsedData as TournamentData);
+        // Clear any validation errors that might have been triggered
+        form.clearErrors();
         // Explicitly notify parent to update graphic immediately
         onFormChange?.(parsedData as TournamentData);
       }
@@ -387,6 +387,11 @@ export function TournamentForm({
 
   // Handle player count changes - add or remove players as needed
   React.useEffect(() => {
+    // Skip until localStorage has been loaded to prevent race conditions
+    if (!hasLoadedFromStorage) {
+      return;
+    }
+
     // Skip if this is the initial render or if player count hasn't changed
     if (prevPlayerCountRef.current === null) {
       prevPlayerCountRef.current = currentPlayerCount;
@@ -511,7 +516,7 @@ export function TournamentForm({
       form.setValue("players", newPlayers);
       form.setValue("playerOrder", newOrder);
     }
-  }, [currentPlayerCount, form, overviewType]);
+  }, [currentPlayerCount, form, overviewType, hasLoadedFromStorage]);
 
   // Handle overview type changes - update player fields accordingly
   React.useEffect(() => {
