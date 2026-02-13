@@ -12,6 +12,7 @@ import { TeamInput } from "./team-input";
 import { Button } from "@/components/ui/button";
 import { Plus, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getFlagsForPlayer } from "@/lib/player-flag-config";
 import type { TournamentData, Placement, BracketSide, BracketGroup } from "@/lib/types";
 
 interface PlayerInputSectionProps {
@@ -88,6 +89,22 @@ export function PlayerInputSection({
   const flags = player.flags || [""];
   const canAddFlag = flags.length < 2;
   const canRemoveFlag = flags.length > 1;
+
+  // Auto-populate flags when player name matches a known player
+  React.useEffect(() => {
+    if (!playerName) return;
+
+    const knownFlags = getFlagsForPlayer(playerName);
+    if (knownFlags) {
+      // Only auto-populate if current flags are empty or just have one empty string
+      const currentFlags = player.flags || [""];
+      const hasEmptyFlags = currentFlags.length === 1 && currentFlags[0] === "";
+
+      if (hasEmptyFlags) {
+        form.setValue(`players.${playerId}.flags`, knownFlags);
+      }
+    }
+  }, [playerName, playerId, form, player.flags]);
 
   // Determine available groups based on player count
   // Top 64: A-P (16 groups for 32 players per bracket side)
