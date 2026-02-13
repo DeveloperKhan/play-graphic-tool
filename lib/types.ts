@@ -89,6 +89,11 @@ export interface BracketLabels {
   losers: BracketLabelConfig;
 }
 
+export interface EventDateRange {
+  startDate: string; // ISO date string (YYYY-MM-DD)
+  endDate: string; // ISO date string (YYYY-MM-DD)
+}
+
 export interface TournamentData {
   titleLines: [string, string, string]; // 3 lines for the title (e.g., ["Las Vegas", "Regional", "Championships"])
   eventYear: string;
@@ -102,6 +107,7 @@ export interface TournamentData {
   bracketPairings?: BracketPairing[]; // Group pairings (for Usage mode)
   columnWrappers?: ColumnWrappers; // Wrapper config for each column
   bracketLabels?: BracketLabels; // Labels for Winners/Losers bracket headers
+  eventDateRange: EventDateRange; // Date range for the event (shown as calendar badge)
 }
 
 // Pokemon data from dracoviz.com API

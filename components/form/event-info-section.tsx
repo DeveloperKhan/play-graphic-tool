@@ -214,6 +214,39 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
           )}
         />
 
+        {/* Event Date Range */}
+        <div className="space-y-3">
+          <FormLabel>Event Date Range</FormLabel>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="eventDateRange.startDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Start Date</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="eventDateRange.endDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Date</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
         {/* Bracket Reset (only show if Bracket is selected) */}
         {showBracketReset && (
           <FormField

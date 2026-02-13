@@ -8,6 +8,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/assets/fonts/proximanova_regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

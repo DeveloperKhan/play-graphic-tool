@@ -88,6 +88,12 @@ export const bracketLabelsSchema = z.object({
   losers: bracketLabelConfigSchema,
 });
 
+// Event date range schema
+export const eventDateRangeSchema = z.object({
+  startDate: z.string(), // ISO date string (YYYY-MM-DD)
+  endDate: z.string(), // ISO date string (YYYY-MM-DD)
+});
+
 // Tournament data schema
 export const tournamentSchema = z
   .object({
@@ -103,6 +109,7 @@ export const tournamentSchema = z
     bracketPairings: z.array(bracketPairingSchema).optional(),
     columnWrappers: columnWrappersSchema.optional(),
     bracketLabels: bracketLabelsSchema.optional(),
+    eventDateRange: eventDateRangeSchema,
   })
   .refine(
     (data) => {

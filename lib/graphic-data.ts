@@ -2,7 +2,7 @@
  * Graphic data utilities for parsing CSV and preparing graphic data
  */
 
-import type { BracketSide, BracketGroup, UsageStats, TournamentData, ColumnId, ColumnWrapperConfig, BracketLabels, OverviewType, Placement } from "./types";
+import type { BracketSide, BracketGroup, UsageStats, TournamentData, ColumnId, ColumnWrapperConfig, BracketLabels, OverviewType, Placement, EventDateRange } from "./types";
 
 export interface GraphicPlayer {
   name: string;
@@ -28,6 +28,7 @@ export interface GraphicData {
   columnWrappers?: Partial<Record<ColumnId, ColumnWrapperConfig>>;
   bracketLabels?: BracketLabels;
   bracketReset?: boolean;
+  eventDateRange: EventDateRange;
 }
 
 /**
@@ -197,6 +198,7 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
     columnWrappers: tournamentData.columnWrappers,
     bracketLabels: tournamentData.bracketLabels,
     bracketReset: tournamentData.bracketReset,
+    eventDateRange: tournamentData.eventDateRange,
   };
 }
 

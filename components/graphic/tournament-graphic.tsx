@@ -6,6 +6,7 @@ import { UsageSection } from "./usage-section";
 import { BracketSection } from "./bracket-section";
 import { PlayerColumn } from "./player-column";
 import { GraphicFooter } from "./graphic-footer";
+import { CalendarBadge } from "./calendar-badge";
 import { TournamentGraphic64, TournamentGraphic64Ref } from "./tournament-graphic-64";
 import { getPlayersByColumn, type GraphicData } from "@/lib/graphic-data";
 
@@ -109,9 +110,23 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
             bottom: 0,
           }}
         >
-          {/* Header - logo at x=33, y=87 (hidden when overviewType is "None") */}
-          {data.overviewType !== "None" && (
+          {/* Calendar Badge - top left corner */}
+          {data.eventDateRange.startDate && data.eventDateRange.endDate && (
             <div style={{ position: "absolute", top: 87, left: 33 }}>
+              <CalendarBadge
+                startDate={data.eventDateRange.startDate}
+                endDate={data.eventDateRange.endDate}
+              />
+            </div>
+          )}
+
+          {/* Header - logo at x=33, y=87 (shifted right if calendar badge is shown) */}
+          {data.overviewType !== "None" && (
+            <div style={{
+              position: "absolute",
+              top: 87,
+              left: data.eventDateRange.startDate && data.eventDateRange.endDate ? 301 : 33
+            }}>
               <GraphicHeader
                 titleLines={
                   // In bracket mode, only show the first title line

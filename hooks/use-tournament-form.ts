@@ -118,6 +118,10 @@ export function createDefaultTournamentData(
       winners: { enabled: true, text: "Winners Bracket" },
       losers: { enabled: true, text: "Losers Bracket" },
     },
+    eventDateRange: {
+      startDate: "",
+      endDate: "",
+    },
   };
 }
 

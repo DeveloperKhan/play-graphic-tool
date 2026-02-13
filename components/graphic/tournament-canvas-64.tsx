@@ -5,6 +5,7 @@ import { GraphicHeader } from "./graphic-header";
 import { UsageSection } from "./usage-section";
 import { PlayerColumn } from "./player-column";
 import { GraphicFooter } from "./graphic-footer";
+import { CalendarBadge } from "./calendar-badge";
 import { getPlayersByColumn64, type GraphicData } from "@/lib/graphic-data";
 
 // Canvas dimensions for Top 64 (each graphic - Winners or Losers)
@@ -104,9 +105,23 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
               bottom: 0,
             }}
           >
-            {/* Header - position at top left */}
+            {/* Calendar Badge - top left corner */}
+            {data.eventDateRange.startDate && data.eventDateRange.endDate && (
+              <div style={{ position: "absolute", top: 87, left: 33 }}>
+                <CalendarBadge
+                  startDate={data.eventDateRange.startDate}
+                  endDate={data.eventDateRange.endDate}
+                />
+              </div>
+            )}
+
+            {/* Header - position at top left (shifted right if calendar badge is shown) */}
             {data.overviewType !== "None" && (
-              <div style={{ position: "absolute", top: 50, left: 33 }}>
+              <div style={{
+                position: "absolute",
+                top: 50,
+                left: data.eventDateRange.startDate && data.eventDateRange.endDate ? 301 : 33
+              }}>
                 <GraphicHeader
                   titleLines={data.titleLines}
                   eventYear={data.eventYear}
