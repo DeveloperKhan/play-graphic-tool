@@ -104,14 +104,26 @@ export function createDefaultTournamentData(
       winners2: { mode: "lines", text: "" },
       losers1: { mode: "lines", text: "" },
       losers2: { mode: "lines", text: "" },
-      // Top 64 additional columns (5 columns per side)
+      // Top 64 additional columns (16 blocks: 8 per graphic, 4 players per block)
       ...(playerCount === 64 ? {
-        winners3: { mode: "lines", text: "" },
-        winners4: { mode: "lines", text: "" },
-        winners5: { mode: "lines", text: "" },
-        losers3: { mode: "lines", text: "" },
-        losers4: { mode: "lines", text: "" },
-        losers5: { mode: "lines", text: "" },
+        // Winners graphic columns
+        winners1a: { mode: "lines", text: "" },
+        winners1b: { mode: "lines", text: "" },
+        winners2a: { mode: "lines", text: "" },
+        winners2b: { mode: "lines", text: "" },
+        winners3a: { mode: "lines", text: "" },
+        winners3b: { mode: "lines", text: "" },
+        winners4a: { mode: "lines", text: "" },
+        winners4b: { mode: "lines", text: "" },
+        // Losers graphic columns
+        losers1a: { mode: "lines", text: "" },
+        losers1b: { mode: "lines", text: "" },
+        losers2a: { mode: "lines", text: "" },
+        losers2b: { mode: "lines", text: "" },
+        losers3a: { mode: "lines", text: "" },
+        losers3b: { mode: "lines", text: "" },
+        losers4a: { mode: "lines", text: "" },
+        losers4b: { mode: "lines", text: "" },
       } : {}),
     },
     bracketLabels: {

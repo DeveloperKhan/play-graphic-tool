@@ -23,7 +23,7 @@ export interface TournamentCanvas64Ref {
 
 export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCanvas64Props>(
   function TournamentCanvas64({ data, bracketType }, ref) {
-    const { col1, col2, col3, col4, col5 } = getPlayersByColumn64(data.players);
+    const { col1a, col1b, col2a, col2b, col3a, col3b, col4a, col4b } = getPlayersByColumn64(data.players);
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLDivElement>(null);
     const [scale, setScale] = useState(1);
@@ -65,9 +65,10 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
       ? (data.bracketLabels?.winners?.enabled ? data.bracketLabels.winners.text : undefined)
       : (data.bracketLabels?.losers?.enabled ? data.bracketLabels.losers.text : undefined);
 
-    // Get column wrapper configs based on bracket type
-    const getWrapper = (colNum: 1 | 2 | 3 | 4 | 5) => {
-      const key = `${bracketType}${colNum}` as keyof typeof data.columnWrappers;
+    // Get column wrapper configs based on bracket type and column position
+    // Each 4-player block has its own wrapper: col1a, col1b, col2a, col2b, col3a, col3b, col4a, col4b
+    const getWrapper = (colNum: 1 | 2 | 3 | 4, position: "a" | "b") => {
+      const key = `${bracketType}${colNum}${position}` as keyof typeof data.columnWrappers;
       return data.columnWrappers?.[key];
     };
 
@@ -154,52 +155,82 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
               </div>
             )}
 
-            {/* Column 1 - Groups A-B (left side, matches Top 16 Winners Col 1) */}
+            {/* Column 1 Top - Groups A-B (left side, bottom area) */}
             <div style={{ position: "absolute", top: 1050, left: 19 }}>
               <PlayerColumn
                 title={bracketLabel}
-                players={col1}
+                players={col1a}
                 startPairIndex={0}
-                wrapper={getWrapper(1)}
+                wrapper={getWrapper(1, "a")}
               />
             </div>
 
-            {/* Column 2 - Groups C-D (left side, matches Top 16 Winners Col 2) */}
+            {/* Column 1 Bottom - Groups C-D (left side, bottom area) */}
             <div style={{ position: "absolute", top: 1050, left: 751 }}>
               <PlayerColumn
-                players={col2}
+                players={col1b}
                 startPairIndex={1}
-                wrapper={getWrapper(2)}
+                wrapper={getWrapper(1, "b")}
                 reserveTitleSpace={!!bracketLabel}
               />
             </div>
 
-            {/* Column 3 - Groups E-H (right side, matches Top 16 Losers position) */}
+            {/* Column 2 Top - Groups E-F (right side, full height) */}
             <div style={{ position: "absolute", top: 169, left: 1440 }}>
               <PlayerColumn
                 title={bracketLabel}
-                players={col3}
+                players={col2a}
                 startPairIndex={0}
-                wrapper={getWrapper(3)}
+                wrapper={getWrapper(2, "a")}
               />
             </div>
 
-            {/* Column 4 - Groups I-L (right side, equal gap ~660px) */}
-            <div style={{ position: "absolute", top: 169, left: 2100 }}>
+            {/* Column 2 Bottom - Groups G-H (right side, aligned with col1a/col1b) */}
+            <div style={{ position: "absolute", top: 1050, left: 1440 }}>
               <PlayerColumn
-                players={col4}
+                players={col2b}
                 startPairIndex={2}
-                wrapper={getWrapper(4)}
+                wrapper={getWrapper(2, "b")}
                 reserveTitleSpace={!!bracketLabel}
               />
             </div>
 
-            {/* Column 5 - Groups M-P (right side, equal gap ~660px) */}
+            {/* Column 3 Top - Groups I-J (right side) */}
+            <div style={{ position: "absolute", top: 169, left: 2100 }}>
+              <PlayerColumn
+                players={col3a}
+                startPairIndex={0}
+                wrapper={getWrapper(3, "a")}
+                reserveTitleSpace={!!bracketLabel}
+              />
+            </div>
+
+            {/* Column 3 Bottom - Groups K-L (right side, aligned with col1a/col1b) */}
+            <div style={{ position: "absolute", top: 1050, left: 2100 }}>
+              <PlayerColumn
+                players={col3b}
+                startPairIndex={2}
+                wrapper={getWrapper(3, "b")}
+                reserveTitleSpace={!!bracketLabel}
+              />
+            </div>
+
+            {/* Column 4 Top - Groups M-N (right side) */}
             <div style={{ position: "absolute", top: 169, left: 2760 }}>
               <PlayerColumn
-                players={col5}
+                players={col4a}
                 startPairIndex={0}
-                wrapper={getWrapper(5)}
+                wrapper={getWrapper(4, "a")}
+                reserveTitleSpace={!!bracketLabel}
+              />
+            </div>
+
+            {/* Column 4 Bottom - Groups O-P (right side, aligned with col1a/col1b) */}
+            <div style={{ position: "absolute", top: 1050, left: 2760 }}>
+              <PlayerColumn
+                players={col4b}
+                startPairIndex={2}
+                wrapper={getWrapper(4, "b")}
                 reserveTitleSpace={!!bracketLabel}
               />
             </div>

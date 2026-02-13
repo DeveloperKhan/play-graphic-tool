@@ -131,23 +131,34 @@ const COLUMNS_16: ColumnConfig[] = [
   { id: "losers2", label: "Losers Column 2 (E-H)", colorIndex: 2, defaultWrapperText: "13th-16th" },
 ];
 
-// Columns for Top 64 (8 columns total - 4 winners, 4 losers)
-const COLUMNS_64: ColumnConfig[] = [
-  { id: "winners1", label: "Winners Col 1 (A-D)", colorIndex: 0, defaultWrapperText: "1st-8th" },
-  { id: "winners2", label: "Winners Col 2 (E-H)", colorIndex: 1, defaultWrapperText: "9th-16th" },
-  { id: "winners3", label: "Winners Col 3 (I-L)", colorIndex: 2, defaultWrapperText: "17th-24th" },
-  { id: "winners4", label: "Winners Col 4 (M-P)", colorIndex: 3, defaultWrapperText: "25th-32nd" },
-  { id: "losers1", label: "Losers Col 1 (A-D)", colorIndex: 0, defaultWrapperText: "1st-8th" },
-  { id: "losers2", label: "Losers Col 2 (E-H)", colorIndex: 1, defaultWrapperText: "9th-16th" },
-  { id: "losers3", label: "Losers Col 3 (I-L)", colorIndex: 2, defaultWrapperText: "17th-24th" },
-  { id: "losers4", label: "Losers Col 4 (M-P)", colorIndex: 3, defaultWrapperText: "25th-32nd" },
+// Columns for Top 64 (16 blocks total - 4 players per block)
+// Winners graphic (8 blocks: 2 per column × 4 columns)
+const COLUMNS_64_WINNERS: ColumnConfig[] = [
+  { id: "winners1a", label: "Winners Col 1 Top (A-B)", colorIndex: 0, defaultWrapperText: "1st-4th" },
+  { id: "winners1b", label: "Winners Col 1 Bottom (C-D)", colorIndex: 1, defaultWrapperText: "5th-8th" },
+  { id: "winners2a", label: "Winners Col 2 Top (E-F)", colorIndex: 2, defaultWrapperText: "9th-12th" },
+  { id: "winners2b", label: "Winners Col 2 Bottom (G-H)", colorIndex: 3, defaultWrapperText: "13th-16th" },
+  { id: "winners3a", label: "Winners Col 3 Top (I-J)", colorIndex: 0, defaultWrapperText: "17th-20th" },
+  { id: "winners3b", label: "Winners Col 3 Bottom (K-L)", colorIndex: 1, defaultWrapperText: "21st-24th" },
+  { id: "winners4a", label: "Winners Col 4 Top (M-N)", colorIndex: 2, defaultWrapperText: "25th-28th" },
+  { id: "winners4b", label: "Winners Col 4 Bottom (O-P)", colorIndex: 3, defaultWrapperText: "29th-32nd" },
+];
+
+// Losers graphic (8 blocks: 2 per column × 4 columns)
+const COLUMNS_64_LOSERS: ColumnConfig[] = [
+  { id: "losers1a", label: "Losers Col 1 Top (A-B)", colorIndex: 0, defaultWrapperText: "1st-4th" },
+  { id: "losers1b", label: "Losers Col 1 Bottom (C-D)", colorIndex: 1, defaultWrapperText: "5th-8th" },
+  { id: "losers2a", label: "Losers Col 2 Top (E-F)", colorIndex: 2, defaultWrapperText: "9th-12th" },
+  { id: "losers2b", label: "Losers Col 2 Bottom (G-H)", colorIndex: 3, defaultWrapperText: "13th-16th" },
+  { id: "losers3a", label: "Losers Col 3 Top (I-J)", colorIndex: 0, defaultWrapperText: "17th-20th" },
+  { id: "losers3b", label: "Losers Col 3 Bottom (K-L)", colorIndex: 1, defaultWrapperText: "21st-24th" },
+  { id: "losers4a", label: "Losers Col 4 Top (M-N)", colorIndex: 2, defaultWrapperText: "25th-28th" },
+  { id: "losers4b", label: "Losers Col 4 Bottom (O-P)", colorIndex: 3, defaultWrapperText: "29th-32nd" },
 ];
 
 export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
   const playerCount = form.watch("playerCount");
-
-  // Select columns based on player count
-  const columns = playerCount === 64 ? COLUMNS_64 : COLUMNS_16;
+  const isTop64 = playerCount === 64;
 
   return (
     <Card>
@@ -158,16 +169,49 @@ export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        {columns.map((column) => (
-          <ColumnWrapperField
-            key={column.id}
-            form={form}
-            columnId={column.id}
-            label={column.label}
-            colorIndex={column.colorIndex}
-            defaultWrapperText={column.defaultWrapperText}
-          />
-        ))}
+        {isTop64 ? (
+          <>
+            {/* Winners Graphic Columns */}
+            <div className="space-y-3">
+              <h4 className="text-sm font-semibold text-muted-foreground">Winners Graphic</h4>
+              {COLUMNS_64_WINNERS.map((column) => (
+                <ColumnWrapperField
+                  key={column.id}
+                  form={form}
+                  columnId={column.id}
+                  label={column.label}
+                  colorIndex={column.colorIndex}
+                  defaultWrapperText={column.defaultWrapperText}
+                />
+              ))}
+            </div>
+            {/* Losers Graphic Columns */}
+            <div className="space-y-3 pt-4 border-t">
+              <h4 className="text-sm font-semibold text-muted-foreground">Losers Graphic</h4>
+              {COLUMNS_64_LOSERS.map((column) => (
+                <ColumnWrapperField
+                  key={column.id}
+                  form={form}
+                  columnId={column.id}
+                  label={column.label}
+                  colorIndex={column.colorIndex}
+                  defaultWrapperText={column.defaultWrapperText}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          COLUMNS_16.map((column) => (
+            <ColumnWrapperField
+              key={column.id}
+              form={form}
+              columnId={column.id}
+              label={column.label}
+              colorIndex={column.colorIndex}
+              defaultWrapperText={column.defaultWrapperText}
+            />
+          ))
+        )}
       </CardContent>
     </Card>
   );

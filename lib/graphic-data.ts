@@ -218,11 +218,14 @@ export function getPlayersByColumn(data: GraphicData) {
 }
 
 /**
- * Get players organized into 5 columns for Top 64 graphics
- * Each graphic (Winners or Losers) has 32 players in 5 columns:
- * - Columns 1-2 (left side, below usage): 4 players each (groups A-B, C-D)
- * - Columns 3-5 (right side, full height): 8 players each (groups E-H, I-L, M-P)
- * Players are sorted by group so same-group players are paired (A, A, B, B, etc.)
+ * Get players organized into 4 columns for Top 64 graphics
+ * Each graphic (Winners or Losers) has 32 players in 4 columns of 8 players each.
+ * Each column is split into top (a) and bottom (b) blocks of 4 players each.
+ * - Column 1: Groups A-D (top: A-B, bottom: C-D)
+ * - Column 2: Groups E-H (top: E-F, bottom: G-H)
+ * - Column 3: Groups I-L (top: I-J, bottom: K-L)
+ * - Column 4: Groups M-P (top: M-N, bottom: O-P)
+ * Players are sorted by group so same-group players are paired.
  */
 export function getPlayersByColumn64(players: GraphicPlayer[]) {
   const groupOrder: Record<string, number> = {
@@ -234,15 +237,23 @@ export function getPlayersByColumn64(players: GraphicPlayer[]) {
   const sortByGroup = (a: GraphicPlayer, b: GraphicPlayer) =>
     (groupOrder[a.group] ?? 99) - (groupOrder[b.group] ?? 99);
 
-  // Left side columns (below usage section) - 4 players each (2 pairs)
-  const col1 = players.filter((p) => ["A", "B"].includes(p.group)).sort(sortByGroup);
-  const col2 = players.filter((p) => ["C", "D"].includes(p.group)).sort(sortByGroup);
-  // Right side columns (full height) - 8 players each (4 pairs)
-  const col3 = players.filter((p) => ["E", "F", "G", "H"].includes(p.group)).sort(sortByGroup);
-  const col4 = players.filter((p) => ["I", "J", "K", "L"].includes(p.group)).sort(sortByGroup);
-  const col5 = players.filter((p) => ["M", "N", "O", "P"].includes(p.group)).sort(sortByGroup);
+  // Column 1: Groups A-D (8 players total)
+  const col1a = players.filter((p) => ["A", "B"].includes(p.group)).sort(sortByGroup);
+  const col1b = players.filter((p) => ["C", "D"].includes(p.group)).sort(sortByGroup);
 
-  return { col1, col2, col3, col4, col5 };
+  // Column 2: Groups E-H (8 players total)
+  const col2a = players.filter((p) => ["E", "F"].includes(p.group)).sort(sortByGroup);
+  const col2b = players.filter((p) => ["G", "H"].includes(p.group)).sort(sortByGroup);
+
+  // Column 3: Groups I-L (8 players total)
+  const col3a = players.filter((p) => ["I", "J"].includes(p.group)).sort(sortByGroup);
+  const col3b = players.filter((p) => ["K", "L"].includes(p.group)).sort(sortByGroup);
+
+  // Column 4: Groups M-P (8 players total)
+  const col4a = players.filter((p) => ["M", "N"].includes(p.group)).sort(sortByGroup);
+  const col4b = players.filter((p) => ["O", "P"].includes(p.group)).sort(sortByGroup);
+
+  return { col1a, col1b, col2a, col2b, col3a, col3b, col4a, col4b };
 }
 
 /**

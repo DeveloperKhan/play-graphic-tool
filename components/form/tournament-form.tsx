@@ -490,19 +490,31 @@ export function TournamentForm({
       form.setValue("players", newPlayers);
       form.setValue("playerOrder", newOrder);
 
-      // Add Top 64 column wrappers (5 columns per side)
+      // Add Top 64 column wrappers (16 blocks: 8 per graphic, 4 players per block)
       const defaultWrapper = { mode: "lines" as const, text: "" };
       form.setValue("columnWrappers", {
         winners1: defaultWrapper,
         winners2: defaultWrapper,
-        winners3: defaultWrapper,
-        winners4: defaultWrapper,
-        winners5: defaultWrapper,
         losers1: defaultWrapper,
         losers2: defaultWrapper,
-        losers3: defaultWrapper,
-        losers4: defaultWrapper,
-        losers5: defaultWrapper,
+        // Winners graphic columns
+        winners1a: defaultWrapper,
+        winners1b: defaultWrapper,
+        winners2a: defaultWrapper,
+        winners2b: defaultWrapper,
+        winners3a: defaultWrapper,
+        winners3b: defaultWrapper,
+        winners4a: defaultWrapper,
+        winners4b: defaultWrapper,
+        // Losers graphic columns
+        losers1a: defaultWrapper,
+        losers1b: defaultWrapper,
+        losers2a: defaultWrapper,
+        losers2b: defaultWrapper,
+        losers3a: defaultWrapper,
+        losers3b: defaultWrapper,
+        losers4a: defaultWrapper,
+        losers4b: defaultWrapper,
       });
     } else if (currentPlayerCount > prevCount) {
       // Add new players (for non-64 counts)

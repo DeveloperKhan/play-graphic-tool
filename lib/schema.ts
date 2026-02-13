@@ -62,18 +62,30 @@ export const columnWrapperConfigSchema = z.object({
 
 // Column wrappers schema (supports both Top 16 and Top 64)
 export const columnWrappersSchema = z.object({
-  // Required for Top 16+
+  // Required for Top 16 (4 players per column)
   winners1: columnWrapperConfigSchema,
   winners2: columnWrapperConfigSchema,
   losers1: columnWrapperConfigSchema,
   losers2: columnWrapperConfigSchema,
-  // Optional for Top 64 (5 columns per side)
-  winners3: columnWrapperConfigSchema.optional(),
-  winners4: columnWrapperConfigSchema.optional(),
-  winners5: columnWrapperConfigSchema.optional(),
-  losers3: columnWrapperConfigSchema.optional(),
-  losers4: columnWrapperConfigSchema.optional(),
-  losers5: columnWrapperConfigSchema.optional(),
+  // Optional for Top 64 - each column split into 'a' (top 4) and 'b' (bottom 4)
+  // Winners graphic columns
+  winners1a: columnWrapperConfigSchema.optional(),
+  winners1b: columnWrapperConfigSchema.optional(),
+  winners2a: columnWrapperConfigSchema.optional(),
+  winners2b: columnWrapperConfigSchema.optional(),
+  winners3a: columnWrapperConfigSchema.optional(),
+  winners3b: columnWrapperConfigSchema.optional(),
+  winners4a: columnWrapperConfigSchema.optional(),
+  winners4b: columnWrapperConfigSchema.optional(),
+  // Losers graphic columns
+  losers1a: columnWrapperConfigSchema.optional(),
+  losers1b: columnWrapperConfigSchema.optional(),
+  losers2a: columnWrapperConfigSchema.optional(),
+  losers2b: columnWrapperConfigSchema.optional(),
+  losers3a: columnWrapperConfigSchema.optional(),
+  losers3b: columnWrapperConfigSchema.optional(),
+  losers4a: columnWrapperConfigSchema.optional(),
+  losers4b: columnWrapperConfigSchema.optional(),
 });
 
 // Bracket label config schema

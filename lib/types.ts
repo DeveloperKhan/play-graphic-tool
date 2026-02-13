@@ -50,11 +50,14 @@ export interface BracketPairing {
 export type PlayerCount = 4 | 8 | 16 | 32 | 64;
 
 // Column identifiers for wrapper configuration
-// For Top 16: winners1, winners2, losers1, losers2
-// For Top 64: all 10 columns (5 per side)
+// For Top 16: winners1, winners2, losers1, losers2 (4 players each)
+// For Top 64: 16 blocks total - each column split into 'a' (top) and 'b' (bottom) for 4 players each
 export type ColumnId =
-  | "winners1" | "winners2" | "winners3" | "winners4" | "winners5"
-  | "losers1" | "losers2" | "losers3" | "losers4" | "losers5";
+  | "winners1" | "winners2" | "losers1" | "losers2"  // Top 16 (4 columns)
+  | "winners1a" | "winners1b" | "winners2a" | "winners2b"  // Top 64 Winners columns 1-2
+  | "winners3a" | "winners3b" | "winners4a" | "winners4b"  // Top 64 Winners columns 3-4
+  | "losers1a" | "losers1b" | "losers2a" | "losers2b"  // Top 64 Losers columns 1-2
+  | "losers3a" | "losers3b" | "losers4a" | "losers4b";  // Top 64 Losers columns 3-4
 
 // Column display modes: lines (default pair lines), wrapper (L-shaped border), hidden (no lines)
 export type ColumnDisplayMode = "lines" | "wrapper" | "hidden";
@@ -64,19 +67,32 @@ export interface ColumnWrapperConfig {
   text: string;
 }
 
-// Column wrappers - base 4 required for Top 16, additional 6 optional for Top 64
+// Column wrappers - base 4 required for Top 16, additional 16 for Top 64 (4 players per block)
 export interface ColumnWrappers {
+  // Top 16 columns (4 players each)
   winners1: ColumnWrapperConfig;
   winners2: ColumnWrapperConfig;
   losers1: ColumnWrapperConfig;
   losers2: ColumnWrapperConfig;
-  // Optional columns for Top 64 (5 columns per side)
-  winners3?: ColumnWrapperConfig;
-  winners4?: ColumnWrapperConfig;
-  winners5?: ColumnWrapperConfig;
-  losers3?: ColumnWrapperConfig;
-  losers4?: ColumnWrapperConfig;
-  losers5?: ColumnWrapperConfig;
+  // Top 64 columns - each column split into 'a' (top 4) and 'b' (bottom 4)
+  // Winners graphic columns
+  winners1a?: ColumnWrapperConfig;
+  winners1b?: ColumnWrapperConfig;
+  winners2a?: ColumnWrapperConfig;
+  winners2b?: ColumnWrapperConfig;
+  winners3a?: ColumnWrapperConfig;
+  winners3b?: ColumnWrapperConfig;
+  winners4a?: ColumnWrapperConfig;
+  winners4b?: ColumnWrapperConfig;
+  // Losers graphic columns
+  losers1a?: ColumnWrapperConfig;
+  losers1b?: ColumnWrapperConfig;
+  losers2a?: ColumnWrapperConfig;
+  losers2b?: ColumnWrapperConfig;
+  losers3a?: ColumnWrapperConfig;
+  losers3b?: ColumnWrapperConfig;
+  losers4a?: ColumnWrapperConfig;
+  losers4b?: ColumnWrapperConfig;
 }
 
 export interface BracketLabelConfig {
