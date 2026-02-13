@@ -31,14 +31,27 @@ export function createDefaultTournamentData(
     if (index < 8) return "5-8";
     if (index < 16) return "9-16";
     if (index < 24) return "17-24";
-    return "25-32";
+    if (index < 32) return "25-32";
+    return "33-64";
   };
 
-  // Determine default group based on player count (for Usage mode)
-  const getDefaultGroup = (index: number): string => {
+  // Determine default group and bracket side based on player count (for Usage mode)
+  const getDefaultBracketInfo = (index: number): { bracketSide: "Winners" | "Losers"; group: string } => {
     const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"];
-    const groupCount = playerCount / 2; // Half for winners, half for losers
-    return groups[index % groupCount];
+
+    if (playerCount === 64) {
+      // Top 64: First 32 are Winners (2 per group A-P), next 32 are Losers (2 per group A-P)
+      const bracketSide = index < 32 ? "Winners" : "Losers";
+      const indexInBracket = index < 32 ? index : index - 32;
+      const group = groups[Math.floor(indexInBracket / 2)];
+      return { bracketSide, group };
+    } else {
+      // Other counts: first half Winners, second half Losers
+      const bracketSide = index < playerCount / 2 ? "Winners" : "Losers";
+      const groupCount = Math.min(playerCount / 2, 8); // Max 8 groups for Top 16 and below
+      const group = groups[index % groupCount];
+      return { bracketSide, group };
+    }
   };
 
   // Create players with empty data
@@ -66,10 +79,11 @@ export function createDefaultTournamentData(
       };
     } else {
       // Usage mode defaults
+      const { bracketSide, group } = getDefaultBracketInfo(i);
       players[playerId] = {
         ...basePlayer,
-        bracketSide: (i < playerCount / 2 ? "Winners" : "Losers") as "Winners" | "Losers",
-        group: getDefaultGroup(i) as any,
+        bracketSide,
+        group: group as any,
       };
     }
   }
@@ -79,7 +93,7 @@ export function createDefaultTournamentData(
     eventYear: new Date().getFullYear().toString(),
     eventType: "Regional",
     overviewType,
-    playerCount: playerCount as 4 | 8 | 16 | 32,
+    playerCount: playerCount as 4 | 8 | 16 | 32 | 64,
     bracketReset: false,
     players,
     playerOrder,
@@ -90,6 +104,15 @@ export function createDefaultTournamentData(
       winners2: { mode: "lines", text: "" },
       losers1: { mode: "lines", text: "" },
       losers2: { mode: "lines", text: "" },
+      // Top 64 additional columns (5 columns per side)
+      ...(playerCount === 64 ? {
+        winners3: { mode: "lines", text: "" },
+        winners4: { mode: "lines", text: "" },
+        winners5: { mode: "lines", text: "" },
+        losers3: { mode: "lines", text: "" },
+        losers4: { mode: "lines", text: "" },
+        losers5: { mode: "lines", text: "" },
+      } : {}),
     },
     bracketLabels: {
       winners: { enabled: true, text: "Winners" },

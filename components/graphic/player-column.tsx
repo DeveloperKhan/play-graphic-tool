@@ -85,9 +85,9 @@ export function PlayerColumn({
 
         {/* Players without any lines - add margin to maintain alignment */}
         <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP, marginLeft: PAIR_LINE_OFFSET }}>
-          {players.map((player) => (
+          {players.map((player, index) => (
             <PlayerCard
-              key={`${player.bracketSide}-${player.group}`}
+              key={`${player.bracketSide}-${player.group}-${index}`}
               player={player}
             />
           ))}
@@ -120,9 +120,9 @@ export function PlayerColumn({
         {/* Wrapped players - no individual pair lines, add margin to match pair line offset */}
         <ColumnWrapper text={wrapper?.text ?? ""} color={wrapperColor}>
           <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP, marginLeft: PAIR_LINE_OFFSET }}>
-            {players.map((player) => (
+            {players.map((player, index) => (
               <PlayerCard
-                key={`${player.bracketSide}-${player.group}`}
+                key={`${player.bracketSide}-${player.group}-${index}`}
                 player={player}
               />
             ))}
@@ -183,9 +183,9 @@ export function PlayerColumn({
 
               {/* Player cards for this pair */}
               <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP }}>
-                {pair.map((player) => (
+                {pair.map((player, index) => (
                   <PlayerCard
-                    key={`${player.bracketSide}-${player.group}`}
+                    key={`${player.bracketSide}-${player.group}-${index}`}
                     player={player}
                   />
                 ))}

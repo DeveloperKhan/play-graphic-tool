@@ -20,6 +20,7 @@ export const playerSchema = z.object({
     z.literal("9-16"),
     z.literal("17-24"),
     z.literal("25-32"),
+    z.literal("33-64"),
   ]).optional(),
   // For Usage mode
   bracketSide: z.enum(["Winners", "Losers"]).optional(),
@@ -59,12 +60,20 @@ export const columnWrapperConfigSchema = z.object({
   text: z.string(),
 });
 
-// Column wrappers schema
+// Column wrappers schema (supports both Top 16 and Top 64)
 export const columnWrappersSchema = z.object({
+  // Required for Top 16+
   winners1: columnWrapperConfigSchema,
   winners2: columnWrapperConfigSchema,
   losers1: columnWrapperConfigSchema,
   losers2: columnWrapperConfigSchema,
+  // Optional for Top 64 (5 columns per side)
+  winners3: columnWrapperConfigSchema.optional(),
+  winners4: columnWrapperConfigSchema.optional(),
+  winners5: columnWrapperConfigSchema.optional(),
+  losers3: columnWrapperConfigSchema.optional(),
+  losers4: columnWrapperConfigSchema.optional(),
+  losers5: columnWrapperConfigSchema.optional(),
 });
 
 // Bracket label config schema
@@ -86,7 +95,7 @@ export const tournamentSchema = z
     eventYear: z.string().min(4, "Event year required"),
     eventType: z.enum(["Regional", "Generic", "International", "Worlds"]),
     overviewType: z.enum(["Usage", "Bracket", "None"]),
-    playerCount: z.union([z.literal(4), z.literal(8), z.literal(16), z.literal(32)]),
+    playerCount: z.union([z.literal(4), z.literal(8), z.literal(16), z.literal(32), z.literal(64)]),
     bracketReset: z.boolean(),
     players: z.record(z.string(), playerSchema),
     playerOrder: z.array(z.string()),
@@ -137,6 +146,7 @@ export const tournamentSchema = z
         "9-16": placements.filter((p) => p === "9-16").length,
         "17-24": placements.filter((p) => p === "17-24").length,
         "25-32": placements.filter((p) => p === "25-32").length,
+        "33-64": placements.filter((p) => p === "33-64").length,
       };
 
       const playerCount = players.length;
@@ -151,7 +161,8 @@ export const tournamentSchema = z
           counts["5-8"] === 0 &&
           counts["9-16"] === 0 &&
           counts["17-24"] === 0 &&
-          counts["25-32"] === 0
+          counts["25-32"] === 0 &&
+          counts["33-64"] === 0
         );
       }
 
@@ -165,7 +176,8 @@ export const tournamentSchema = z
           counts["5-8"] === 4 &&
           counts["9-16"] === 0 &&
           counts["17-24"] === 0 &&
-          counts["25-32"] === 0
+          counts["25-32"] === 0 &&
+          counts["33-64"] === 0
         );
       }
 
@@ -179,7 +191,8 @@ export const tournamentSchema = z
           counts["5-8"] === 4 &&
           counts["9-16"] === 8 &&
           counts["17-24"] === 0 &&
-          counts["25-32"] === 0
+          counts["25-32"] === 0 &&
+          counts["33-64"] === 0
         );
       }
 
@@ -193,7 +206,23 @@ export const tournamentSchema = z
           counts["5-8"] === 4 &&
           counts["9-16"] === 8 &&
           counts["17-24"] === 8 &&
-          counts["25-32"] === 8
+          counts["25-32"] === 8 &&
+          counts["33-64"] === 0
+        );
+      }
+
+      // Top 64: 1st, 2nd, 3rd, 4th, 4x 5-8, 8x 9-16, 8x 17-24, 8x 25-32, 32x 33-64
+      if (playerCount === 64) {
+        return (
+          counts["1"] === 1 &&
+          counts["2"] === 1 &&
+          counts["3"] === 1 &&
+          counts["4"] === 1 &&
+          counts["5-8"] === 4 &&
+          counts["9-16"] === 8 &&
+          counts["17-24"] === 8 &&
+          counts["25-32"] === 8 &&
+          counts["33-64"] === 32
         );
       }
 
@@ -201,7 +230,7 @@ export const tournamentSchema = z
     },
     {
       message:
-        "Invalid placement distribution for player count (must be 4, 8, 16, or 32)",
+        "Invalid placement distribution for player count (must be 4, 8, 16, 32, or 64)",
     }
   )
   .refine(

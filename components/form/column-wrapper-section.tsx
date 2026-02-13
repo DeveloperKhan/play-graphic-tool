@@ -123,14 +123,32 @@ interface ColumnConfig {
   defaultWrapperText: string; // Default text when wrapper mode is selected
 }
 
-const COLUMNS: ColumnConfig[] = [
+// Columns for Top 16
+const COLUMNS_16: ColumnConfig[] = [
   { id: "winners1", label: "Winners Column 1 (A-D)", colorIndex: 0, defaultWrapperText: "1st-4th" },
   { id: "winners2", label: "Winners Column 2 (E-H)", colorIndex: 2, defaultWrapperText: "5th-8th" },
   { id: "losers1", label: "Losers Column 1 (A-D)", colorIndex: 0, defaultWrapperText: "9th-12th" },
   { id: "losers2", label: "Losers Column 2 (E-H)", colorIndex: 2, defaultWrapperText: "13th-16th" },
 ];
 
+// Columns for Top 64 (8 columns total - 4 winners, 4 losers)
+const COLUMNS_64: ColumnConfig[] = [
+  { id: "winners1", label: "Winners Col 1 (A-D)", colorIndex: 0, defaultWrapperText: "1st-8th" },
+  { id: "winners2", label: "Winners Col 2 (E-H)", colorIndex: 1, defaultWrapperText: "9th-16th" },
+  { id: "winners3", label: "Winners Col 3 (I-L)", colorIndex: 2, defaultWrapperText: "17th-24th" },
+  { id: "winners4", label: "Winners Col 4 (M-P)", colorIndex: 3, defaultWrapperText: "25th-32nd" },
+  { id: "losers1", label: "Losers Col 1 (A-D)", colorIndex: 0, defaultWrapperText: "1st-8th" },
+  { id: "losers2", label: "Losers Col 2 (E-H)", colorIndex: 1, defaultWrapperText: "9th-16th" },
+  { id: "losers3", label: "Losers Col 3 (I-L)", colorIndex: 2, defaultWrapperText: "17th-24th" },
+  { id: "losers4", label: "Losers Col 4 (M-P)", colorIndex: 3, defaultWrapperText: "25th-32nd" },
+];
+
 export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
+  const playerCount = form.watch("playerCount");
+
+  // Select columns based on player count
+  const columns = playerCount === 64 ? COLUMNS_64 : COLUMNS_16;
+
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -140,7 +158,7 @@ export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        {COLUMNS.map((column) => (
+        {columns.map((column) => (
           <ColumnWrapperField
             key={column.id}
             form={form}

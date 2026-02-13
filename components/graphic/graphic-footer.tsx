@@ -5,7 +5,15 @@ const LOGO_WIDTH = 328.14;
 const LOGO_HEIGHT = 68.13;
 const ICON_SIZE = 28;
 
-export function GraphicFooter() {
+interface GraphicFooterProps {
+  /** Use extended tagline for wider graphics (Top 64) */
+  extended?: boolean;
+}
+
+const SHORT_TAGLINE = "Pokémon GO data insights and infographics. Find more at:";
+const EXTENDED_TAGLINE = "Pokémon GO data insights and infographics for Play! Pokémon and GO Battle League. Find teams, usage data, schedules, tournaments and more at:";
+
+export function GraphicFooter({ extended = false }: GraphicFooterProps) {
   return (
     <div
       style={{
@@ -40,7 +48,7 @@ export function GraphicFooter() {
 
       {/* Tagline */}
       <span style={{ fontFamily: "Prompt, sans-serif", color: "white", fontSize: 30 }}>
-        Pokémon GO data insights and infographics. Find more at:
+        {extended ? EXTENDED_TAGLINE : SHORT_TAGLINE}
       </span>
 
       {/* Website */}

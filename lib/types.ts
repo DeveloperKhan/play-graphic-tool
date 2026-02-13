@@ -2,7 +2,7 @@
 
 export type EventType = "Regional" | "Generic" | "International" | "Worlds";
 export type OverviewType = "Usage" | "Bracket" | "None";
-export type Placement = 1 | 2 | 3 | 4 | "5-8" | "9-16" | "17-24" | "25-32";
+export type Placement = 1 | 2 | 3 | 4 | "5-8" | "9-16" | "17-24" | "25-32" | "33-64";
 
 export interface Pokemon {
   id: string; // speciesId from Pokemon data
@@ -47,10 +47,14 @@ export interface BracketPairing {
   description?: string; // Optional description (e.g., "Winners A vs Winners H")
 }
 
-export type PlayerCount = 4 | 8 | 16 | 32;
+export type PlayerCount = 4 | 8 | 16 | 32 | 64;
 
 // Column identifiers for wrapper configuration
-export type ColumnId = "winners1" | "winners2" | "losers1" | "losers2";
+// For Top 16: winners1, winners2, losers1, losers2
+// For Top 64: all 10 columns (5 per side)
+export type ColumnId =
+  | "winners1" | "winners2" | "winners3" | "winners4" | "winners5"
+  | "losers1" | "losers2" | "losers3" | "losers4" | "losers5";
 
 // Column display modes: lines (default pair lines), wrapper (L-shaped border), hidden (no lines)
 export type ColumnDisplayMode = "lines" | "wrapper" | "hidden";
@@ -58,6 +62,21 @@ export type ColumnDisplayMode = "lines" | "wrapper" | "hidden";
 export interface ColumnWrapperConfig {
   mode: ColumnDisplayMode;
   text: string;
+}
+
+// Column wrappers - base 4 required for Top 16, additional 6 optional for Top 64
+export interface ColumnWrappers {
+  winners1: ColumnWrapperConfig;
+  winners2: ColumnWrapperConfig;
+  losers1: ColumnWrapperConfig;
+  losers2: ColumnWrapperConfig;
+  // Optional columns for Top 64 (5 columns per side)
+  winners3?: ColumnWrapperConfig;
+  winners4?: ColumnWrapperConfig;
+  winners5?: ColumnWrapperConfig;
+  losers3?: ColumnWrapperConfig;
+  losers4?: ColumnWrapperConfig;
+  losers5?: ColumnWrapperConfig;
 }
 
 export interface BracketLabelConfig {
@@ -81,7 +100,7 @@ export interface TournamentData {
   playerOrder: string[]; // ordered list of player ids (for rendering order)
   bracketMatches?: BracketMatch[]; // Manual bracket overrides (for Bracket mode)
   bracketPairings?: BracketPairing[]; // Group pairings (for Usage mode)
-  columnWrappers?: Record<ColumnId, ColumnWrapperConfig>; // Wrapper config for each column
+  columnWrappers?: ColumnWrappers; // Wrapper config for each column
   bracketLabels?: BracketLabels; // Labels for Winners/Losers bracket headers
 }
 

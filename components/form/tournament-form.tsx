@@ -8,6 +8,7 @@ import { FormNavigation } from "./form-navigation";
 import { ColumnWrapperSection, BracketLabelsSection } from "./column-wrapper-section";
 import { useTournamentForm, createDefaultTournamentData } from "@/hooks/use-tournament-form";
 import { sortTeam } from "@/lib/pokemon-sort";
+import { tournamentSchema } from "@/lib/schema";
 import type { TournamentData, Pokemon } from "@/lib/types";
 
 const STORAGE_KEY = "tournament-form-data";
@@ -33,6 +34,9 @@ export function TournamentForm({
   const [isSortingAllPokemon, setIsSortingAllPokemon] = React.useState(false);
   const [hasLoadedFromStorage, setHasLoadedFromStorage] = React.useState(false);
 
+  // Ref to track previous player count for detecting changes (declared early for localStorage access)
+  const prevPlayerCountRef = React.useRef<number | null>(null);
+
   // Load saved form data from localStorage on mount
   React.useEffect(() => {
     if (hasLoadedFromStorage) return;
@@ -41,6 +45,12 @@ export function TournamentForm({
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsedData = JSON.parse(saved);
+        console.log("[localStorage] Raw saved data:", parsedData);
+        console.log("[localStorage] playerCount:", parsedData.playerCount);
+        console.log("[localStorage] players count:", Object.keys(parsedData.players || {}).length);
+        console.log("[localStorage] playerOrder:", parsedData.playerOrder?.length);
+        console.log("[localStorage] overviewType:", parsedData.overviewType);
+
         // Migrate old eventName to titleLines if needed
         if (!parsedData.titleLines && parsedData.eventName !== undefined) {
           parsedData.titleLines = [parsedData.eventName, "", ""];
@@ -50,8 +60,127 @@ export function TournamentForm({
         if (!parsedData.titleLines) {
           parsedData.titleLines = ["", "", ""];
         }
-        // Reset the form with saved data
+
+        // Ensure playerCount is a valid number (coerce from string if needed)
+        const validPlayerCounts = [4, 8, 16, 32, 64];
+        let savedPlayerCount = Number(parsedData.playerCount) || 16;
+        if (!validPlayerCounts.includes(savedPlayerCount)) {
+          savedPlayerCount = 16; // Fall back to 16 if invalid
+        }
+        parsedData.playerCount = savedPlayerCount;
+
+        const actualPlayerCount = Object.keys(parsedData.players || {}).length;
+
+        // Fix player count mismatch (can happen when playerCount changed but effect didn't complete)
+        if (savedPlayerCount !== actualPlayerCount && parsedData.players && parsedData.playerOrder) {
+          const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"];
+          const overviewType = parsedData.overviewType || "Usage";
+
+          if (savedPlayerCount > actualPlayerCount) {
+            // Add missing players
+            for (let i = actualPlayerCount; i < savedPlayerCount; i++) {
+              const playerId = `player-${i + 1}`;
+              parsedData.playerOrder.push(playerId);
+
+              // Determine default placement based on index (check from lowest to highest)
+              let defaultPlacement: any = "33-64";
+              if (i === 0) defaultPlacement = 1;
+              else if (i === 1) defaultPlacement = 2;
+              else if (i === 2) defaultPlacement = 3;
+              else if (i === 3) defaultPlacement = 4;
+              else if (i < 8) defaultPlacement = "5-8";
+              else if (i < 16) defaultPlacement = "9-16";
+              else if (i < 24) defaultPlacement = "17-24";
+              else if (i < 32) defaultPlacement = "25-32";
+              // else stays "33-64"
+
+              // Determine default group and bracket side
+              // For Top 64: First 32 are Winners (2 per group A-P), next 32 are Losers
+              let defaultBracketSide: string;
+              let defaultGroup: string;
+
+              if (savedPlayerCount === 64) {
+                defaultBracketSide = i < 32 ? "Winners" : "Losers";
+                const indexInBracket = i < 32 ? i : i - 32;
+                defaultGroup = groups[Math.floor(indexInBracket / 2)];
+              } else {
+                defaultBracketSide = i < savedPlayerCount / 2 ? "Winners" : "Losers";
+                const groupCount = Math.min(savedPlayerCount / 2, 8);
+                defaultGroup = groups[i % groupCount];
+              }
+
+              const basePlayer = {
+                id: playerId,
+                name: "",
+                team: Array(6).fill(null).map(() => ({ id: "", isShadow: false })),
+                flags: [""],
+              };
+
+              if (overviewType === "Bracket") {
+                parsedData.players[playerId] = { ...basePlayer, placement: defaultPlacement };
+              } else {
+                parsedData.players[playerId] = {
+                  ...basePlayer,
+                  bracketSide: defaultBracketSide,
+                  group: defaultGroup,
+                };
+              }
+            }
+          } else {
+            // Remove excess players
+            const excessPlayerIds = parsedData.playerOrder.slice(savedPlayerCount);
+            parsedData.playerOrder = parsedData.playerOrder.slice(0, savedPlayerCount);
+            excessPlayerIds.forEach((playerId: string) => {
+              delete parsedData.players[playerId];
+            });
+          }
+        }
+
+        // Ensure column wrappers exist for Top 64
+        if (savedPlayerCount === 64) {
+          if (!parsedData.columnWrappers) {
+            parsedData.columnWrappers = {};
+          }
+          // Add missing Top 64 column wrappers (5 columns per side)
+          const defaultWrapper = { mode: "lines", text: "" };
+          if (!parsedData.columnWrappers.winners1) parsedData.columnWrappers.winners1 = defaultWrapper;
+          if (!parsedData.columnWrappers.winners2) parsedData.columnWrappers.winners2 = defaultWrapper;
+          if (!parsedData.columnWrappers.winners3) parsedData.columnWrappers.winners3 = defaultWrapper;
+          if (!parsedData.columnWrappers.winners4) parsedData.columnWrappers.winners4 = defaultWrapper;
+          if (!parsedData.columnWrappers.winners5) parsedData.columnWrappers.winners5 = defaultWrapper;
+          if (!parsedData.columnWrappers.losers1) parsedData.columnWrappers.losers1 = defaultWrapper;
+          if (!parsedData.columnWrappers.losers2) parsedData.columnWrappers.losers2 = defaultWrapper;
+          if (!parsedData.columnWrappers.losers3) parsedData.columnWrappers.losers3 = defaultWrapper;
+          if (!parsedData.columnWrappers.losers4) parsedData.columnWrappers.losers4 = defaultWrapper;
+          if (!parsedData.columnWrappers.losers5) parsedData.columnWrappers.losers5 = defaultWrapper;
+        }
+
+        // Reset the form with saved data (no validation - always load user's data)
+        console.log("[localStorage] Final data to load:", parsedData);
+        console.log("[localStorage] Final players:", Object.keys(parsedData.players).map(id => {
+          const p = parsedData.players[id];
+          return { id, bracketSide: p.bracketSide, group: p.group, name: p.name };
+        }));
+
+        // Debug: Run Zod validation to see exact errors
+        const validationResult = tournamentSchema.safeParse(parsedData);
+        if (!validationResult.success) {
+          console.log("[Zod] Validation FAILED:");
+          console.log("[Zod] Issues:", JSON.stringify(validationResult.error.issues, null, 2));
+          validationResult.error.issues.forEach((issue, i) => {
+            console.log(`[Zod] Issue ${i + 1}: path="${issue.path.join('.')}", code="${issue.code}", message="${issue.message}"`);
+          });
+        } else {
+          console.log("[Zod] Validation PASSED");
+        }
+
         form.reset(parsedData as TournamentData);
+        // Clear any validation errors that might have been triggered
+        form.clearErrors();
+        // Update the player count ref to prevent the player count change effect from adding/removing players
+        if (parsedData.playerCount) {
+          prevPlayerCountRef.current = parsedData.playerCount;
+        }
         // Explicitly notify parent to update graphic immediately
         onFormChange?.(parsedData as TournamentData);
       }
@@ -67,7 +196,11 @@ export function TournamentForm({
 
     const subscription = form.watch((data) => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        // Only save when player count is consistent to avoid race conditions
+        const actualPlayerCount = data.players ? Object.keys(data.players).length : 0;
+        if (data.playerCount === actualPlayerCount) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
       } catch (error) {
         console.error("Failed to save form data:", error);
       }
@@ -149,6 +282,7 @@ export function TournamentForm({
       "9-16": 6,
       "17-24": 7,
       "25-32": 8,
+      "33-64": 9,
     };
 
     // Define sort order for groups
@@ -273,6 +407,134 @@ export function TournamentForm({
     }
   }, [form, onFormChange]);
 
+  // Handle player count changes - add or remove players as needed
+  React.useEffect(() => {
+    // Skip if this is the initial render or if player count hasn't changed
+    if (prevPlayerCountRef.current === null) {
+      prevPlayerCountRef.current = currentPlayerCount;
+      return;
+    }
+    if (prevPlayerCountRef.current === currentPlayerCount) {
+      return;
+    }
+
+    const prevCount = prevPlayerCountRef.current;
+    prevPlayerCountRef.current = currentPlayerCount;
+
+    const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"];
+
+    // Helper to create a fresh player with correct group/bracket assignment
+    const createPlayer = (index: number, totalPlayers: number) => {
+      const playerId = `player-${index + 1}`;
+
+      // Determine placement based on index
+      let defaultPlacement: any = "33-64";
+      if (index === 0) defaultPlacement = 1;
+      else if (index === 1) defaultPlacement = 2;
+      else if (index === 2) defaultPlacement = 3;
+      else if (index === 3) defaultPlacement = 4;
+      else if (index < 8) defaultPlacement = "5-8";
+      else if (index < 16) defaultPlacement = "9-16";
+      else if (index < 24) defaultPlacement = "17-24";
+      else if (index < 32) defaultPlacement = "25-32";
+      // else stays "33-64"
+
+      // For Top 64: 32 Winners (2 per group A-P), then 32 Losers (2 per group A-P)
+      // For other counts: half Winners, half Losers, distributed across groups
+      let bracketSide: "Winners" | "Losers";
+      let group: string;
+
+      if (totalPlayers === 64) {
+        // Top 64: First 32 are Winners, next 32 are Losers
+        // Within each bracket: 2 players per group (A, A, B, B, ... P, P)
+        bracketSide = index < 32 ? "Winners" : "Losers";
+        const indexInBracket = index < 32 ? index : index - 32;
+        group = groups[Math.floor(indexInBracket / 2)];
+      } else {
+        // Other counts: first half Winners, second half Losers
+        bracketSide = index < totalPlayers / 2 ? "Winners" : "Losers";
+        const groupCount = Math.min(totalPlayers / 2, 8); // Max 8 groups for Top 16 and below
+        group = groups[index % groupCount];
+      }
+
+      const basePlayer = {
+        id: playerId,
+        name: "",
+        team: Array(6).fill(null).map(() => ({ id: "", isShadow: false })),
+        flags: [""],
+      };
+
+      if (overviewType === "Bracket") {
+        return { ...basePlayer, placement: defaultPlacement };
+      } else {
+        return {
+          ...basePlayer,
+          bracketSide: bracketSide as any,
+          group: group as any,
+        };
+      }
+    };
+
+    // When switching TO 64 players, reset all players with fresh structure
+    if (currentPlayerCount === 64) {
+      const newPlayers: Record<string, any> = {};
+      const newOrder: string[] = [];
+
+      for (let i = 0; i < 64; i++) {
+        const playerId = `player-${i + 1}`;
+        newOrder.push(playerId);
+        newPlayers[playerId] = createPlayer(i, 64);
+      }
+
+      form.setValue("players", newPlayers);
+      form.setValue("playerOrder", newOrder);
+
+      // Add Top 64 column wrappers (5 columns per side)
+      const defaultWrapper = { mode: "lines" as const, text: "" };
+      form.setValue("columnWrappers", {
+        winners1: defaultWrapper,
+        winners2: defaultWrapper,
+        winners3: defaultWrapper,
+        winners4: defaultWrapper,
+        winners5: defaultWrapper,
+        losers1: defaultWrapper,
+        losers2: defaultWrapper,
+        losers3: defaultWrapper,
+        losers4: defaultWrapper,
+        losers5: defaultWrapper,
+      });
+    } else if (currentPlayerCount > prevCount) {
+      // Add new players (for non-64 counts)
+      const currentPlayers = form.getValues("players");
+      const currentOrder = form.getValues("playerOrder");
+      const newPlayers = { ...currentPlayers };
+      const newOrder = [...currentOrder];
+
+      for (let i = prevCount; i < currentPlayerCount; i++) {
+        const playerId = `player-${i + 1}`;
+        newOrder.push(playerId);
+        newPlayers[playerId] = createPlayer(i, currentPlayerCount);
+      }
+
+      form.setValue("players", newPlayers);
+      form.setValue("playerOrder", newOrder);
+    } else if (currentPlayerCount < prevCount) {
+      // Remove excess players
+      const currentPlayers = form.getValues("players");
+      const currentOrder = form.getValues("playerOrder");
+      const newPlayers = { ...currentPlayers };
+      const newOrder = currentOrder.slice(0, currentPlayerCount);
+
+      // Remove players that are no longer in the order
+      currentOrder.slice(currentPlayerCount).forEach((playerId) => {
+        delete newPlayers[playerId];
+      });
+
+      form.setValue("players", newPlayers);
+      form.setValue("playerOrder", newOrder);
+    }
+  }, [currentPlayerCount, form, overviewType]);
+
   // Handle overview type changes - update player fields accordingly
   React.useEffect(() => {
     const players = form.getValues("players");
@@ -295,7 +557,8 @@ export function TournamentForm({
           else if (index < 8) defaultPlacement = "5-8";
           else if (index < 16) defaultPlacement = "9-16";
           else if (index < 24) defaultPlacement = "17-24";
-          else defaultPlacement = "25-32";
+          else if (index < 32) defaultPlacement = "25-32";
+          else defaultPlacement = "33-64";
 
           updatedPlayers[playerId] = {
             ...player,

@@ -22,9 +22,10 @@ export interface GraphicData {
   eventYear: string;
   eventType: "Regional" | "International" | "Worlds" | "Generic";
   overviewType: OverviewType;
+  playerCount: number; // 4, 8, 16, 32, or 64
   players: GraphicPlayer[];
   usageStats: UsageStats[];
-  columnWrappers?: Record<ColumnId, ColumnWrapperConfig>;
+  columnWrappers?: Partial<Record<ColumnId, ColumnWrapperConfig>>;
   bracketLabels?: BracketLabels;
   bracketReset?: boolean;
 }
@@ -190,6 +191,7 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
     eventYear: tournamentData.eventYear,
     eventType: tournamentData.eventType,
     overviewType: tournamentData.overviewType,
+    playerCount: tournamentData.playerCount,
     players: graphicPlayers,
     usageStats: calculateUsageStats(graphicPlayers, 12),
     columnWrappers: tournamentData.columnWrappers,
@@ -199,7 +201,7 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
 }
 
 /**
- * Get players organized by bracket side and column
+ * Get players organized by bracket side and column (for Top 16)
  */
 export function getPlayersByColumn(data: GraphicData) {
   const winnersCol1 = data.players.filter(
@@ -211,4 +213,62 @@ export function getPlayersByColumn(data: GraphicData) {
   const losers = data.players.filter((p) => p.bracketSide === "Losers");
 
   return { winnersCol1, winnersCol2, losers };
+}
+
+/**
+ * Get players organized into 5 columns for Top 64 graphics
+ * Each graphic (Winners or Losers) has 32 players in 5 columns:
+ * - Columns 1-2 (left side, below usage): 4 players each (groups A-B, C-D)
+ * - Columns 3-5 (right side, full height): 8 players each (groups E-H, I-L, M-P)
+ * Players are sorted by group so same-group players are paired (A, A, B, B, etc.)
+ */
+export function getPlayersByColumn64(players: GraphicPlayer[]) {
+  const groupOrder: Record<string, number> = {
+    A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8,
+    I: 9, J: 10, K: 11, L: 12, M: 13, N: 14, O: 15, P: 16,
+  };
+
+  // Sort players by group to ensure same-group players are adjacent
+  const sortByGroup = (a: GraphicPlayer, b: GraphicPlayer) =>
+    (groupOrder[a.group] ?? 99) - (groupOrder[b.group] ?? 99);
+
+  // Left side columns (below usage section) - 4 players each (2 pairs)
+  const col1 = players.filter((p) => ["A", "B"].includes(p.group)).sort(sortByGroup);
+  const col2 = players.filter((p) => ["C", "D"].includes(p.group)).sort(sortByGroup);
+  // Right side columns (full height) - 8 players each (4 pairs)
+  const col3 = players.filter((p) => ["E", "F", "G", "H"].includes(p.group)).sort(sortByGroup);
+  const col4 = players.filter((p) => ["I", "J", "K", "L"].includes(p.group)).sort(sortByGroup);
+  const col5 = players.filter((p) => ["M", "N", "O", "P"].includes(p.group)).sort(sortByGroup);
+
+  return { col1, col2, col3, col4, col5 };
+}
+
+/**
+ * Split GraphicData for Top 64 into Winners and Losers data
+ * Usage stats are COMBINED across all 64 players and shown on both graphics
+ */
+export function splitGraphicDataFor64(data: GraphicData): {
+  winnersData: GraphicData;
+  losersData: GraphicData;
+} {
+  const winnersPlayers = data.players.filter((p) => p.bracketSide === "Winners");
+  const losersPlayers = data.players.filter((p) => p.bracketSide === "Losers");
+
+  // Usage stats are calculated from ALL 64 players (combined)
+  // Both graphics show the same usage stats
+  const combinedUsageStats = calculateUsageStats(data.players, 12);
+
+  const winnersData: GraphicData = {
+    ...data,
+    players: winnersPlayers,
+    usageStats: combinedUsageStats,
+  };
+
+  const losersData: GraphicData = {
+    ...data,
+    players: losersPlayers,
+    usageStats: combinedUsageStats,
+  };
+
+  return { winnersData, losersData };
 }

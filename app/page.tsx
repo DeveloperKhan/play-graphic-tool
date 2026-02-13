@@ -21,48 +21,69 @@ export default function Home() {
     return convertToGraphicData(tournamentData);
   }, [tournamentData]);
 
-  const handleExport = async () => {
-    const canvasElement = graphicRef.current?.getCanvasElement();
-    if (!canvasElement) return;
+  // Helper function to export a single canvas element
+  const exportCanvas = async (element: HTMLDivElement, filename: string) => {
+    const originalTransform = element.style.transform;
+    element.style.transform = "none";
 
+    // Wait for all images to be fully loaded
+    const images = element.querySelectorAll("img");
+    await Promise.all(
+      Array.from(images).map((img) => {
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve) => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      })
+    );
+
+    // Wait a frame for the transform change to apply
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: null,
+      logging: false,
+    });
+
+    const dataUrl = canvas.toDataURL("image/png");
+    element.style.transform = originalTransform;
+
+    const link = document.createElement("a");
+    link.download = `${filename}-${Date.now()}.png`;
+    link.href = dataUrl;
+    link.click();
+  };
+
+  const handleExport = async () => {
     setIsExporting(true);
     try {
-      // Store original transform and temporarily remove it for capture
-      const originalTransform = canvasElement.style.transform;
-      canvasElement.style.transform = "none";
+      // Check if this is a multi-canvas export (Top 64)
+      const isMultiCanvas = graphicRef.current?.isMultiCanvas;
 
-      // Wait for all images in the canvas to be fully loaded
-      const images = canvasElement.querySelectorAll("img");
-      await Promise.all(
-        Array.from(images).map((img) => {
-          if (img.complete) return Promise.resolve();
-          return new Promise((resolve) => {
-            img.onload = resolve;
-            img.onerror = resolve; // Continue even if image fails
-          });
-        })
-      );
+      if (isMultiCanvas) {
+        // Export both Winners and Losers graphics
+        const winnersCanvas = graphicRef.current?.getWinnersCanvasElement?.();
+        const losersCanvas = graphicRef.current?.getLosersCanvasElement?.();
 
-      // Wait a frame for the transform change to apply
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-
-      const canvas = await html2canvas(canvasElement, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: false,
-        backgroundColor: null,
-        logging: false,
-      });
-
-      const dataUrl = canvas.toDataURL("image/png");
-
-      // Restore original transform
-      canvasElement.style.transform = originalTransform;
-
-      const link = document.createElement("a");
-      link.download = `tournament-graphic-${Date.now()}.png`;
-      link.href = dataUrl;
-      link.click();
+        if (winnersCanvas) {
+          await exportCanvas(winnersCanvas, "tournament-winners");
+        }
+        if (losersCanvas) {
+          // Small delay between downloads to ensure both trigger
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          await exportCanvas(losersCanvas, "tournament-losers");
+        }
+      } else {
+        // Single canvas export
+        const canvasElement = graphicRef.current?.getCanvasElement();
+        if (canvasElement) {
+          await exportCanvas(canvasElement, "tournament-graphic");
+        }
+      }
     } catch (error) {
       console.error("Export failed:", error);
     } finally {
@@ -102,7 +123,11 @@ export default function Home() {
               disabled={isExporting}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
             >
-              {isExporting ? "Exporting..." : "Export Image"}
+              {isExporting
+                ? "Exporting..."
+                : tournamentData?.playerCount === 64
+                  ? "Export Images (2)"
+                  : "Export Image"}
             </button>
           </div>
           <div className="border rounded-lg bg-muted/50 flex-1 overflow-auto">

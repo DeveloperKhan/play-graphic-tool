@@ -6,6 +6,7 @@ import { UsageSection } from "./usage-section";
 import { BracketSection } from "./bracket-section";
 import { PlayerColumn } from "./player-column";
 import { GraphicFooter } from "./graphic-footer";
+import { TournamentGraphic64, TournamentGraphic64Ref } from "./tournament-graphic-64";
 import { getPlayersByColumn, type GraphicData } from "@/lib/graphic-data";
 
 // Base canvas dimensions
@@ -18,6 +19,10 @@ interface TournamentGraphicProps {
 
 export interface TournamentGraphicRef {
   getCanvasElement: () => HTMLDivElement | null;
+  // For Top 64 multi-canvas support
+  getWinnersCanvasElement?: () => HTMLDivElement | null;
+  getLosersCanvasElement?: () => HTMLDivElement | null;
+  isMultiCanvas?: boolean;
 }
 
 export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGraphicProps>(
@@ -25,10 +30,17 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
   const { winnersCol1, winnersCol2, losers } = getPlayersByColumn(data);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
+  const graphic64Ref = useRef<TournamentGraphic64Ref>(null);
   const [scale, setScale] = useState(1);
 
+  // For Top 64, delegate to TournamentGraphic64
+  const isTop64 = data.playerCount === 64;
+
   useImperativeHandle(ref, () => ({
-    getCanvasElement: () => canvasRef.current,
+    getCanvasElement: () => isTop64 ? null : canvasRef.current,
+    getWinnersCanvasElement: () => graphic64Ref.current?.getWinnersCanvasElement() ?? null,
+    getLosersCanvasElement: () => graphic64Ref.current?.getLosersCanvasElement() ?? null,
+    isMultiCanvas: isTop64,
   }));
 
   // Calculate scale based on container width
@@ -44,6 +56,11 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
     window.addEventListener("resize", updateScale);
     return () => window.removeEventListener("resize", updateScale);
   }, []);
+
+  // Render Top 64 with tabs
+  if (isTop64) {
+    return <TournamentGraphic64 ref={graphic64Ref} data={data} />;
+  }
 
   return (
     <div

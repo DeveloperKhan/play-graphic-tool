@@ -136,6 +136,7 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
                   <SelectItem value="32" disabled>
                     Top 32 (Coming Soon)
                   </SelectItem>
+                  <SelectItem value="64">Top 64</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

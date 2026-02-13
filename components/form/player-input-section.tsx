@@ -31,6 +31,7 @@ const PLACEMENT_OPTIONS: { value: Placement; label: string }[] = [
   { value: "9-16", label: "9-16 Place" },
   { value: "17-24", label: "17-24 Place" },
   { value: "25-32", label: "25-32 Place" },
+  { value: "33-64", label: "33-64 Place" },
 ];
 
 const BRACKET_SIDE_OPTIONS: { value: BracketSide; label: string }[] = [
@@ -89,9 +90,12 @@ export function PlayerInputSection({
   const canRemoveFlag = flags.length > 1;
 
   // Determine available groups based on player count
-  const availableGroups = playerCount === 32
+  // Top 64: A-P (16 groups for 32 players per bracket side)
+  // Top 32: A-P (16 groups)
+  // Top 16 and below: A-H (8 groups)
+  const availableGroups = playerCount >= 32
     ? GROUP_OPTIONS
-    : GROUP_OPTIONS.slice(0, 8); // A-H for Top 16 and below
+    : GROUP_OPTIONS.slice(0, 8);
 
   const addFlag = () => {
     if (canAddFlag) {
