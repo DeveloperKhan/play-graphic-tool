@@ -93,16 +93,7 @@ export default function Home() {
 
   return (
     <div className="h-screen bg-background overflow-hidden flex flex-col">
-      <div className="px-4 sm:px-6 lg:px-8 py-6 shrink-0">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
-          Play! Pokemon GO Tournament Graphic Generator
-        </h1>
-        <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-          Create professional tournament graphics for your Pokemon GO events
-        </p>
-      </div>
-
-      <div className="flex-1 grid grid-cols-1 xl:grid-cols-2 gap-8 px-4 sm:px-6 lg:px-8 pb-8 min-h-0">
+      <div className="flex-1 grid grid-cols-1 xl:grid-cols-2 gap-8 px-4 sm:px-6 lg:px-8 py-8 min-h-0">
         {/* Form Section - scrolls independently */}
         <div className="flex flex-col min-h-0">
           <h2 className="text-xl sm:text-2xl font-semibold mb-4 shrink-0">Tournament Details</h2>
