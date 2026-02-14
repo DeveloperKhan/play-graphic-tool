@@ -4,6 +4,21 @@
 
 import type { UsageStats, TournamentData, ColumnId, ColumnWrapperConfig, BracketLabels, OverviewType, EventDateRange } from "./types";
 
+/**
+ * Resolved bracket positions for graphic display
+ * Contains player names (resolved from IDs) instead of player IDs
+ */
+export interface ResolvedBracketPositions {
+  first: string | null;
+  second: string | null;
+  third: string | null;
+  fourth: string | null;
+  fifth1: string | null;
+  fifth2: string | null;
+  fifth3: string | null;
+  fifth4: string | null;
+}
+
 export interface GraphicPlayer {
   name: string;
   flags: string[];
@@ -25,6 +40,7 @@ export interface GraphicData {
   columnWrappers?: Partial<Record<ColumnId, ColumnWrapperConfig>>;
   bracketLabels?: BracketLabels;
   bracketReset?: boolean;
+  bracketPositions?: ResolvedBracketPositions;
   eventDateRange: EventDateRange;
 }
 
@@ -156,6 +172,37 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
     })
     .filter((p): p is GraphicPlayer => p !== null);
 
+  // Resolve bracket positions from player IDs to player names
+  const resolvedBracketPositions: ResolvedBracketPositions | undefined =
+    tournamentData.bracketPositions
+      ? {
+          first: tournamentData.bracketPositions.first
+            ? tournamentData.players[tournamentData.bracketPositions.first]?.name || null
+            : null,
+          second: tournamentData.bracketPositions.second
+            ? tournamentData.players[tournamentData.bracketPositions.second]?.name || null
+            : null,
+          third: tournamentData.bracketPositions.third
+            ? tournamentData.players[tournamentData.bracketPositions.third]?.name || null
+            : null,
+          fourth: tournamentData.bracketPositions.fourth
+            ? tournamentData.players[tournamentData.bracketPositions.fourth]?.name || null
+            : null,
+          fifth1: tournamentData.bracketPositions.fifth1
+            ? tournamentData.players[tournamentData.bracketPositions.fifth1]?.name || null
+            : null,
+          fifth2: tournamentData.bracketPositions.fifth2
+            ? tournamentData.players[tournamentData.bracketPositions.fifth2]?.name || null
+            : null,
+          fifth3: tournamentData.bracketPositions.fifth3
+            ? tournamentData.players[tournamentData.bracketPositions.fifth3]?.name || null
+            : null,
+          fifth4: tournamentData.bracketPositions.fifth4
+            ? tournamentData.players[tournamentData.bracketPositions.fifth4]?.name || null
+            : null,
+        }
+      : undefined;
+
   return {
     titleLines: tournamentData.titleLines || ["", "", ""],
     eventYear: tournamentData.eventYear,
@@ -167,6 +214,7 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
     columnWrappers: tournamentData.columnWrappers,
     bracketLabels: tournamentData.bracketLabels,
     bracketReset: tournamentData.bracketReset,
+    bracketPositions: resolvedBracketPositions,
     eventDateRange: tournamentData.eventDateRange,
   };
 }

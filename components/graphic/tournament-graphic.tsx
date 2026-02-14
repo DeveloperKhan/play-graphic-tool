@@ -154,7 +154,7 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
           {data.overviewType === "Bracket" && (
             <div style={{ position: "absolute", top: 224, left: 43 }}>
               <BracketSection
-                players={data.players}
+                bracketPositions={data.bracketPositions}
                 bracketReset={data.bracketReset ?? false}
               />
             </div>

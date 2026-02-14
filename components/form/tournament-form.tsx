@@ -6,6 +6,7 @@ import { EventInfoSection } from "./event-info-section";
 import { PlayerInputSection } from "./player-input-section";
 import { FormNavigation } from "./form-navigation";
 import { ColumnWrapperSection, BracketLabelsSection } from "./column-wrapper-section";
+import { BracketConfigSection } from "./bracket-config-section";
 import { useTournamentForm, createDefaultTournamentData } from "@/hooks/use-tournament-form";
 import { sortTeam } from "@/lib/pokemon-sort";
 import type { TournamentData, Pokemon } from "@/lib/types";
@@ -505,6 +506,9 @@ export function TournamentForm({
 
         {/* Column Wrapper Settings */}
         <ColumnWrapperSection form={form} />
+
+        {/* Bracket Positions (only shown in Bracket mode) */}
+        <BracketConfigSection form={form} />
 
         {/* All Players - Collapsible List */}
         <div className="space-y-4 min-w-0">

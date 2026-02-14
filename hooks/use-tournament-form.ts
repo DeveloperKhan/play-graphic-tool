@@ -1,7 +1,23 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { tournamentSchema } from "@/lib/schema";
-import type { TournamentData, Player } from "@/lib/types";
+import type { TournamentData, Player, BracketPositions } from "@/lib/types";
+
+/**
+ * Create default bracket positions (all null)
+ */
+function createDefaultBracketPositions(): BracketPositions {
+  return {
+    first: null,
+    second: null,
+    third: null,
+    fourth: null,
+    fifth1: null,
+    fifth2: null,
+    fifth3: null,
+    fifth4: null,
+  };
+}
 
 /**
  * Generate a unique player ID
@@ -52,6 +68,7 @@ export function createDefaultTournamentData(
     bracketReset: false,
     players,
     playerOrder,
+    bracketPositions: createDefaultBracketPositions(),
     bracketMatches: [],
     bracketPairings: [],
     columnWrappers: {

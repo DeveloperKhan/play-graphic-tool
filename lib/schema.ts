@@ -91,6 +91,18 @@ export const eventDateRangeSchema = z.object({
   endDate: z.string(), // ISO date string (YYYY-MM-DD)
 });
 
+// Bracket positions schema - maps bracket slots to player IDs
+export const bracketPositionsSchema = z.object({
+  first: z.string().nullable(),
+  second: z.string().nullable(),
+  third: z.string().nullable(),
+  fourth: z.string().nullable(),
+  fifth1: z.string().nullable(),
+  fifth2: z.string().nullable(),
+  fifth3: z.string().nullable(),
+  fifth4: z.string().nullable(),
+});
+
 // Tournament data schema
 export const tournamentSchema = z
   .object({
@@ -102,6 +114,7 @@ export const tournamentSchema = z
     bracketReset: z.boolean(),
     players: z.record(z.string(), playerSchema),
     playerOrder: z.array(z.string()),
+    bracketPositions: bracketPositionsSchema.optional(),
     bracketMatches: z.array(bracketMatchSchema).optional(),
     bracketPairings: z.array(bracketPairingSchema).optional(),
     columnWrappers: columnWrappersSchema.optional(),

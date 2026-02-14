@@ -1,16 +1,10 @@
 "use client";
 
 import { BracketCell, BRACKET_CELL_DIMENSIONS } from "./bracket-cell";
-import type { Placement } from "@/lib/types";
-
-// Extended player type with placement for bracket display
-interface BracketPlayer {
-  name: string;
-  placement?: Placement;
-}
+import type { ResolvedBracketPositions } from "@/lib/graphic-data";
 
 interface BracketSectionProps {
-  players: BracketPlayer[];
+  bracketPositions?: ResolvedBracketPositions;
   bracketReset: boolean;
 }
 
@@ -99,19 +93,19 @@ const SECTION_LABELS = {
   champion: { x: 1163, y: 585 },
 };
 
-export function BracketSection({ players, bracketReset }: BracketSectionProps) {
-  // Map players by placement
-  const champion = players.find((p) => p.placement === 1);
-  const runnerUp = players.find((p) => p.placement === 2);
-  const thirdPlace = players.find((p) => p.placement === 3);
-  const fourthPlace = players.find((p) => p.placement === 4);
-  const fifthToEighth = players.filter((p) => p.placement === "5-8");
+export function BracketSection({ bracketPositions, bracketReset }: BracketSectionProps) {
+  // Get player names from resolved bracket positions
+  const champion = bracketPositions?.first ?? null;
+  const runnerUp = bracketPositions?.second ?? null;
+  const thirdPlace = bracketPositions?.third ?? null;
+  const fourthPlace = bracketPositions?.fourth ?? null;
+  const fifth1 = bracketPositions?.fifth1 ?? null;
+  const fifth2 = bracketPositions?.fifth2 ?? null;
+  const fifth3 = bracketPositions?.fifth3 ?? null;
+  const fifth4 = bracketPositions?.fifth4 ?? null;
 
   // Determine visibility states
   const hasWinner = !!champion;
-
-  // Assign 5-8 players to bracket positions (first 4 in order)
-  const [fifth1, fifth2, fifth3, fifth4] = fifthToEighth;
 
   return (
     <div
@@ -166,25 +160,25 @@ export function BracketSection({ players, bracketReset }: BracketSectionProps) {
       <BracketCell
         x={WINNERS_R1[0].x}
         y={WINNERS_R1[0].y}
-        playerName={fifth1?.name}
+        playerName={fifth1 ?? undefined}
         borderColor={COLORS.yellow}
       />
       <BracketCell
         x={WINNERS_R1[1].x}
         y={WINNERS_R1[1].y}
-        playerName={fifth2?.name}
+        playerName={fifth2 ?? undefined}
         borderColor={COLORS.yellow}
       />
       <BracketCell
         x={WINNERS_R1[2].x}
         y={WINNERS_R1[2].y}
-        playerName={fifth3?.name}
+        playerName={fifth3 ?? undefined}
         borderColor={COLORS.cyan}
       />
       <BracketCell
         x={WINNERS_R1[3].x}
         y={WINNERS_R1[3].y}
-        playerName={fifth4?.name}
+        playerName={fifth4 ?? undefined}
         borderColor={COLORS.cyan}
       />
 
@@ -248,7 +242,7 @@ export function BracketSection({ players, bracketReset }: BracketSectionProps) {
       <BracketCell
         x={LOSERS_SEMIS[0].x}
         y={LOSERS_SEMIS[0].y}
-        playerName={fourthPlace?.name}
+        playerName={fourthPlace ?? undefined}
       />
       <BracketCell
         x={LOSERS_SEMIS[1].x}
@@ -259,7 +253,7 @@ export function BracketSection({ players, bracketReset }: BracketSectionProps) {
       <BracketCell
         x={LOSERS_FINALS[0].x}
         y={LOSERS_FINALS[0].y}
-        playerName={thirdPlace?.name}
+        playerName={thirdPlace ?? undefined}
         borderColor={COLORS.purple}
       />
       <BracketCell
@@ -271,7 +265,7 @@ export function BracketSection({ players, bracketReset }: BracketSectionProps) {
       <BracketCell
         x={GRAND_FINALS.x}
         y={GRAND_FINALS.y}
-        playerName={hasWinner ? champion?.name : undefined}
+        playerName={hasWinner ? champion ?? undefined : undefined}
         isGoldBackground={hasWinner}
       />
 
@@ -279,7 +273,7 @@ export function BracketSection({ players, bracketReset }: BracketSectionProps) {
       <BracketCell
         x={GRAND_FINALS_RESET.x}
         y={GRAND_FINALS_RESET.y}
-        playerName={runnerUp?.name}
+        playerName={runnerUp ?? undefined}
       />
 
       {/* Reset label (conditional) */}
@@ -307,7 +301,7 @@ export function BracketSection({ players, bracketReset }: BracketSectionProps) {
       <BracketCell
         x={CHAMPION.x}
         y={CHAMPION.y}
-        playerName={champion?.name}
+        playerName={champion ?? undefined}
         isChampion
         isGoldBackground={hasWinner}
         hidden={!hasWinner}

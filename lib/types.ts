@@ -92,6 +92,21 @@ export interface BracketLabelConfig {
   text: string;
 }
 
+// Bracket positions - maps each bracket slot to a player ID
+// For Top 8 bracket display (used when overviewType is "Bracket")
+export interface BracketPositions {
+  // Final standings
+  first: string | null;      // 1st place (Champion)
+  second: string | null;     // 2nd place (Runner-up)
+  third: string | null;      // 3rd place
+  fourth: string | null;     // 4th place
+  // 5th-8th place (4 players in Winners R1)
+  fifth1: string | null;
+  fifth2: string | null;
+  fifth3: string | null;
+  fifth4: string | null;
+}
+
 export interface BracketLabels {
   winners: BracketLabelConfig;
   losers: BracketLabelConfig;
@@ -111,6 +126,7 @@ export interface TournamentData {
   bracketReset: boolean; // Was there a bracket reset in grand finals?
   players: Record<string, Player>; // player lookup by id
   playerOrder: string[]; // ordered list of player ids (for rendering order)
+  bracketPositions?: BracketPositions; // Player assignments for bracket positions (for Bracket mode)
   bracketMatches?: BracketMatch[]; // Manual bracket overrides (for Bracket mode)
   bracketPairings?: BracketPairing[]; // Group pairings (for Usage mode)
   columnWrappers?: ColumnWrappers; // Wrapper config for each column
