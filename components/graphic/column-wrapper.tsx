@@ -40,18 +40,20 @@ export function ColumnWrapper({ text, color, children }: ColumnWrapperProps) {
         }}
       />
 
-      {/* Top horizontal line - positioned above content */}
-      <div
-        style={{
-          position: "absolute",
-          top: lineTop,
-          left: lineLeft,
-          width: WRAPPER_WIDTH,
-          height: LINE_THICKNESS,
-          backgroundColor: color,
-          borderTopRightRadius: LINE_THICKNESS / 2,
-        }}
-      />
+      {/* Top horizontal line - positioned above content, only shown when there's a label */}
+      {text && (
+        <div
+          style={{
+            position: "absolute",
+            top: lineTop,
+            left: lineLeft,
+            width: WRAPPER_WIDTH,
+            height: LINE_THICKNESS,
+            backgroundColor: color,
+            borderTopRightRadius: LINE_THICKNESS / 2,
+          }}
+        />
+      )}
 
       {/* Text label - positioned at end of horizontal line, vertically aligned */}
       {text && (
