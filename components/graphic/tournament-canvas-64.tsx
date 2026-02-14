@@ -182,7 +182,7 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
                 players={col1b}
                 startPairIndex={1}
                 wrapper={getWrapper(1, "b")}
-                reserveTitleSpace={!!bracketLabel}
+                reserveTitleSpace
               />
             </div>
 
@@ -202,7 +202,7 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
                 players={col2b}
                 startPairIndex={2}
                 wrapper={getWrapper(2, "b")}
-                reserveTitleSpace={!!bracketLabel}
+                reserveTitleSpace
               />
             </div>
 
@@ -212,7 +212,7 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
                 players={col3a}
                 startPairIndex={0}
                 wrapper={getWrapper(3, "a")}
-                reserveTitleSpace={!!bracketLabel}
+                reserveTitleSpace
               />
             </div>
 
@@ -222,7 +222,7 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
                 players={col3b}
                 startPairIndex={2}
                 wrapper={getWrapper(3, "b")}
-                reserveTitleSpace={!!bracketLabel}
+                reserveTitleSpace
               />
             </div>
 
@@ -232,7 +232,7 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
                 players={col4a}
                 startPairIndex={0}
                 wrapper={getWrapper(4, "a")}
-                reserveTitleSpace={!!bracketLabel}
+                reserveTitleSpace
               />
             </div>
 
@@ -242,7 +242,7 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
                 players={col4b}
                 startPairIndex={2}
                 wrapper={getWrapper(4, "b")}
-                reserveTitleSpace={!!bracketLabel}
+                reserveTitleSpace
               />
             </div>
 
