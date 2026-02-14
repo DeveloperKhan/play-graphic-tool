@@ -16,6 +16,7 @@ interface PokemonWithScore {
   pokemon: Pokemon;
   metadata: PokemonMetadata | null;
   sortScore: number;
+  usageCount: number;
 }
 
 /**
@@ -61,9 +62,13 @@ function calculateSortScore(metadata: PokemonMetadata | null): number {
  * Simply reorders the existing Pokemon - doesn't add or remove any.
  *
  * @param team - Array of Pokemon from the form
+ * @param usageCounts - Optional map of Pokemon ID to usage count across all teams
  * @returns Sorted array of the same Pokemon
  */
-export async function sortTeam(team: Pokemon[]): Promise<Pokemon[]> {
+export async function sortTeam(
+  team: Pokemon[],
+  usageCounts?: Map<string, number>
+): Promise<Pokemon[]> {
   // Deep clone the Pokemon to avoid reference issues with form state
   const clonedTeam: Pokemon[] = team.map((p) => ({
     id: p.id,
@@ -76,6 +81,7 @@ export async function sortTeam(team: Pokemon[]): Promise<Pokemon[]> {
       pokemon,
       metadata: pokemon.id ? await getPokemonById(pokemon.id) : null,
       sortScore: 0, // Will be calculated below
+      usageCount: pokemon.id ? (usageCounts?.get(pokemon.id) ?? 0) : 0,
     }))
   );
 
@@ -84,13 +90,40 @@ export async function sortTeam(team: Pokemon[]): Promise<Pokemon[]> {
     p.sortScore = calculateSortScore(p.metadata);
   }
 
-  // Sort by score (lower = earlier in team)
-  // Use stable sort to preserve relative order of Pokemon with same score
-  pokemonWithScores.sort((a, b) => a.sortScore - b.sortScore);
+  // Sort by:
+  // 1. Usage count (descending - higher usage first)
+  // 2. Bucket score (ascending - lower score = earlier slot preference)
+  pokemonWithScores.sort((a, b) => {
+    // First sort by usage (higher usage = earlier)
+    if (a.usageCount !== b.usageCount) {
+      return b.usageCount - a.usageCount;
+    }
+    // Then sort by bucket score (lower = earlier)
+    return a.sortScore - b.sortScore;
+  });
 
   // Return the sorted Pokemon as new objects
   return pokemonWithScores.map((p) => ({
     id: p.pokemon.id,
     isShadow: p.pokemon.isShadow,
   }));
+}
+
+/**
+ * Calculate usage counts for all Pokemon across all teams.
+ * @param allTeams - Array of all teams (each team is an array of Pokemon)
+ * @returns Map of Pokemon ID to usage count
+ */
+export function calculateUsageCounts(allTeams: Pokemon[][]): Map<string, number> {
+  const counts = new Map<string, number>();
+
+  for (const team of allTeams) {
+    for (const pokemon of team) {
+      if (pokemon.id) {
+        counts.set(pokemon.id, (counts.get(pokemon.id) ?? 0) + 1);
+      }
+    }
+  }
+
+  return counts;
 }

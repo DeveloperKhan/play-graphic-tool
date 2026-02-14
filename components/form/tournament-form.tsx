@@ -8,7 +8,7 @@ import { FormNavigation } from "./form-navigation";
 import { ColumnWrapperSection, BracketLabelsSection } from "./column-wrapper-section";
 import { BracketConfigSection } from "./bracket-config-section";
 import { useTournamentForm, createDefaultTournamentData } from "@/hooks/use-tournament-form";
-import { sortTeam } from "@/lib/pokemon-sort";
+import { sortTeam, calculateUsageCounts } from "@/lib/pokemon-sort";
 import type { TournamentData, Pokemon } from "@/lib/types";
 
 const STORAGE_KEY = "tournament-form-data";
@@ -268,13 +268,24 @@ export function TournamentForm({
 
     setIsSortingAllPokemon(true);
     try {
-      // Sort each player's team sequentially to avoid race conditions
+      // First, gather all teams to calculate usage counts
+      const allTeams: Pokemon[][] = [];
       for (const playerId of currentOrder) {
-        // Get fresh team data for each player
+        const team = form.getValues(`players.${playerId}.team`) as Pokemon[];
+        if (team) {
+          allTeams.push(team);
+        }
+      }
+
+      // Calculate usage counts across all teams
+      const usageCounts = calculateUsageCounts(allTeams);
+
+      // Sort each player's team using usage counts + bucket sorting
+      for (const playerId of currentOrder) {
         const team = form.getValues(`players.${playerId}.team`) as Pokemon[];
         if (!team) continue;
 
-        const sortedTeam = await sortTeam(team);
+        const sortedTeam = await sortTeam(team, usageCounts);
         // Update each Pokemon slot for this player
         for (let index = 0; index < sortedTeam.length; index++) {
           const pokemon = sortedTeam[index];
