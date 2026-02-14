@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { tournamentSchema } from "@/lib/schema";
-import type { TournamentData, Placement, Player } from "@/lib/types";
+import type { TournamentData, Player } from "@/lib/types";
 
 /**
  * Generate a unique player ID
@@ -22,44 +22,15 @@ export function createDefaultTournamentData(
   const players: Record<string, Player> = {};
   const playerOrder: string[] = [];
 
-  // Determine default placements based on player count (for Bracket mode)
-  const getDefaultPlacement = (index: number): Placement => {
-    if (index === 0) return 1;
-    if (index === 1) return 2;
-    if (index === 2) return 3;
-    if (index === 3) return 4;
-    if (index < 8) return "5-8";
-    if (index < 16) return "9-16";
-    if (index < 24) return "17-24";
-    if (index < 32) return "25-32";
-    return "33-64";
-  };
-
-  // Determine default group and bracket side based on player count (for Usage mode)
-  const getDefaultBracketInfo = (index: number): { bracketSide: "Winners" | "Losers"; group: string } => {
-    const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"];
-
-    if (playerCount === 64) {
-      // Top 64: First 32 are Winners (2 per group A-P), next 32 are Losers (2 per group A-P)
-      const bracketSide = index < 32 ? "Winners" : "Losers";
-      const indexInBracket = index < 32 ? index : index - 32;
-      const group = groups[Math.floor(indexInBracket / 2)];
-      return { bracketSide, group };
-    } else {
-      // Other counts: first half Winners, second half Losers
-      const bracketSide = index < playerCount / 2 ? "Winners" : "Losers";
-      const groupCount = Math.min(playerCount / 2, 8); // Max 8 groups for Top 16 and below
-      const group = groups[index % groupCount];
-      return { bracketSide, group };
-    }
-  };
-
   // Create players with empty data
+  // Player order determines column placement:
+  // - Top 16: 0-3 Winners Col 1, 4-7 Winners Col 2, 8-11 Losers Col 1, 12-15 Losers Col 2
+  // - Top 64: 0-31 Winners bracket, 32-63 Losers bracket
   for (let i = 0; i < playerCount; i++) {
     const playerId = generatePlayerId(i);
     playerOrder.push(playerId);
 
-    const basePlayer = {
+    players[playerId] = {
       id: playerId,
       name: "",
       team: Array(6)
@@ -70,22 +41,6 @@ export function createDefaultTournamentData(
         })),
       flags: [""],
     };
-
-    // Add mode-specific fields
-    if (overviewType === "Bracket") {
-      players[playerId] = {
-        ...basePlayer,
-        placement: getDefaultPlacement(i),
-      };
-    } else {
-      // Usage mode defaults
-      const { bracketSide, group } = getDefaultBracketInfo(i);
-      players[playerId] = {
-        ...basePlayer,
-        bracketSide,
-        group: group as any,
-      };
-    }
   }
 
   return {

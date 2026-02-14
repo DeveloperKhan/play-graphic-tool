@@ -1,49 +1,41 @@
-import type { Player, BracketMatch, Placement } from "./types";
+import type { Player, BracketMatch } from "./types";
 
 /**
- * Generate a double elimination bracket from player placements
- * This auto-generates the bracket structure based on final placements
- * @param players - Record of players with their placements
+ * Generate a double elimination bracket from player order
+ * Uses index-based placement: 0=1st, 1=2nd, 2=3rd, 3=4th, 4-7=5-8
+ * @param playerOrder - Ordered array of player IDs
+ * @param players - Record of players
  * @param bracketReset - Whether there was a bracket reset in grand finals
  * @returns Array of bracket matches
  */
 export function generateBracket(
+  playerOrder: string[],
   players: Record<string, Player>,
   bracketReset: boolean = false
 ): BracketMatch[] {
   const matches: BracketMatch[] = [];
 
-  // Get top 8 players sorted by placement
-  const top8Players = Object.values(players)
-    .filter((p) => {
-      const placement = p.placement;
-      return (
-        placement === 1 ||
-        placement === 2 ||
-        placement === 3 ||
-        placement === 4 ||
-        placement === "5-8"
-      );
-    })
-    .sort((a, b) => comparePlacements(a.placement ?? 1, b.placement ?? 1));
+  // Get top 8 players from the order
+  const top8PlayerIds = playerOrder.slice(0, 8);
+  const top8Players = top8PlayerIds
+    .map((id) => players[id])
+    .filter((p): p is Player => p !== undefined);
 
   if (top8Players.length < 8) {
     // Not enough players for a full bracket
     return matches;
   }
 
-  // Based on final placements, we can infer the bracket structure
-  // 1st place: Won grand finals
-  // 2nd place: Lost grand finals (from winners or losers bracket)
-  // 3rd place: Lost in losers finals
-  // 4th place: Lost earlier in losers bracket
-  // 5-8: Lost in winners bracket or earlier in losers bracket
+  // Players are already in placement order:
+  // Index 0 = 1st place (winner)
+  // Index 1 = 2nd place
+  // Index 2 = 3rd place
+  // Index 3 = 4th place
+  // Index 4-7 = 5-8 place
 
   const first = top8Players[0]; // 1st place
   const second = top8Players[1]; // 2nd place
   const third = top8Players[2]; // 3rd place
-  const fourth = top8Players[3]; // 4th place
-  const fifth_eighth = top8Players.slice(4, 8); // 5-8 place
 
   // Generate Grand Finals
   const grandFinalsId = "gf-1";
@@ -100,18 +92,7 @@ export function generateBracket(
 }
 
 /**
- * Compare two placements for sorting
- * @param a - First placement
- * @param b - Second placement
- * @returns Comparison result (-1, 0, 1)
- */
-function comparePlacements(a: Placement, b: Placement): number {
-  const order: Placement[] = [1, 2, 3, 4, "5-8", "9-16", "17-24", "25-32"];
-  return order.indexOf(a) - order.indexOf(b);
-}
-
-/**
- * Validate that bracket matches are consistent with player placements
+ * Validate that bracket matches are consistent with players
  * @param matches - Array of bracket matches
  * @param players - Record of players
  * @returns True if bracket is valid

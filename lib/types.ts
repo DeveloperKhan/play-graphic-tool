@@ -17,14 +17,6 @@ export type BracketGroup =
 export interface Player {
   id: string; // unique player identifier
   name: string; // player's name
-
-  // For Bracket mode (overviewType === "Bracket")
-  placement?: Placement;
-
-  // For Usage mode (overviewType === "Usage")
-  bracketSide?: BracketSide; // Winners or Losers
-  group?: BracketGroup; // A-P
-
   team: Pokemon[]; // exactly 6
   flags: string[]; // 1-2 ISO country codes (ISO 3166-1 alpha-2)
 }

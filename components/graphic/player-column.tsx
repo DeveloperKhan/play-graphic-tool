@@ -87,7 +87,7 @@ export function PlayerColumn({
         <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP, marginLeft: PAIR_LINE_OFFSET }}>
           {players.map((player, index) => (
             <PlayerCard
-              key={`${player.bracketSide}-${player.group}-${index}`}
+              key={`player-${index}`}
               player={player}
             />
           ))}
@@ -122,7 +122,7 @@ export function PlayerColumn({
           <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP, marginLeft: PAIR_LINE_OFFSET }}>
             {players.map((player, index) => (
               <PlayerCard
-                key={`${player.bracketSide}-${player.group}-${index}`}
+                key={`player-${index}`}
                 player={player}
               />
             ))}
@@ -185,7 +185,7 @@ export function PlayerColumn({
               <div style={{ display: "flex", flexDirection: "column", gap: PLAYER_GAP }}>
                 {pair.map((player, index) => (
                   <PlayerCard
-                    key={`${player.bracketSide}-${player.group}-${index}`}
+                    key={`player-${index}`}
                     player={player}
                   />
                 ))}

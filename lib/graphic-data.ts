@@ -2,13 +2,10 @@
  * Graphic data utilities for parsing CSV and preparing graphic data
  */
 
-import type { BracketSide, BracketGroup, UsageStats, TournamentData, ColumnId, ColumnWrapperConfig, BracketLabels, OverviewType, Placement, EventDateRange } from "./types";
+import type { UsageStats, TournamentData, ColumnId, ColumnWrapperConfig, BracketLabels, OverviewType, EventDateRange } from "./types";
 
 export interface GraphicPlayer {
   name: string;
-  bracketSide: BracketSide;
-  group: BracketGroup;
-  placement?: Placement;
   flags: string[];
   team: Array<{
     name: string;
@@ -55,26 +52,6 @@ export function parsePokemonName(rawName: string): {
 }
 
 /**
- * Parse a bracket group from CSV format
- * Examples: "A Winner" -> { group: "A", side: "Winners" }
- *           "H Loser" -> { group: "H", side: "Losers" }
- */
-export function parseBracketGroup(groupStr: string): {
-  group: BracketGroup;
-  side: BracketSide;
-} {
-  const parts = groupStr.trim().split(" ");
-  const group = parts[0].toUpperCase() as BracketGroup;
-  const sideRaw = parts[1]?.toLowerCase() || "";
-
-  // Handle "Winner", "Loser", "Lower" (typo in CSV)
-  const side: BracketSide =
-    sideRaw.includes("winner") ? "Winners" : "Losers";
-
-  return { group, side };
-}
-
-/**
  * Calculate Pokemon usage statistics from player teams
  */
 export function calculateUsageStats(
@@ -118,6 +95,7 @@ export function calculateUsageStats(
 
 /**
  * Parse CSV data into GraphicPlayer array
+ * Note: CSV parsing returns players in order - column placement is based on array index
  */
 export function parseCSVData(csvContent: string): GraphicPlayer[] {
   const lines = csvContent.trim().split("\n");
@@ -132,7 +110,6 @@ export function parseCSVData(csvContent: string): GraphicPlayer[] {
     const columns = line.split(",");
     if (columns.length < 8) continue;
 
-    const groupInfo = parseBracketGroup(columns[0]);
     const playerName = columns[1].trim();
 
     // Parse Pokemon 1-6 (columns 2-7)
@@ -146,8 +123,6 @@ export function parseCSVData(csvContent: string): GraphicPlayer[] {
 
     players.push({
       name: playerName,
-      bracketSide: groupInfo.side,
-      group: groupInfo.group,
       flags: ["US"], // Default to US for now (can be enhanced later)
       team,
     });
@@ -158,6 +133,7 @@ export function parseCSVData(csvContent: string): GraphicPlayer[] {
 
 /**
  * Convert TournamentData (from form) to GraphicData (for graphic rendering)
+ * Players are ordered by playerOrder array - index determines column placement
  */
 export function convertToGraphicData(tournamentData: TournamentData): GraphicData {
   const graphicPlayers: GraphicPlayer[] = tournamentData.playerOrder
@@ -167,8 +143,6 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
 
       const graphicPlayer: GraphicPlayer = {
         name: player.name || "",
-        bracketSide: player.bracketSide || "Winners",
-        group: player.group || "A",
         flags: player.flags.filter((f) => f.length > 0),
         team: player.team.map((pokemon) => ({
           // Use the speciesId as the name - the sprite component will handle lookup
@@ -177,11 +151,6 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
           isShadow: pokemon.isShadow,
         })),
       };
-
-      // Add placement if in bracket mode
-      if (player.placement !== undefined) {
-        graphicPlayer.placement = player.placement;
-      }
 
       return graphicPlayer;
     })
@@ -203,69 +172,64 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
 }
 
 /**
- * Get players organized by bracket side and column (for Top 16)
+ * Get players organized by column (for Top 16)
+ * Uses index-based slicing from player array:
+ * - Players 0-3: Winners Column 1
+ * - Players 4-7: Winners Column 2
+ * - Players 8-11: Losers Column 1 (top)
+ * - Players 12-15: Losers Column 2 (bottom)
  */
 export function getPlayersByColumn(data: GraphicData) {
-  const winnersCol1 = data.players.filter(
-    (p) => p.bracketSide === "Winners" && ["A", "B", "C", "D"].includes(p.group)
-  );
-  const winnersCol2 = data.players.filter(
-    (p) => p.bracketSide === "Winners" && ["E", "F", "G", "H"].includes(p.group)
-  );
-  const losers = data.players.filter((p) => p.bracketSide === "Losers");
+  const players = data.players;
+
+  const winnersCol1 = players.slice(0, 4);
+  const winnersCol2 = players.slice(4, 8);
+  const losers = players.slice(8, 16);
 
   return { winnersCol1, winnersCol2, losers };
 }
 
 /**
  * Get players organized into 4 columns for Top 64 graphics
- * Each graphic (Winners or Losers) has 32 players in 4 columns of 8 players each.
+ * Uses index-based slicing. Each bracket (Winners/Losers) has 32 players.
  * Each column is split into top (a) and bottom (b) blocks of 4 players each.
- * - Column 1: Groups A-D (top: A-B, bottom: C-D)
- * - Column 2: Groups E-H (top: E-F, bottom: G-H)
- * - Column 3: Groups I-L (top: I-J, bottom: K-L)
- * - Column 4: Groups M-P (top: M-N, bottom: O-P)
- * Players are sorted by group so same-group players are paired.
+ *
+ * For a 32-player array (single bracket):
+ * - col1a: Players 0-3
+ * - col1b: Players 4-7
+ * - col2a: Players 8-11
+ * - col2b: Players 12-15
+ * - col3a: Players 16-19
+ * - col3b: Players 20-23
+ * - col4a: Players 24-27
+ * - col4b: Players 28-31
  */
 export function getPlayersByColumn64(players: GraphicPlayer[]) {
-  const groupOrder: Record<string, number> = {
-    A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8,
-    I: 9, J: 10, K: 11, L: 12, M: 13, N: 14, O: 15, P: 16,
-  };
-
-  // Sort players by group to ensure same-group players are adjacent
-  const sortByGroup = (a: GraphicPlayer, b: GraphicPlayer) =>
-    (groupOrder[a.group] ?? 99) - (groupOrder[b.group] ?? 99);
-
-  // Column 1: Groups A-D (8 players total)
-  const col1a = players.filter((p) => ["A", "B"].includes(p.group)).sort(sortByGroup);
-  const col1b = players.filter((p) => ["C", "D"].includes(p.group)).sort(sortByGroup);
-
-  // Column 2: Groups E-H (8 players total)
-  const col2a = players.filter((p) => ["E", "F"].includes(p.group)).sort(sortByGroup);
-  const col2b = players.filter((p) => ["G", "H"].includes(p.group)).sort(sortByGroup);
-
-  // Column 3: Groups I-L (8 players total)
-  const col3a = players.filter((p) => ["I", "J"].includes(p.group)).sort(sortByGroup);
-  const col3b = players.filter((p) => ["K", "L"].includes(p.group)).sort(sortByGroup);
-
-  // Column 4: Groups M-P (8 players total)
-  const col4a = players.filter((p) => ["M", "N"].includes(p.group)).sort(sortByGroup);
-  const col4b = players.filter((p) => ["O", "P"].includes(p.group)).sort(sortByGroup);
+  const col1a = players.slice(0, 4);
+  const col1b = players.slice(4, 8);
+  const col2a = players.slice(8, 12);
+  const col2b = players.slice(12, 16);
+  const col3a = players.slice(16, 20);
+  const col3b = players.slice(20, 24);
+  const col4a = players.slice(24, 28);
+  const col4b = players.slice(28, 32);
 
   return { col1a, col1b, col2a, col2b, col3a, col3b, col4a, col4b };
 }
 
 /**
  * Split GraphicData for Top 64 into Winners and Losers data
+ * Uses index-based slicing:
+ * - Players 0-31: Winners bracket
+ * - Players 32-63: Losers bracket
  * Usage stats are COMBINED across all 64 players and shown on both graphics
  */
 export function splitGraphicDataFor64(data: GraphicData): {
   winnersData: GraphicData;
   losersData: GraphicData;
 } {
-  const winnersPlayers = data.players.filter((p) => p.bracketSide === "Winners");
-  const losersPlayers = data.players.filter((p) => p.bracketSide === "Losers");
+  const winnersPlayers = data.players.slice(0, 32);
+  const losersPlayers = data.players.slice(32, 64);
 
   // Usage stats are calculated from ALL 64 players (combined)
   // Both graphics show the same usage stats

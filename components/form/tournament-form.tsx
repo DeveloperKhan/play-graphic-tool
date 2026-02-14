@@ -22,7 +22,6 @@ export function TournamentForm({
   const form = useTournamentForm();
   const playerOrder = form.watch("playerOrder");
   const currentPlayerCount = form.watch("playerCount");
-  const overviewType = form.watch("overviewType");
   const players = form.watch("players");
 
   // Track which sections are open (all collapsed by default)
@@ -70,58 +69,17 @@ export function TournamentForm({
 
         // Fix player count mismatch (can happen when playerCount changed but effect didn't complete)
         if (savedPlayerCount !== actualPlayerCount && parsedData.players && parsedData.playerOrder) {
-          const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"];
-          const overviewType = parsedData.overviewType || "Usage";
-
           if (savedPlayerCount > actualPlayerCount) {
             // Add missing players
             for (let i = actualPlayerCount; i < savedPlayerCount; i++) {
               const playerId = `player-${i + 1}`;
               parsedData.playerOrder.push(playerId);
-
-              // Determine default placement based on index (check from lowest to highest)
-              let defaultPlacement: any = "33-64";
-              if (i === 0) defaultPlacement = 1;
-              else if (i === 1) defaultPlacement = 2;
-              else if (i === 2) defaultPlacement = 3;
-              else if (i === 3) defaultPlacement = 4;
-              else if (i < 8) defaultPlacement = "5-8";
-              else if (i < 16) defaultPlacement = "9-16";
-              else if (i < 24) defaultPlacement = "17-24";
-              else if (i < 32) defaultPlacement = "25-32";
-              // else stays "33-64"
-
-              // Determine default group and bracket side
-              // For Top 64: First 32 are Winners (2 per group A-P), next 32 are Losers
-              let defaultBracketSide: string;
-              let defaultGroup: string;
-
-              if (savedPlayerCount === 64) {
-                defaultBracketSide = i < 32 ? "Winners" : "Losers";
-                const indexInBracket = i < 32 ? i : i - 32;
-                defaultGroup = groups[Math.floor(indexInBracket / 2)];
-              } else {
-                defaultBracketSide = i < savedPlayerCount / 2 ? "Winners" : "Losers";
-                const groupCount = Math.min(savedPlayerCount / 2, 8);
-                defaultGroup = groups[i % groupCount];
-              }
-
-              const basePlayer = {
+              parsedData.players[playerId] = {
                 id: playerId,
                 name: "",
                 team: Array(6).fill(null).map(() => ({ id: "", isShadow: false })),
                 flags: [""],
               };
-
-              if (overviewType === "Bracket") {
-                parsedData.players[playerId] = { ...basePlayer, placement: defaultPlacement };
-              } else {
-                parsedData.players[playerId] = {
-                  ...basePlayer,
-                  bracketSide: defaultBracketSide,
-                  group: defaultGroup,
-                };
-              }
             }
           } else {
             // Remove excess players
@@ -131,6 +89,16 @@ export function TournamentForm({
               delete parsedData.players[playerId];
             });
           }
+        }
+
+        // Migrate old player data - remove deprecated fields
+        if (parsedData.players) {
+          Object.keys(parsedData.players).forEach((playerId) => {
+            const player = parsedData.players[playerId];
+            delete player.placement;
+            delete player.bracketSide;
+            delete player.group;
+          });
         }
 
         // Ensure column wrappers exist for Top 64
@@ -262,47 +230,47 @@ export function TournamentForm({
     const currentPlayers = form.getValues("players");
     const currentOrder = form.getValues("playerOrder");
 
-    // Define sort order for placements
-    const placementOrder: Record<string | number, number> = {
-      1: 1,
-      2: 2,
-      3: 3,
-      4: 4,
-      "5-8": 5,
-      "9-16": 6,
-      "17-24": 7,
-      "25-32": 8,
-      "33-64": 9,
-    };
-
-    // Define sort order for groups
-    const groupOrder: Record<string, number> = {
-      A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8,
-      I: 9, J: 10, K: 11, L: 12, M: 13, N: 14, O: 15, P: 16,
-    };
-
+    // Sort players alphabetically by name
     const sortedOrder = [...currentOrder].sort((a, b) => {
       const playerA = currentPlayers[a];
       const playerB = currentPlayers[b];
-
-      if (overviewType === "Bracket") {
-        // Sort by placement
-        const placementA = placementOrder[playerA?.placement ?? "25-32"] ?? 99;
-        const placementB = placementOrder[playerB?.placement ?? "25-32"] ?? 99;
-        return placementA - placementB;
-      } else {
-        // Sort by bracket side (Winners first), then by group
-        const sideA = playerA?.bracketSide === "Winners" ? 0 : 1;
-        const sideB = playerB?.bracketSide === "Winners" ? 0 : 1;
-        if (sideA !== sideB) return sideA - sideB;
-
-        const groupA = groupOrder[playerA?.group ?? "P"] ?? 99;
-        const groupB = groupOrder[playerB?.group ?? "P"] ?? 99;
-        return groupA - groupB;
-      }
+      const nameA = playerA?.name?.toLowerCase() || "";
+      const nameB = playerB?.name?.toLowerCase() || "";
+      return nameA.localeCompare(nameB);
     });
 
     form.setValue("playerOrder", sortedOrder);
+  };
+
+  // Move player up in order
+  const handleMoveUp = (index: number) => {
+    if (index <= 0) return;
+    const currentOrder = form.getValues("playerOrder");
+    const newOrder = [...currentOrder];
+    [newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]];
+    form.setValue("playerOrder", newOrder);
+  };
+
+  // Move player down in order
+  const handleMoveDown = (index: number) => {
+    const currentOrder = form.getValues("playerOrder");
+    if (index >= currentOrder.length - 1) return;
+    const newOrder = [...currentOrder];
+    [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
+    form.setValue("playerOrder", newOrder);
+  };
+
+  // Move player to a specific position (1-indexed)
+  const handleMoveTo = (fromIndex: number, toPosition: number) => {
+    const currentOrder = form.getValues("playerOrder");
+    const toIndex = toPosition - 1; // Convert to 0-indexed
+    if (fromIndex === toIndex) return;
+    if (toIndex < 0 || toIndex >= currentOrder.length) return;
+
+    const newOrder = [...currentOrder];
+    const [removed] = newOrder.splice(fromIndex, 1);
+    newOrder.splice(toIndex, 0, removed);
+    form.setValue("playerOrder", newOrder);
   };
 
   const handleSortAllPokemon = async () => {
@@ -422,58 +390,15 @@ export function TournamentForm({
     const prevCount = prevPlayerCountRef.current;
     prevPlayerCountRef.current = currentPlayerCount;
 
-    const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"];
-
-    // Helper to create a fresh player with correct group/bracket assignment
-    const createPlayer = (index: number, totalPlayers: number) => {
+    // Helper to create a fresh player
+    const createPlayer = (index: number) => {
       const playerId = `player-${index + 1}`;
-
-      // Determine placement based on index
-      let defaultPlacement: any = "33-64";
-      if (index === 0) defaultPlacement = 1;
-      else if (index === 1) defaultPlacement = 2;
-      else if (index === 2) defaultPlacement = 3;
-      else if (index === 3) defaultPlacement = 4;
-      else if (index < 8) defaultPlacement = "5-8";
-      else if (index < 16) defaultPlacement = "9-16";
-      else if (index < 24) defaultPlacement = "17-24";
-      else if (index < 32) defaultPlacement = "25-32";
-      // else stays "33-64"
-
-      // For Top 64: 32 Winners (2 per group A-P), then 32 Losers (2 per group A-P)
-      // For other counts: half Winners, half Losers, distributed across groups
-      let bracketSide: "Winners" | "Losers";
-      let group: string;
-
-      if (totalPlayers === 64) {
-        // Top 64: First 32 are Winners, next 32 are Losers
-        // Within each bracket: 2 players per group (A, A, B, B, ... P, P)
-        bracketSide = index < 32 ? "Winners" : "Losers";
-        const indexInBracket = index < 32 ? index : index - 32;
-        group = groups[Math.floor(indexInBracket / 2)];
-      } else {
-        // Other counts: first half Winners, second half Losers
-        bracketSide = index < totalPlayers / 2 ? "Winners" : "Losers";
-        const groupCount = Math.min(totalPlayers / 2, 8); // Max 8 groups for Top 16 and below
-        group = groups[index % groupCount];
-      }
-
-      const basePlayer = {
+      return {
         id: playerId,
         name: "",
         team: Array(6).fill(null).map(() => ({ id: "", isShadow: false })),
         flags: [""],
       };
-
-      if (overviewType === "Bracket") {
-        return { ...basePlayer, placement: defaultPlacement };
-      } else {
-        return {
-          ...basePlayer,
-          bracketSide: bracketSide as any,
-          group: group as any,
-        };
-      }
     };
 
     // When switching TO 64 players, reset all players with fresh structure
@@ -484,7 +409,7 @@ export function TournamentForm({
       for (let i = 0; i < 64; i++) {
         const playerId = `player-${i + 1}`;
         newOrder.push(playerId);
-        newPlayers[playerId] = createPlayer(i, 64);
+        newPlayers[playerId] = createPlayer(i);
       }
 
       form.setValue("players", newPlayers);
@@ -526,7 +451,7 @@ export function TournamentForm({
       for (let i = prevCount; i < currentPlayerCount; i++) {
         const playerId = `player-${i + 1}`;
         newOrder.push(playerId);
-        newPlayers[playerId] = createPlayer(i, currentPlayerCount);
+        newPlayers[playerId] = createPlayer(i);
       }
 
       form.setValue("players", newPlayers);
@@ -546,63 +471,7 @@ export function TournamentForm({
       form.setValue("players", newPlayers);
       form.setValue("playerOrder", newOrder);
     }
-  }, [currentPlayerCount, form, overviewType, hasLoadedFromStorage]);
-
-  // Handle overview type changes - update player fields accordingly
-  React.useEffect(() => {
-    const players = form.getValues("players");
-    const updatedPlayers = { ...players };
-    let needsUpdate = false;
-
-    Object.keys(updatedPlayers).forEach((playerId, index) => {
-      const player = updatedPlayers[playerId];
-
-      if (overviewType === "Bracket") {
-        // Switch to Bracket mode - add placement, remove bracketSide/group
-        if (player.placement === undefined) {
-          needsUpdate = true;
-          // Determine default placement based on index
-          let defaultPlacement: any = "9-16";
-          if (index === 0) defaultPlacement = 1;
-          else if (index === 1) defaultPlacement = 2;
-          else if (index === 2) defaultPlacement = 3;
-          else if (index === 3) defaultPlacement = 4;
-          else if (index < 8) defaultPlacement = "5-8";
-          else if (index < 16) defaultPlacement = "9-16";
-          else if (index < 24) defaultPlacement = "17-24";
-          else if (index < 32) defaultPlacement = "25-32";
-          else defaultPlacement = "33-64";
-
-          updatedPlayers[playerId] = {
-            ...player,
-            placement: defaultPlacement,
-          };
-          // Remove Usage mode fields
-          delete (updatedPlayers[playerId] as any).bracketSide;
-          delete (updatedPlayers[playerId] as any).group;
-        }
-      } else if (overviewType === "Usage") {
-        // Switch to Usage mode - add bracketSide/group, remove placement
-        if (player.bracketSide === undefined || player.group === undefined) {
-          needsUpdate = true;
-          const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"];
-          const groupCount = currentPlayerCount / 2;
-
-          updatedPlayers[playerId] = {
-            ...player,
-            bracketSide: (index < currentPlayerCount / 2 ? "Winners" : "Losers") as any,
-            group: groups[index % groupCount] as any,
-          };
-          // Remove Bracket mode field
-          delete (updatedPlayers[playerId] as any).placement;
-        }
-      }
-    });
-
-    if (needsUpdate) {
-      form.setValue("players", updatedPlayers);
-    }
-  }, [overviewType, form, currentPlayerCount]);
+  }, [currentPlayerCount, form, hasLoadedFromStorage]);
 
   return (
     <Form {...form}>
@@ -645,8 +514,14 @@ export function TournamentForm({
               form={form}
               playerId={playerId}
               playerNumber={index + 1}
+              totalPlayers={playerOrder.length}
               isOpen={openSections.has(playerId)}
               onOpenChange={(open) => handleOpenChange(playerId, open)}
+              onMoveUp={() => handleMoveUp(index)}
+              onMoveDown={() => handleMoveDown(index)}
+              onMoveTo={(position) => handleMoveTo(index, position)}
+              isFirst={index === 0}
+              isLast={index === playerOrder.length - 1}
             />
           ))}
         </div>
