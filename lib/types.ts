@@ -92,19 +92,47 @@ export interface BracketLabelConfig {
   text: string;
 }
 
-// Bracket positions - maps each bracket slot to a player ID
-// For Top 8 bracket display (used when overviewType is "Bracket")
+// Bracket positions - maps each bracket cell to a player ID
+// For Top 8 double elimination bracket display (21 cells total)
 export interface BracketPositions {
-  // Final standings
-  first: string | null;      // 1st place (Champion)
-  second: string | null;     // 2nd place (Runner-up)
-  third: string | null;      // 3rd place
-  fourth: string | null;     // 4th place
-  // 5th-8th place (4 players in Winners R1)
-  fifth1: string | null;
-  fifth2: string | null;
-  fifth3: string | null;
-  fifth4: string | null;
+  // Winners Semifinals (2 matches = 4 cells)
+  winnersSemis1Top: string | null;
+  winnersSemis1Bottom: string | null;
+  winnersSemis2Top: string | null;
+  winnersSemis2Bottom: string | null;
+
+  // Winners Finals (1 match = 2 cells)
+  winnersFinalsTop: string | null;
+  winnersFinalsBottom: string | null;
+
+  // Losers Round 1 (2 matches = 4 cells)
+  losersR1Match1Top: string | null;
+  losersR1Match1Bottom: string | null;
+  losersR1Match2Top: string | null;
+  losersR1Match2Bottom: string | null;
+
+  // Losers Round 2 (2 cells)
+  losersR2Top: string | null;
+  losersR2Bottom: string | null;
+
+  // Losers Round 3 (2 cells)
+  losersR3Top: string | null;
+  losersR3Bottom: string | null;
+
+  // Losers Semifinals (1 match = 2 cells)
+  losersSemisTop: string | null;
+  losersSemisBottom: string | null;
+
+  // Losers Finals (1 match = 2 cells)
+  losersFinalsTop: string | null;
+  losersFinalsBottom: string | null;
+
+  // Grand Finals (2 cells)
+  grandFinalsWinners: string | null;  // Player from winners bracket
+  grandFinalsLosers: string | null;   // Player from losers bracket
+
+  // Champion (1 cell)
+  champion: string | null;
 }
 
 export interface BracketLabels {

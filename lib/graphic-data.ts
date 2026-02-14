@@ -7,16 +7,47 @@ import type { UsageStats, TournamentData, ColumnId, ColumnWrapperConfig, Bracket
 /**
  * Resolved bracket positions for graphic display
  * Contains player names (resolved from IDs) instead of player IDs
+ * Maps to all 21 cells in the Top 8 double elimination bracket
  */
 export interface ResolvedBracketPositions {
-  first: string | null;
-  second: string | null;
-  third: string | null;
-  fourth: string | null;
-  fifth1: string | null;
-  fifth2: string | null;
-  fifth3: string | null;
-  fifth4: string | null;
+  // Winners Semifinals (2 matches = 4 cells)
+  winnersSemis1Top: string | null;
+  winnersSemis1Bottom: string | null;
+  winnersSemis2Top: string | null;
+  winnersSemis2Bottom: string | null;
+
+  // Winners Finals (1 match = 2 cells)
+  winnersFinalsTop: string | null;
+  winnersFinalsBottom: string | null;
+
+  // Losers Round 1 (2 matches = 4 cells)
+  losersR1Match1Top: string | null;
+  losersR1Match1Bottom: string | null;
+  losersR1Match2Top: string | null;
+  losersR1Match2Bottom: string | null;
+
+  // Losers Round 2 (2 cells)
+  losersR2Top: string | null;
+  losersR2Bottom: string | null;
+
+  // Losers Round 3 (2 cells)
+  losersR3Top: string | null;
+  losersR3Bottom: string | null;
+
+  // Losers Semifinals (1 match = 2 cells)
+  losersSemisTop: string | null;
+  losersSemisBottom: string | null;
+
+  // Losers Finals (1 match = 2 cells)
+  losersFinalsTop: string | null;
+  losersFinalsBottom: string | null;
+
+  // Grand Finals (2 cells)
+  grandFinalsWinners: string | null;
+  grandFinalsLosers: string | null;
+
+  // Champion (1 cell)
+  champion: string | null;
 }
 
 export interface GraphicPlayer {
@@ -172,36 +203,48 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
     })
     .filter((p): p is GraphicPlayer => p !== null);
 
+  // Helper to resolve player ID to name
+  const resolveName = (playerId: string | null): string | null => {
+    if (!playerId) return null;
+    return tournamentData.players[playerId]?.name || null;
+  };
+
   // Resolve bracket positions from player IDs to player names
-  const resolvedBracketPositions: ResolvedBracketPositions | undefined =
-    tournamentData.bracketPositions
-      ? {
-          first: tournamentData.bracketPositions.first
-            ? tournamentData.players[tournamentData.bracketPositions.first]?.name || null
-            : null,
-          second: tournamentData.bracketPositions.second
-            ? tournamentData.players[tournamentData.bracketPositions.second]?.name || null
-            : null,
-          third: tournamentData.bracketPositions.third
-            ? tournamentData.players[tournamentData.bracketPositions.third]?.name || null
-            : null,
-          fourth: tournamentData.bracketPositions.fourth
-            ? tournamentData.players[tournamentData.bracketPositions.fourth]?.name || null
-            : null,
-          fifth1: tournamentData.bracketPositions.fifth1
-            ? tournamentData.players[tournamentData.bracketPositions.fifth1]?.name || null
-            : null,
-          fifth2: tournamentData.bracketPositions.fifth2
-            ? tournamentData.players[tournamentData.bracketPositions.fifth2]?.name || null
-            : null,
-          fifth3: tournamentData.bracketPositions.fifth3
-            ? tournamentData.players[tournamentData.bracketPositions.fifth3]?.name || null
-            : null,
-          fifth4: tournamentData.bracketPositions.fifth4
-            ? tournamentData.players[tournamentData.bracketPositions.fifth4]?.name || null
-            : null,
-        }
-      : undefined;
+  const bp = tournamentData.bracketPositions;
+  const resolvedBracketPositions: ResolvedBracketPositions | undefined = bp
+    ? {
+        // Winners Semifinals
+        winnersSemis1Top: resolveName(bp.winnersSemis1Top),
+        winnersSemis1Bottom: resolveName(bp.winnersSemis1Bottom),
+        winnersSemis2Top: resolveName(bp.winnersSemis2Top),
+        winnersSemis2Bottom: resolveName(bp.winnersSemis2Bottom),
+        // Winners Finals
+        winnersFinalsTop: resolveName(bp.winnersFinalsTop),
+        winnersFinalsBottom: resolveName(bp.winnersFinalsBottom),
+        // Losers Round 1
+        losersR1Match1Top: resolveName(bp.losersR1Match1Top),
+        losersR1Match1Bottom: resolveName(bp.losersR1Match1Bottom),
+        losersR1Match2Top: resolveName(bp.losersR1Match2Top),
+        losersR1Match2Bottom: resolveName(bp.losersR1Match2Bottom),
+        // Losers Round 2
+        losersR2Top: resolveName(bp.losersR2Top),
+        losersR2Bottom: resolveName(bp.losersR2Bottom),
+        // Losers Round 3
+        losersR3Top: resolveName(bp.losersR3Top),
+        losersR3Bottom: resolveName(bp.losersR3Bottom),
+        // Losers Semifinals
+        losersSemisTop: resolveName(bp.losersSemisTop),
+        losersSemisBottom: resolveName(bp.losersSemisBottom),
+        // Losers Finals
+        losersFinalsTop: resolveName(bp.losersFinalsTop),
+        losersFinalsBottom: resolveName(bp.losersFinalsBottom),
+        // Grand Finals
+        grandFinalsWinners: resolveName(bp.grandFinalsWinners),
+        grandFinalsLosers: resolveName(bp.grandFinalsLosers),
+        // Champion
+        champion: resolveName(bp.champion),
+      }
+    : undefined;
 
   return {
     titleLines: tournamentData.titleLines || ["", "", ""],

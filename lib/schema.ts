@@ -91,16 +91,47 @@ export const eventDateRangeSchema = z.object({
   endDate: z.string(), // ISO date string (YYYY-MM-DD)
 });
 
-// Bracket positions schema - maps bracket slots to player IDs
+// Bracket positions schema - maps bracket cells to player IDs
+// For Top 8 double elimination bracket (21 cells total)
 export const bracketPositionsSchema = z.object({
-  first: z.string().nullable(),
-  second: z.string().nullable(),
-  third: z.string().nullable(),
-  fourth: z.string().nullable(),
-  fifth1: z.string().nullable(),
-  fifth2: z.string().nullable(),
-  fifth3: z.string().nullable(),
-  fifth4: z.string().nullable(),
+  // Winners Semifinals (2 matches = 4 cells)
+  winnersSemis1Top: z.string().nullable(),
+  winnersSemis1Bottom: z.string().nullable(),
+  winnersSemis2Top: z.string().nullable(),
+  winnersSemis2Bottom: z.string().nullable(),
+
+  // Winners Finals (1 match = 2 cells)
+  winnersFinalsTop: z.string().nullable(),
+  winnersFinalsBottom: z.string().nullable(),
+
+  // Losers Round 1 (2 matches = 4 cells)
+  losersR1Match1Top: z.string().nullable(),
+  losersR1Match1Bottom: z.string().nullable(),
+  losersR1Match2Top: z.string().nullable(),
+  losersR1Match2Bottom: z.string().nullable(),
+
+  // Losers Round 2 (2 cells)
+  losersR2Top: z.string().nullable(),
+  losersR2Bottom: z.string().nullable(),
+
+  // Losers Round 3 (2 cells)
+  losersR3Top: z.string().nullable(),
+  losersR3Bottom: z.string().nullable(),
+
+  // Losers Semifinals (1 match = 2 cells)
+  losersSemisTop: z.string().nullable(),
+  losersSemisBottom: z.string().nullable(),
+
+  // Losers Finals (1 match = 2 cells)
+  losersFinalsTop: z.string().nullable(),
+  losersFinalsBottom: z.string().nullable(),
+
+  // Grand Finals (2 cells)
+  grandFinalsWinners: z.string().nullable(),
+  grandFinalsLosers: z.string().nullable(),
+
+  // Champion (1 cell)
+  champion: z.string().nullable(),
 });
 
 // Tournament data schema

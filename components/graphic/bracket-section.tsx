@@ -94,18 +94,11 @@ const SECTION_LABELS = {
 };
 
 export function BracketSection({ bracketPositions, bracketReset }: BracketSectionProps) {
-  // Get player names from resolved bracket positions
-  const champion = bracketPositions?.first ?? null;
-  const runnerUp = bracketPositions?.second ?? null;
-  const thirdPlace = bracketPositions?.third ?? null;
-  const fourthPlace = bracketPositions?.fourth ?? null;
-  const fifth1 = bracketPositions?.fifth1 ?? null;
-  const fifth2 = bracketPositions?.fifth2 ?? null;
-  const fifth3 = bracketPositions?.fifth3 ?? null;
-  const fifth4 = bracketPositions?.fifth4 ?? null;
+  // Get player names from resolved bracket positions (shorthand alias)
+  const bp = bracketPositions;
 
   // Determine visibility states
-  const hasWinner = !!champion;
+  const hasWinner = !!bp?.champion;
 
   return (
     <div
@@ -156,124 +149,136 @@ export function BracketSection({ bracketPositions, bracketReset }: BracketSectio
 
       {/* ============ BRACKET CELLS ============ */}
 
-      {/* Winners Round 1 - each pairing has unique color */}
+      {/* Winners Semifinals - Match 1 (yellow) and Match 2 (cyan) */}
       <BracketCell
         x={WINNERS_R1[0].x}
         y={WINNERS_R1[0].y}
-        playerName={fifth1 ?? undefined}
+        playerName={bp?.winnersSemis1Top ?? undefined}
         borderColor={COLORS.yellow}
       />
       <BracketCell
         x={WINNERS_R1[1].x}
         y={WINNERS_R1[1].y}
-        playerName={fifth2 ?? undefined}
+        playerName={bp?.winnersSemis1Bottom ?? undefined}
         borderColor={COLORS.yellow}
       />
       <BracketCell
         x={WINNERS_R1[2].x}
         y={WINNERS_R1[2].y}
-        playerName={fifth3 ?? undefined}
+        playerName={bp?.winnersSemis2Top ?? undefined}
         borderColor={COLORS.cyan}
       />
       <BracketCell
         x={WINNERS_R1[3].x}
         y={WINNERS_R1[3].y}
-        playerName={fifth4 ?? undefined}
+        playerName={bp?.winnersSemis2Bottom ?? undefined}
         borderColor={COLORS.cyan}
       />
 
-      {/* Winners Semis (Winners Finals) - both cells have purple */}
+      {/* Winners Finals - both cells have purple */}
       <BracketCell
         x={WINNERS_SEMIS[0].x}
         y={WINNERS_SEMIS[0].y}
+        playerName={bp?.winnersFinalsTop ?? undefined}
         borderColor={COLORS.purple}
       />
       <BracketCell
         x={WINNERS_SEMIS[1].x}
         y={WINNERS_SEMIS[1].y}
+        playerName={bp?.winnersFinalsBottom ?? undefined}
         borderColor={COLORS.purple}
       />
 
-      {/* Losers Round 1 - each pairing has unique color */}
+      {/* Losers Round 1 - Match 1 (green) and Match 2 (pink) */}
       <BracketCell
         x={LOSERS_R1[0].x}
         y={LOSERS_R1[0].y}
+        playerName={bp?.losersR1Match1Top ?? undefined}
         borderColor={COLORS.green}
       />
       <BracketCell
         x={LOSERS_R1[1].x}
         y={LOSERS_R1[1].y}
+        playerName={bp?.losersR1Match1Bottom ?? undefined}
         borderColor={COLORS.green}
       />
       <BracketCell
         x={LOSERS_R1[2].x}
         y={LOSERS_R1[2].y}
+        playerName={bp?.losersR1Match2Top ?? undefined}
         borderColor={COLORS.pink}
       />
       <BracketCell
         x={LOSERS_R1[3].x}
         y={LOSERS_R1[3].y}
+        playerName={bp?.losersR1Match2Bottom ?? undefined}
         borderColor={COLORS.pink}
       />
 
-      {/* Losers Round 2 - top cell only, cyan (from Winners R1 match 2 dropout) */}
+      {/* Losers Round 2 */}
       <BracketCell
         x={LOSERS_R2[0].x}
         y={LOSERS_R2[0].y}
+        playerName={bp?.losersR2Top ?? undefined}
         borderColor={COLORS.cyan}
       />
       <BracketCell
         x={LOSERS_R2[1].x}
         y={LOSERS_R2[1].y}
+        playerName={bp?.losersR2Bottom ?? undefined}
       />
 
-      {/* Losers Round 3 - top cell only, yellow (from Winners R1 match 1 dropout) */}
+      {/* Losers Round 3 */}
       <BracketCell
         x={LOSERS_R3[0].x}
         y={LOSERS_R3[0].y}
+        playerName={bp?.losersR3Top ?? undefined}
         borderColor={COLORS.yellow}
       />
       <BracketCell
         x={LOSERS_R3[1].x}
         y={LOSERS_R3[1].y}
+        playerName={bp?.losersR3Bottom ?? undefined}
       />
 
-      {/* Losers Semis - no colored borders */}
+      {/* Losers Semifinals */}
       <BracketCell
         x={LOSERS_SEMIS[0].x}
         y={LOSERS_SEMIS[0].y}
-        playerName={fourthPlace ?? undefined}
+        playerName={bp?.losersSemisTop ?? undefined}
       />
       <BracketCell
         x={LOSERS_SEMIS[1].x}
         y={LOSERS_SEMIS[1].y}
+        playerName={bp?.losersSemisBottom ?? undefined}
       />
 
-      {/* Losers Finals - only top cell has colored border matching winner's final */}
+      {/* Losers Finals */}
       <BracketCell
         x={LOSERS_FINALS[0].x}
         y={LOSERS_FINALS[0].y}
-        playerName={thirdPlace ?? undefined}
+        playerName={bp?.losersFinalsTop ?? undefined}
         borderColor={COLORS.purple}
       />
       <BracketCell
         x={LOSERS_FINALS[1].x}
         y={LOSERS_FINALS[1].y}
+        playerName={bp?.losersFinalsBottom ?? undefined}
       />
 
-      {/* Grand Finals Winner */}
+      {/* Grand Finals - Winners Side */}
       <BracketCell
         x={GRAND_FINALS.x}
         y={GRAND_FINALS.y}
-        playerName={hasWinner ? champion ?? undefined : undefined}
+        playerName={hasWinner ? bp?.grandFinalsWinners ?? undefined : undefined}
         isGoldBackground={hasWinner}
       />
 
-      {/* Grand Finals Loser / Reset */}
+      {/* Grand Finals - Losers Side / Reset */}
       <BracketCell
         x={GRAND_FINALS_RESET.x}
         y={GRAND_FINALS_RESET.y}
-        playerName={runnerUp ?? undefined}
+        playerName={bp?.grandFinalsLosers ?? undefined}
       />
 
       {/* Reset label (conditional) */}
@@ -301,7 +306,7 @@ export function BracketSection({ bracketPositions, bracketReset }: BracketSectio
       <BracketCell
         x={CHAMPION.x}
         y={CHAMPION.y}
-        playerName={champion ?? undefined}
+        playerName={bp?.champion ?? undefined}
         isChampion
         isGoldBackground={hasWinner}
         hidden={!hasWinner}

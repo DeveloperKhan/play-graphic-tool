@@ -5,17 +5,40 @@ import type { TournamentData, Player, BracketPositions } from "@/lib/types";
 
 /**
  * Create default bracket positions (all null)
+ * Maps to all 21 cells in the Top 8 double elimination bracket
  */
 function createDefaultBracketPositions(): BracketPositions {
   return {
-    first: null,
-    second: null,
-    third: null,
-    fourth: null,
-    fifth1: null,
-    fifth2: null,
-    fifth3: null,
-    fifth4: null,
+    // Winners Semifinals
+    winnersSemis1Top: null,
+    winnersSemis1Bottom: null,
+    winnersSemis2Top: null,
+    winnersSemis2Bottom: null,
+    // Winners Finals
+    winnersFinalsTop: null,
+    winnersFinalsBottom: null,
+    // Losers Round 1
+    losersR1Match1Top: null,
+    losersR1Match1Bottom: null,
+    losersR1Match2Top: null,
+    losersR1Match2Bottom: null,
+    // Losers Round 2
+    losersR2Top: null,
+    losersR2Bottom: null,
+    // Losers Round 3
+    losersR3Top: null,
+    losersR3Bottom: null,
+    // Losers Semifinals
+    losersSemisTop: null,
+    losersSemisBottom: null,
+    // Losers Finals
+    losersFinalsTop: null,
+    losersFinalsBottom: null,
+    // Grand Finals
+    grandFinalsWinners: null,
+    grandFinalsLosers: null,
+    // Champion
+    champion: null,
   };
 }
 

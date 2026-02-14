@@ -17,16 +17,74 @@ interface BracketConfigSectionProps {
   form: UseFormReturn<TournamentData>;
 }
 
-// Position configuration for the bracket
-const BRACKET_POSITIONS = [
-  { key: "first", label: "1st Place (Champion)" },
-  { key: "second", label: "2nd Place (Runner-up)" },
-  { key: "third", label: "3rd Place" },
-  { key: "fourth", label: "4th Place" },
-  { key: "fifth1", label: "5th-8th Place (Slot 1)" },
-  { key: "fifth2", label: "5th-8th Place (Slot 2)" },
-  { key: "fifth3", label: "5th-8th Place (Slot 3)" },
-  { key: "fifth4", label: "5th-8th Place (Slot 4)" },
+// Bracket position groups organized by round
+const BRACKET_SECTIONS = [
+  {
+    title: "Winners Semifinals",
+    positions: [
+      { key: "winnersSemis1Top", label: "Match 1 - Top" },
+      { key: "winnersSemis1Bottom", label: "Match 1 - Bottom" },
+      { key: "winnersSemis2Top", label: "Match 2 - Top" },
+      { key: "winnersSemis2Bottom", label: "Match 2 - Bottom" },
+    ],
+  },
+  {
+    title: "Winners Finals",
+    positions: [
+      { key: "winnersFinalsTop", label: "Top" },
+      { key: "winnersFinalsBottom", label: "Bottom" },
+    ],
+  },
+  {
+    title: "Losers Round 1",
+    positions: [
+      { key: "losersR1Match1Top", label: "Match 1 - Top" },
+      { key: "losersR1Match1Bottom", label: "Match 1 - Bottom" },
+      { key: "losersR1Match2Top", label: "Match 2 - Top" },
+      { key: "losersR1Match2Bottom", label: "Match 2 - Bottom" },
+    ],
+  },
+  {
+    title: "Losers Round 2",
+    positions: [
+      { key: "losersR2Top", label: "Top" },
+      { key: "losersR2Bottom", label: "Bottom" },
+    ],
+  },
+  {
+    title: "Losers Round 3",
+    positions: [
+      { key: "losersR3Top", label: "Top" },
+      { key: "losersR3Bottom", label: "Bottom" },
+    ],
+  },
+  {
+    title: "Losers Semifinals",
+    positions: [
+      { key: "losersSemisTop", label: "Top" },
+      { key: "losersSemisBottom", label: "Bottom" },
+    ],
+  },
+  {
+    title: "Losers Finals",
+    positions: [
+      { key: "losersFinalsTop", label: "Top" },
+      { key: "losersFinalsBottom", label: "Bottom" },
+    ],
+  },
+  {
+    title: "Grand Finals",
+    positions: [
+      { key: "grandFinalsWinners", label: "From Winners" },
+      { key: "grandFinalsLosers", label: "From Losers" },
+    ],
+  },
+  {
+    title: "Champion",
+    positions: [
+      { key: "champion", label: "Champion" },
+    ],
+  },
 ] as const;
 
 export function BracketConfigSection({ form }: BracketConfigSectionProps) {
@@ -66,54 +124,59 @@ export function BracketConfigSection({ form }: BracketConfigSectionProps) {
       <CardHeader>
         <CardTitle>Bracket Positions</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm text-muted-foreground mb-4">
-          Select which player finished in each bracket position.
+      <CardContent className="space-y-6">
+        <p className="text-sm text-muted-foreground">
+          Select which player appears in each bracket cell.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {BRACKET_POSITIONS.map((position) => (
-            <FormField
-              key={position.key}
-              control={form.control}
-              name={`bracketPositions.${position.key}`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{position.label}</FormLabel>
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value === "__none__" ? null : value);
-                    }}
-                    value={field.value ?? "__none__"}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select player..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="__none__">
-                        <span className="text-muted-foreground">No player selected</span>
-                      </SelectItem>
-                      {playerOptions.map((player) => {
-                        const isSelected = selectedPlayerIds.has(player.id) && field.value !== player.id;
-                        return (
-                          <SelectItem
-                            key={player.id}
-                            value={player.id}
-                            disabled={isSelected}
-                          >
-                            {player.name}
-                            {isSelected && " (already selected)"}
+        {BRACKET_SECTIONS.map((section) => (
+          <div key={section.title} className="space-y-3">
+            <h4 className="font-medium text-sm">{section.title}</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {section.positions.map((position) => (
+                <FormField
+                  key={position.key}
+                  control={form.control}
+                  name={`bracketPositions.${position.key}` as `bracketPositions.${keyof typeof bracketPositions}`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs">{position.label}</FormLabel>
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value === "__none__" ? null : value);
+                        }}
+                        value={(field.value as string | null) ?? "__none__"}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="h-9">
+                            <SelectValue placeholder="Select player..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="__none__">
+                            <span className="text-muted-foreground">No player selected</span>
                           </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-          ))}
-        </div>
+                          {playerOptions.map((player) => {
+                            const isSelected = selectedPlayerIds.has(player.id) && field.value !== player.id;
+                            return (
+                              <SelectItem
+                                key={player.id}
+                                value={player.id}
+                                disabled={isSelected}
+                              >
+                                {player.name}
+                                {isSelected && " (already selected)"}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
       </CardContent>
     </Card>
   );
