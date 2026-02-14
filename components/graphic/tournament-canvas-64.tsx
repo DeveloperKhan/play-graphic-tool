@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { GraphicHeader } from "./graphic-header";
 import { UsageSection } from "./usage-section";
+import { BracketSection } from "./bracket-section";
 import { PlayerColumn } from "./player-column";
 import { GraphicFooter } from "./graphic-footer";
 import { CalendarBadge } from "./calendar-badge";
@@ -151,6 +152,16 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
                 <UsageSection
                   usageStats={data.usageStats}
                   totalPlayers={64}
+                />
+              </div>
+            )}
+
+            {/* Bracket Section - positioned below header (only for Bracket mode) */}
+            {data.overviewType === "Bracket" && (
+              <div style={{ position: "absolute", top: 224, left: 43 }}>
+                <BracketSection
+                  bracketPositions={data.bracketPositions}
+                  bracketReset={data.bracketReset ?? false}
                 />
               </div>
             )}
