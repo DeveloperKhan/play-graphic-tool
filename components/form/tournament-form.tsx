@@ -227,22 +227,6 @@ export function TournamentForm({
     setOpenSections(new Set());
   };
 
-  const handleSortPlayers = () => {
-    const currentPlayers = form.getValues("players");
-    const currentOrder = form.getValues("playerOrder");
-
-    // Sort players alphabetically by name
-    const sortedOrder = [...currentOrder].sort((a, b) => {
-      const playerA = currentPlayers[a];
-      const playerB = currentPlayers[b];
-      const nameA = playerA?.name?.toLowerCase() || "";
-      const nameB = playerB?.name?.toLowerCase() || "";
-      return nameA.localeCompare(nameB);
-    });
-
-    form.setValue("playerOrder", sortedOrder);
-  };
-
   // Move player up in order
   const handleMoveUp = (index: number) => {
     if (index <= 0) return;
@@ -491,7 +475,6 @@ export function TournamentForm({
           onNavigate={handleNavigate}
           onExpandAll={handleExpandAll}
           onCollapseAll={handleCollapseAll}
-          onSortPlayers={handleSortPlayers}
           onSortAllPokemon={handleSortAllPokemon}
           onImport={handleImport}
           onImportFlags={handleImportFlags}

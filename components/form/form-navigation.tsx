@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, ArrowUpDown, Sparkles, RotateCcw, Copy, Upload, Check } from "lucide-react";
+import { ChevronDown, ChevronUp, Sparkles, RotateCcw, Copy, Upload, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import-dialog";
 import { RK9RosterImportDialog } from "./rk9-roster-import-dialog";
@@ -43,7 +43,6 @@ interface FormNavigationProps {
   onNavigate: (sectionId: string) => void;
   onExpandAll: () => void;
   onCollapseAll: () => void;
-  onSortPlayers: () => void;
   onSortAllPokemon: () => void;
   onImport: (players: ImportedPlayer[]) => void;
   onImportFlags: (updates: Array<{ playerId: string; flags: string[] }>) => void;
@@ -62,7 +61,6 @@ export function FormNavigation({
   onNavigate,
   onExpandAll,
   onCollapseAll,
-  onSortPlayers,
   onSortAllPokemon,
   onImport,
   onImportFlags,
@@ -119,16 +117,6 @@ export function FormNavigation({
         >
           <ChevronUp className="h-3 w-3 mr-1" />
           Collapse All
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={onSortPlayers}
-          className="text-xs"
-        >
-          <ArrowUpDown className="h-3 w-3 mr-1" />
-          Sort Players
         </Button>
         <BulkMoveDialog
           playerOrder={playerOrder}
