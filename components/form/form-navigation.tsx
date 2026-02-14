@@ -6,6 +6,7 @@ import { ChevronDown, ChevronUp, ArrowUpDown, Sparkles, RotateCcw, Copy, Upload,
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import-dialog";
 import { RK9RosterImportDialog } from "./rk9-roster-import-dialog";
+import { BulkMoveDialog } from "./bulk-move-dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,6 +47,7 @@ interface FormNavigationProps {
   onSortAllPokemon: () => void;
   onImport: (players: ImportedPlayer[]) => void;
   onImportFlags: (updates: Array<{ playerId: string; flags: string[] }>) => void;
+  onBulkReorder: (newOrder: string[]) => void;
   onResetForm: () => void;
   onCopyJson: () => Promise<boolean>;
   onImportJson: (json: string) => boolean;
@@ -64,6 +66,7 @@ export function FormNavigation({
   onSortAllPokemon,
   onImport,
   onImportFlags,
+  onBulkReorder,
   onResetForm,
   onCopyJson,
   onImportJson,
@@ -127,6 +130,11 @@ export function FormNavigation({
           <ArrowUpDown className="h-3 w-3 mr-1" />
           Sort Players
         </Button>
+        <BulkMoveDialog
+          playerOrder={playerOrder}
+          playerNames={playerNames}
+          onBulkReorder={onBulkReorder}
+        />
         <Button
           type="button"
           variant="outline"

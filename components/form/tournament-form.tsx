@@ -274,6 +274,11 @@ export function TournamentForm({
     form.setValue("playerOrder", newOrder);
   };
 
+  // Bulk reorder players
+  const handleBulkReorder = (newOrder: string[]) => {
+    form.setValue("playerOrder", newOrder);
+  };
+
   const handleSortAllPokemon = async () => {
     const currentOrder = form.getValues("playerOrder");
 
@@ -490,6 +495,7 @@ export function TournamentForm({
           onSortAllPokemon={handleSortAllPokemon}
           onImport={handleImport}
           onImportFlags={handleImportFlags}
+          onBulkReorder={handleBulkReorder}
           onResetForm={handleResetForm}
           onCopyJson={handleCopyJson}
           onImportJson={handleImportJson}
