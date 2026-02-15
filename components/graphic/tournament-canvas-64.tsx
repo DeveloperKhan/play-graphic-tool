@@ -121,22 +121,28 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
               bottom: 0,
             }}
           >
-            {/* Calendar Badge - top left corner */}
+            {/* Calendar Badge - top left corner (larger and lower in Bracket mode) */}
             {data.eventDateRange?.startDate && data.eventDateRange?.endDate && (
-              <div style={{ position: "absolute", top: 87, left: 33 }}>
+              <div style={{
+                position: "absolute",
+                top: data.overviewType === "Bracket" ? 190 : 87,
+                left: 33
+              }}>
                 <CalendarBadge
                   startDate={data.eventDateRange.startDate}
                   endDate={data.eventDateRange.endDate}
+                  size={data.overviewType === "Bracket" ? "large" : "default"}
                 />
               </div>
             )}
 
-            {/* Header - position at top left (shifted right if calendar badge is shown) */}
+            {/* Header - position at top left (shifted right if calendar badge is shown, except in Bracket mode) */}
             {data.overviewType !== "None" && (
               <div style={{
                 position: "absolute",
                 top: 50,
-                left: data.eventDateRange?.startDate && data.eventDateRange?.endDate ? 301 : 33
+                // In Bracket mode, calendar is positioned lower so header doesn't need to shift
+                left: data.eventDateRange?.startDate && data.eventDateRange?.endDate && data.overviewType !== "Bracket" ? 301 : 33
               }}>
                 <GraphicHeader
                   titleLines={data.titleLines}
