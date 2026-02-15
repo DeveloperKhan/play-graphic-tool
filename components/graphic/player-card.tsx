@@ -11,6 +11,15 @@ interface PlayerCardProps {
 // Flag size for 2100x2100 canvas
 const FLAG_SIZE = 60;
 const SMALL_FLAG_SIZE = 40; // Size when 2 flags are shown
+const PLACEMENT_BADGE_SIZE = 53;
+
+// Placement badge image paths
+const PLACEMENT_BADGES: Record<1 | 2 | 3 | 4, string> = {
+  1: "/assets/graphic/placements/Type=1st.svg",
+  2: "/assets/graphic/placements/Type=2nd.svg",
+  3: "/assets/graphic/placements/Type=3rd.svg",
+  4: "/assets/graphic/placements/Type=4th.svg",
+};
 
 interface FlagDisplayProps {
   flags: string[];
@@ -73,11 +82,14 @@ const POKEMON_ROW_WIDTH = POKEMON_WIDTH * 6 + GAP * 5; // 6 Pokemon with GAP bet
 interface DynamicPlayerNameProps {
   name: string;
   flagCount: number;
+  hasPlacement: boolean;
 }
 
-function DynamicPlayerName({ name, flagCount }: DynamicPlayerNameProps) {
-  // Calculate available width based on flag count
-  const availableWidth = POKEMON_ROW_WIDTH - (flagCount * FLAG_SIZE + flagCount * GAP);
+function DynamicPlayerName({ name, flagCount, hasPlacement }: DynamicPlayerNameProps) {
+  // Calculate available width based on flag count and placement badge
+  const flagSpace = flagCount * FLAG_SIZE + flagCount * GAP;
+  const placementSpace = hasPlacement ? PLACEMENT_BADGE_SIZE + GAP : 0;
+  const availableWidth = POKEMON_ROW_WIDTH - flagSpace - placementSpace;
 
   // Estimate font size based on character count (approximate width per character)
   // This avoids DOM measurement and works reliably with html2canvas-pro
@@ -110,12 +122,36 @@ function DynamicPlayerName({ name, flagCount }: DynamicPlayerNameProps) {
 }
 
 export function PlayerCard({ player }: PlayerCardProps) {
+  const hasPlacement = player.placement !== undefined;
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 19 }}>
-      {/* Flag(s) and Player Name */}
-      <div style={{ display: "flex", alignItems: "center", gap: GAP }}>
+      {/* Flag(s), Player Name, and Placement Badge */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: GAP,
+          width: POKEMON_ROW_WIDTH,
+        }}
+      >
         <FlagDisplay flags={player.flags} />
-        <DynamicPlayerName name={player.name} flagCount={player.flags.length > 0 ? 1 : 0} />
+        <DynamicPlayerName
+          name={player.name}
+          flagCount={player.flags.length > 0 ? 1 : 0}
+          hasPlacement={hasPlacement}
+        />
+        {/* Spacer to push badge to the end */}
+        <div style={{ flex: 1 }} />
+        {/* Placement Badge */}
+        {hasPlacement && (
+          <img
+            src={PLACEMENT_BADGES[player.placement!]}
+            alt={`${player.placement}${player.placement === 1 ? "st" : player.placement === 2 ? "nd" : player.placement === 3 ? "rd" : "th"} place`}
+            width={PLACEMENT_BADGE_SIZE}
+            height={PLACEMENT_BADGE_SIZE}
+          />
+        )}
       </div>
 
       {/* Pokemon Team (6 sprites in a row) */}

@@ -58,6 +58,40 @@ export interface GraphicPlayer {
     speciesId: string;
     isShadow: boolean;
   }>;
+  placement?: 1 | 2 | 3 | 4; // Top 4 placement when bracket is complete
+}
+
+/**
+ * Check if bracket is complete (all 21 positions are filled)
+ */
+export function isBracketComplete(bp: ResolvedBracketPositions | undefined): boolean {
+  if (!bp) return false;
+
+  const allPositions = [
+    bp.winnersSemis1Top,
+    bp.winnersSemis1Bottom,
+    bp.winnersSemis2Top,
+    bp.winnersSemis2Bottom,
+    bp.winnersFinalsTop,
+    bp.winnersFinalsBottom,
+    bp.losersR1Match1Top,
+    bp.losersR1Match1Bottom,
+    bp.losersR1Match2Top,
+    bp.losersR1Match2Bottom,
+    bp.losersR2Top,
+    bp.losersR2Bottom,
+    bp.losersR3Top,
+    bp.losersR3Bottom,
+    bp.losersSemisTop,
+    bp.losersSemisBottom,
+    bp.losersFinalsTop,
+    bp.losersFinalsBottom,
+    bp.grandFinalsWinners,
+    bp.grandFinalsLosers,
+    bp.champion,
+  ];
+
+  return allPositions.every((pos) => pos !== null && pos !== undefined);
 }
 
 export interface GraphicData {
@@ -183,8 +217,48 @@ export function parseCSVData(csvContent: string): GraphicPlayer[] {
  * Players are ordered by playerOrder array - index determines column placement
  */
 export function convertToGraphicData(tournamentData: TournamentData): GraphicData {
+  // Helper to resolve player ID to name
+  const resolveName = (playerId: string | null): string | null => {
+    if (!playerId) return null;
+    return tournamentData.players[playerId]?.name || null;
+  };
+
+  // Resolve bracket positions from player IDs to player names first
+  // (needed to check if bracket is complete)
+  const bp = tournamentData.bracketPositions;
+  const resolvedBracketPositions: ResolvedBracketPositions | undefined = bp
+    ? {
+        winnersSemis1Top: resolveName(bp.winnersSemis1Top),
+        winnersSemis1Bottom: resolveName(bp.winnersSemis1Bottom),
+        winnersSemis2Top: resolveName(bp.winnersSemis2Top),
+        winnersSemis2Bottom: resolveName(bp.winnersSemis2Bottom),
+        winnersFinalsTop: resolveName(bp.winnersFinalsTop),
+        winnersFinalsBottom: resolveName(bp.winnersFinalsBottom),
+        losersR1Match1Top: resolveName(bp.losersR1Match1Top),
+        losersR1Match1Bottom: resolveName(bp.losersR1Match1Bottom),
+        losersR1Match2Top: resolveName(bp.losersR1Match2Top),
+        losersR1Match2Bottom: resolveName(bp.losersR1Match2Bottom),
+        losersR2Top: resolveName(bp.losersR2Top),
+        losersR2Bottom: resolveName(bp.losersR2Bottom),
+        losersR3Top: resolveName(bp.losersR3Top),
+        losersR3Bottom: resolveName(bp.losersR3Bottom),
+        losersSemisTop: resolveName(bp.losersSemisTop),
+        losersSemisBottom: resolveName(bp.losersSemisBottom),
+        losersFinalsTop: resolveName(bp.losersFinalsTop),
+        losersFinalsBottom: resolveName(bp.losersFinalsBottom),
+        grandFinalsWinners: resolveName(bp.grandFinalsWinners),
+        grandFinalsLosers: resolveName(bp.grandFinalsLosers),
+        champion: resolveName(bp.champion),
+      }
+    : undefined;
+
+  // Determine if placements should be shown (Bracket mode + bracket complete)
+  const showPlacements =
+    tournamentData.overviewType === "Bracket" &&
+    isBracketComplete(resolvedBracketPositions);
+
   const graphicPlayers: GraphicPlayer[] = tournamentData.playerOrder
-    .map((playerId) => {
+    .map((playerId, index) => {
       const player = tournamentData.players[playerId];
       if (!player) return null;
 
@@ -197,54 +271,13 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
           speciesId: pokemon.id,
           isShadow: pokemon.isShadow,
         })),
+        // Assign placements 1-4 to first 4 players when bracket is complete
+        placement: showPlacements && index < 4 ? (index + 1) as 1 | 2 | 3 | 4 : undefined,
       };
 
       return graphicPlayer;
     })
     .filter((p): p is GraphicPlayer => p !== null);
-
-  // Helper to resolve player ID to name
-  const resolveName = (playerId: string | null): string | null => {
-    if (!playerId) return null;
-    return tournamentData.players[playerId]?.name || null;
-  };
-
-  // Resolve bracket positions from player IDs to player names
-  const bp = tournamentData.bracketPositions;
-  const resolvedBracketPositions: ResolvedBracketPositions | undefined = bp
-    ? {
-        // Winners Semifinals
-        winnersSemis1Top: resolveName(bp.winnersSemis1Top),
-        winnersSemis1Bottom: resolveName(bp.winnersSemis1Bottom),
-        winnersSemis2Top: resolveName(bp.winnersSemis2Top),
-        winnersSemis2Bottom: resolveName(bp.winnersSemis2Bottom),
-        // Winners Finals
-        winnersFinalsTop: resolveName(bp.winnersFinalsTop),
-        winnersFinalsBottom: resolveName(bp.winnersFinalsBottom),
-        // Losers Round 1
-        losersR1Match1Top: resolveName(bp.losersR1Match1Top),
-        losersR1Match1Bottom: resolveName(bp.losersR1Match1Bottom),
-        losersR1Match2Top: resolveName(bp.losersR1Match2Top),
-        losersR1Match2Bottom: resolveName(bp.losersR1Match2Bottom),
-        // Losers Round 2
-        losersR2Top: resolveName(bp.losersR2Top),
-        losersR2Bottom: resolveName(bp.losersR2Bottom),
-        // Losers Round 3
-        losersR3Top: resolveName(bp.losersR3Top),
-        losersR3Bottom: resolveName(bp.losersR3Bottom),
-        // Losers Semifinals
-        losersSemisTop: resolveName(bp.losersSemisTop),
-        losersSemisBottom: resolveName(bp.losersSemisBottom),
-        // Losers Finals
-        losersFinalsTop: resolveName(bp.losersFinalsTop),
-        losersFinalsBottom: resolveName(bp.losersFinalsBottom),
-        // Grand Finals
-        grandFinalsWinners: resolveName(bp.grandFinalsWinners),
-        grandFinalsLosers: resolveName(bp.grandFinalsLosers),
-        // Champion
-        champion: resolveName(bp.champion),
-      }
-    : undefined;
 
   return {
     titleLines: tournamentData.titleLines || ["", "", ""],
