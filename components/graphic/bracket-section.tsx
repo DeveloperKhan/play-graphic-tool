@@ -100,6 +100,10 @@ export function BracketSection({ bracketPositions, bracketReset }: BracketSectio
   // Determine visibility states
   const hasWinner = !!bp?.champion;
 
+  // Determine which Grand Finals cell should be gold (matches the champion)
+  const isWinnersSideChampion = hasWinner && bp?.grandFinalsWinners === bp?.champion;
+  const isLosersSideChampion = hasWinner && bp?.grandFinalsLosers === bp?.champion;
+
   return (
     <div
       style={{
@@ -270,8 +274,8 @@ export function BracketSection({ bracketPositions, bracketReset }: BracketSectio
       <BracketCell
         x={GRAND_FINALS.x}
         y={GRAND_FINALS.y}
-        playerName={hasWinner ? bp?.grandFinalsWinners ?? undefined : undefined}
-        isGoldBackground={hasWinner}
+        playerName={bp?.grandFinalsWinners ?? undefined}
+        isGoldBackground={isWinnersSideChampion}
       />
 
       {/* Grand Finals - Losers Side / Reset */}
@@ -279,6 +283,7 @@ export function BracketSection({ bracketPositions, bracketReset }: BracketSectio
         x={GRAND_FINALS_RESET.x}
         y={GRAND_FINALS_RESET.y}
         playerName={bp?.grandFinalsLosers ?? undefined}
+        isGoldBackground={isLosersSideChampion}
       />
 
       {/* Reset label (conditional) */}
