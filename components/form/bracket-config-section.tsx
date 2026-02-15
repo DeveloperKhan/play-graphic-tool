@@ -111,14 +111,6 @@ export function BracketConfigSection({ form }: BracketConfigSectionProps) {
       .filter((p) => p.name);
   }, [playerOrder, players]);
 
-  // Get already selected player IDs to show which are taken
-  const selectedPlayerIds = React.useMemo(() => {
-    if (!bracketPositions) return new Set<string>();
-    return new Set(
-      Object.values(bracketPositions).filter((id): id is string => id !== null)
-    );
-  }, [bracketPositions]);
-
   return (
     <Card>
       <CardHeader>
@@ -155,19 +147,14 @@ export function BracketConfigSection({ form }: BracketConfigSectionProps) {
                           <SelectItem value="__none__">
                             <span className="text-muted-foreground">No player selected</span>
                           </SelectItem>
-                          {playerOptions.map((player) => {
-                            const isSelected = selectedPlayerIds.has(player.id) && field.value !== player.id;
-                            return (
-                              <SelectItem
-                                key={player.id}
-                                value={player.id}
-                                disabled={isSelected}
-                              >
-                                {player.name}
-                                {isSelected && " (already selected)"}
-                              </SelectItem>
-                            );
-                          })}
+                          {playerOptions.map((player) => (
+                            <SelectItem
+                              key={player.id}
+                              value={player.id}
+                            >
+                              {player.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormItem>
