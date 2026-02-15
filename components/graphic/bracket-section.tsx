@@ -296,7 +296,7 @@ export function BracketSection({ bracketPositions, bracketReset }: BracketSectio
             fontFamily: "Urbane, sans-serif",
             fontWeight: 600,
             fontSize: 20,
-            color: "rgba(255, 255, 255, 0.7)",
+            color: "white",
             display: "flex",
             alignItems: "center",
             gap: 6,
@@ -351,8 +351,8 @@ function SectionLabel({ x, y, fontSize = 26, children }: SectionLabelProps) {
 function ResetIcon() {
   return (
     <svg
-      width="18"
-      height="18"
+      width="22"
+      height="22"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
