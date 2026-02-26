@@ -45,13 +45,22 @@ export const columnWrapperConfigSchema = z.object({
   text: z.string(),
 });
 
-// Column wrappers schema (supports both Top 16 and Top 64)
+// Column wrappers schema (supports Top 16, Top 32, and Top 64)
 export const columnWrappersSchema = z.object({
   // Required for Top 16 (4 players per column)
   winners1: columnWrapperConfigSchema,
   winners2: columnWrapperConfigSchema,
   losers1: columnWrapperConfigSchema,
   losers2: columnWrapperConfigSchema,
+  // Optional for Top 32 (8 blocks - 4 players each)
+  col1a: columnWrapperConfigSchema.optional(),
+  col1b: columnWrapperConfigSchema.optional(),
+  col2a: columnWrapperConfigSchema.optional(),
+  col2b: columnWrapperConfigSchema.optional(),
+  col3a: columnWrapperConfigSchema.optional(),
+  col3b: columnWrapperConfigSchema.optional(),
+  col4a: columnWrapperConfigSchema.optional(),
+  col4b: columnWrapperConfigSchema.optional(),
   // Optional for Top 64 - each column split into 'a' (top 4) and 'b' (bottom 4)
   // Winners graphic columns
   winners1a: columnWrapperConfigSchema.optional(),

@@ -131,6 +131,18 @@ const COLUMNS_16: ColumnConfig[] = [
   { id: "losers2", label: "Losers Column 2 (E-H)", colorIndex: 2, defaultWrapperText: "13th-16th" },
 ];
 
+// Columns for Top 32 (8 blocks total - 4 players per block)
+const COLUMNS_32: ColumnConfig[] = [
+  { id: "col1a", label: "Column 1 Top (A-B)", colorIndex: 0, defaultWrapperText: "1st-4th" },
+  { id: "col1b", label: "Column 1 Bottom (C-D)", colorIndex: 1, defaultWrapperText: "5th-8th" },
+  { id: "col2a", label: "Column 2 Top (E-F)", colorIndex: 2, defaultWrapperText: "9th-12th" },
+  { id: "col2b", label: "Column 2 Bottom (G-H)", colorIndex: 3, defaultWrapperText: "13th-16th" },
+  { id: "col3a", label: "Column 3 Top (I-J)", colorIndex: 0, defaultWrapperText: "17th-20th" },
+  { id: "col3b", label: "Column 3 Bottom (K-L)", colorIndex: 1, defaultWrapperText: "21st-24th" },
+  { id: "col4a", label: "Column 4 Top (M-N)", colorIndex: 2, defaultWrapperText: "25th-28th" },
+  { id: "col4b", label: "Column 4 Bottom (O-P)", colorIndex: 3, defaultWrapperText: "29th-32nd" },
+];
+
 // Columns for Top 64 (16 blocks total - 4 players per block)
 // Winners graphic (8 blocks: 2 per column × 4 columns)
 const COLUMNS_64_WINNERS: ColumnConfig[] = [
@@ -159,6 +171,7 @@ const COLUMNS_64_LOSERS: ColumnConfig[] = [
 export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
   const playerCount = form.watch("playerCount");
   const isTop64 = playerCount === 64;
+  const isTop32 = playerCount === 32;
 
   return (
     <Card>
@@ -200,6 +213,17 @@ export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
               ))}
             </div>
           </>
+        ) : isTop32 ? (
+          COLUMNS_32.map((column) => (
+            <ColumnWrapperField
+              key={column.id}
+              form={form}
+              columnId={column.id}
+              label={column.label}
+              colorIndex={column.colorIndex}
+              defaultWrapperText={column.defaultWrapperText}
+            />
+          ))
         ) : (
           COLUMNS_16.map((column) => (
             <ColumnWrapperField

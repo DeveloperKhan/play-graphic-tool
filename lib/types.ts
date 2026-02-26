@@ -43,9 +43,12 @@ export type PlayerCount = 4 | 8 | 16 | 32 | 64;
 
 // Column identifiers for wrapper configuration
 // For Top 16: winners1, winners2, losers1, losers2 (4 players each)
+// For Top 32: 8 blocks total - col1a through col4b (4 players each)
 // For Top 64: 16 blocks total - each column split into 'a' (top) and 'b' (bottom) for 4 players each
 export type ColumnId =
   | "winners1" | "winners2" | "losers1" | "losers2"  // Top 16 (4 columns)
+  | "col1a" | "col1b" | "col2a" | "col2b"  // Top 32 columns 1-2
+  | "col3a" | "col3b" | "col4a" | "col4b"  // Top 32 columns 3-4
   | "winners1a" | "winners1b" | "winners2a" | "winners2b"  // Top 64 Winners columns 1-2
   | "winners3a" | "winners3b" | "winners4a" | "winners4b"  // Top 64 Winners columns 3-4
   | "losers1a" | "losers1b" | "losers2a" | "losers2b"  // Top 64 Losers columns 1-2
@@ -59,13 +62,22 @@ export interface ColumnWrapperConfig {
   text: string;
 }
 
-// Column wrappers - base 4 required for Top 16, additional 16 for Top 64 (4 players per block)
+// Column wrappers - base 4 required for Top 16, 8 for Top 32, 16 for Top 64 (4 players per block)
 export interface ColumnWrappers {
   // Top 16 columns (4 players each)
   winners1: ColumnWrapperConfig;
   winners2: ColumnWrapperConfig;
   losers1: ColumnWrapperConfig;
   losers2: ColumnWrapperConfig;
+  // Top 32 columns (8 blocks - 4 players each)
+  col1a?: ColumnWrapperConfig;
+  col1b?: ColumnWrapperConfig;
+  col2a?: ColumnWrapperConfig;
+  col2b?: ColumnWrapperConfig;
+  col3a?: ColumnWrapperConfig;
+  col3b?: ColumnWrapperConfig;
+  col4a?: ColumnWrapperConfig;
+  col4b?: ColumnWrapperConfig;
   // Top 64 columns - each column split into 'a' (top 4) and 'b' (bottom 4)
   // Winners graphic columns
   winners1a?: ColumnWrapperConfig;

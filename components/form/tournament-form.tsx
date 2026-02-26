@@ -442,6 +442,37 @@ export function TournamentForm({
         losers4a: defaultWrapper,
         losers4b: defaultWrapper,
       });
+    } else if (currentPlayerCount === 32) {
+      // When switching TO 32 players, reset all players with fresh structure
+      const newPlayers: Record<string, any> = {};
+      const newOrder: string[] = [];
+
+      for (let i = 0; i < 32; i++) {
+        const playerId = `player-${i + 1}`;
+        newOrder.push(playerId);
+        newPlayers[playerId] = createPlayer(i);
+      }
+
+      form.setValue("players", newPlayers);
+      form.setValue("playerOrder", newOrder);
+
+      // Add Top 32 column wrappers (8 blocks: 4 players per block)
+      const defaultWrapper = { mode: "lines" as const, text: "" };
+      form.setValue("columnWrappers", {
+        winners1: defaultWrapper,
+        winners2: defaultWrapper,
+        losers1: defaultWrapper,
+        losers2: defaultWrapper,
+        // Top 32 columns
+        col1a: defaultWrapper,
+        col1b: defaultWrapper,
+        col2a: defaultWrapper,
+        col2b: defaultWrapper,
+        col3a: defaultWrapper,
+        col3b: defaultWrapper,
+        col4a: defaultWrapper,
+        col4b: defaultWrapper,
+      });
     } else if (currentPlayerCount > prevCount) {
       // Add new players (for non-64 counts)
       const currentPlayers = form.getValues("players");

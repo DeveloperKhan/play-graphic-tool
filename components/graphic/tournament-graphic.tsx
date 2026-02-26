@@ -8,6 +8,7 @@ import { PlayerColumn } from "./player-column";
 import { GraphicFooter } from "./graphic-footer";
 import { CalendarBadge } from "./calendar-badge";
 import { TournamentGraphic64, TournamentGraphic64Ref } from "./tournament-graphic-64";
+import { TournamentGraphic32, TournamentGraphic32Ref } from "./tournament-graphic-32";
 import { getPlayersByColumn, type GraphicData } from "@/lib/graphic-data";
 
 // Base canvas dimensions
@@ -32,13 +33,19 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const graphic64Ref = useRef<TournamentGraphic64Ref>(null);
+  const graphic32Ref = useRef<TournamentGraphic32Ref>(null);
   const [scale, setScale] = useState(1);
 
-  // For Top 64, delegate to TournamentGraphic64
+  // Route to appropriate graphic component based on player count
   const isTop64 = data.playerCount === 64;
+  const isTop32 = data.playerCount === 32;
 
   useImperativeHandle(ref, () => ({
-    getCanvasElement: () => isTop64 ? null : canvasRef.current,
+    getCanvasElement: () => {
+      if (isTop64) return null;
+      if (isTop32) return graphic32Ref.current?.getCanvasElement() ?? null;
+      return canvasRef.current;
+    },
     getWinnersCanvasElement: () => graphic64Ref.current?.getWinnersCanvasElement() ?? null,
     getLosersCanvasElement: () => graphic64Ref.current?.getLosersCanvasElement() ?? null,
     isMultiCanvas: isTop64,
@@ -63,6 +70,12 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
     return <TournamentGraphic64 ref={graphic64Ref} data={data} />;
   }
 
+  // Render Top 32 (single graphic, same dimensions as Top 64)
+  if (isTop32) {
+    return <TournamentGraphic32 ref={graphic32Ref} data={data} />;
+  }
+
+  // Render Top 16 (default)
   return (
     <div
       ref={containerRef}

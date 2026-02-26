@@ -15,7 +15,7 @@ export const CANVAS_HEIGHT_64 = 2078;
 
 interface TournamentCanvas64Props {
   data: GraphicData;
-  bracketType: "winners" | "losers";
+  bracketType: "winners" | "losers" | null;  // null for Top 32 (single graphic, no bracket designation)
 }
 
 export interface TournamentCanvas64Ref {
@@ -61,15 +61,20 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
       };
     }, []);
 
-    // Get bracket label based on type
-    const bracketLabel = bracketType === "winners"
-      ? (data.bracketLabels?.winners?.enabled ? data.bracketLabels.winners.text : undefined)
-      : (data.bracketLabels?.losers?.enabled ? data.bracketLabels.losers.text : undefined);
+    // Get bracket label based on type (null = Top 32 with no bracket label)
+    const bracketLabel = bracketType === null
+      ? undefined
+      : bracketType === "winners"
+        ? (data.bracketLabels?.winners?.enabled ? data.bracketLabels.winners.text : undefined)
+        : (data.bracketLabels?.losers?.enabled ? data.bracketLabels.losers.text : undefined);
 
     // Get column wrapper configs based on bracket type and column position
-    // Each 4-player block has its own wrapper: col1a, col1b, col2a, col2b, col3a, col3b, col4a, col4b
+    // For Top 32 (bracketType=null): use col1a, col1b, etc.
+    // For Top 64: use winners1a, losers1a, etc.
     const getWrapper = (colNum: 1 | 2 | 3 | 4, position: "a" | "b") => {
-      const key = `${bracketType}${colNum}${position}` as keyof typeof data.columnWrappers;
+      const key = bracketType === null
+        ? `col${colNum}${position}` as keyof typeof data.columnWrappers
+        : `${bracketType}${colNum}${position}` as keyof typeof data.columnWrappers;
       return data.columnWrappers?.[key];
     };
 
@@ -157,7 +162,7 @@ export const TournamentCanvas64 = forwardRef<TournamentCanvas64Ref, TournamentCa
               <div style={{ position: "absolute", top: 300, left: 19 }}>
                 <UsageSection
                   usageStats={data.usageStats}
-                  totalPlayers={64}
+                  totalPlayers={bracketType === null ? 32 : 64}
                 />
               </div>
             )}
