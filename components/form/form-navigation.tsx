@@ -169,7 +169,7 @@ export function FormNavigation({
                   setImportJson(e.target.value);
                   setImportError(null);
                 }}
-                className="min-h-[200px] font-mono text-xs"
+                className="min-h-[200px] max-h-75 overflow-y-auto font-mono text-xs"
               />
               {importError && (
                 <p className="text-sm text-destructive">{importError}</p>
