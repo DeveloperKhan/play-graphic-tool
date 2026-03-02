@@ -20,7 +20,6 @@ export const PLAYER_FLAG_MAPPINGS: PlayerFlagMapping[] = [
   { name: "610Hero", flags: ["JP"] },
   { name: "MEweedle", flags: ["CH", "GB"] },
   { name: "WooIfpack", flags: ["FR", "SV"] },
-  { name: "AdibKhan", flags: ["BA"] },
   { name: "hkassasin", flags: ["HK", "GB"] },
   { name: "LurganRocket", flags: ["IE"] },
   { name: "Jinz", flags: ["AU", "JP"] },
@@ -29,6 +28,7 @@ export const PLAYER_FLAG_MAPPINGS: PlayerFlagMapping[] = [
   { name: "Ilqm", flags: ["CR"] },
   { name: "AshtonAsh", flags: ["US", "MX"] },
   { name: "Joeddy12", flags: ["PR"] },
+  { name: "AbsolTrainBest", flags: ["US", "JP"]},
 ];
 
 /**
