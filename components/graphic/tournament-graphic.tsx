@@ -139,10 +139,11 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
           )}
 
           {/* Header - logo at x=33, y=87 (shifted right if calendar badge is shown, except in Bracket mode) */}
+          {/* In Bracket mode, header is at y=50 to match Top 32 spacing */}
           {data.overviewType !== "None" && (
             <div style={{
               position: "absolute",
-              top: 87,
+              top: data.overviewType === "Bracket" ? 55 : 87,
               // In Bracket mode, calendar is positioned lower so header doesn't need to shift
               left: data.eventDateRange?.startDate && data.eventDateRange?.endDate && data.overviewType !== "Bracket" ? 301 : 33
             }}>
