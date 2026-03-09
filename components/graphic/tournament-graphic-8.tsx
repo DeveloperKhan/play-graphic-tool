@@ -172,7 +172,7 @@ export const TournamentGraphic8 = forwardRef<TournamentGraphic8Ref, TournamentGr
 
             {/* Footer - positioned near bottom */}
             <div style={{ position: "absolute", top: 1942, left: 0, right: 0 }}>
-              <GraphicFooter />
+              <GraphicFooter compact />
             </div>
           </div>
         </div>
