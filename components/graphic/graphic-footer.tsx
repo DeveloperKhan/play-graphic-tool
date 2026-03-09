@@ -25,8 +25,8 @@ export function GraphicFooter({ extended = false, compact = false }: GraphicFoot
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          paddingLeft: 32,
-          paddingRight: 32,
+          paddingLeft: 78,
+          paddingRight: 78,
           paddingTop: 24,
           paddingBottom: 24,
         }}

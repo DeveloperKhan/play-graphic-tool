@@ -6,6 +6,10 @@ interface GraphicHeaderProps {
   titleLines: [string, string, string];
   eventYear: string;
   eventType: "Regional" | "International" | "Worlds" | "Generic";
+  /** Custom font size for the event name title lines */
+  titleFontSize?: number;
+  /** Custom width for the text area (for dynamic letter spacing) */
+  textWidth?: number;
 }
 
 // Dimensions for 2100x2100 canvas
@@ -76,6 +80,8 @@ function TitleLine({ text, width, fontSize }: TitleLineProps) {
 export function GraphicHeader({
   titleLines,
   eventYear,
+  titleFontSize = TITLE_FONT_SIZE,
+  textWidth = TEXT_WIDTH,
 }: GraphicHeaderProps) {
   // Filter out empty lines
   const visibleLines = titleLines.filter((line) => line.trim().length > 0);
@@ -83,7 +89,7 @@ export function GraphicHeader({
   return (
     <div
       style={{
-        width: TEXT_WIDTH,
+        width: textWidth,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -105,7 +111,7 @@ export function GraphicHeader({
       </p>
       <div
         style={{
-          width: TEXT_WIDTH,
+          width: textWidth,
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
@@ -115,8 +121,8 @@ export function GraphicHeader({
           <TitleLine
             key={index}
             text={line}
-            width={TEXT_WIDTH}
-            fontSize={TITLE_FONT_SIZE}
+            width={textWidth}
+            fontSize={titleFontSize}
           />
         ))}
       </div>

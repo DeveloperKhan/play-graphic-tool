@@ -97,8 +97,8 @@ export const TournamentGraphic8 = forwardRef<TournamentGraphic8Ref, TournamentGr
             {data.eventDateRange?.startDate && data.eventDateRange?.endDate && (
               <div style={{
                 position: "absolute",
-                top: data.overviewType === "Bracket" ? 190 : 87,
-                left: 33
+                top: data.overviewType === "Bracket" ? 260 : 87,
+                left: data.overviewType === "Bracket" ? 83 : 73
               }}>
                 <CalendarBadge
                   startDate={data.eventDateRange.startDate}
@@ -109,13 +109,13 @@ export const TournamentGraphic8 = forwardRef<TournamentGraphic8Ref, TournamentGr
             )}
 
             {/* Header - logo at x=33, y=87 (shifted right if calendar badge is shown, except in Bracket mode) */}
-            {/* In Bracket mode, header is at y=50 to match Top 32 spacing */}
+            {/* In Bracket mode, header is at y=65 to match Top 32 spacing */}
             {data.overviewType !== "None" && (
               <div style={{
                 position: "absolute",
-                top: data.overviewType === "Bracket" ? 55 : 87,
+                top: data.overviewType === "Bracket" ? 75 : 107,
                 // In Bracket mode, calendar is positioned lower so header doesn't need to shift
-                left: data.eventDateRange?.startDate && data.eventDateRange?.endDate && data.overviewType !== "Bracket" ? 301 : 33
+                left: data.eventDateRange?.startDate && data.eventDateRange?.endDate && data.overviewType !== "Bracket" ? 301 : 75
               }}>
                 <GraphicHeader
                   titleLines={
@@ -126,13 +126,15 @@ export const TournamentGraphic8 = forwardRef<TournamentGraphic8Ref, TournamentGr
                   }
                   eventYear={data.eventYear}
                   eventType={data.eventType}
+                  titleFontSize={93}
+                  textWidth={1365}
                 />
               </div>
             )}
 
-            {/* Usage Section - positioned at 352px from top (only for Usage mode) */}
+            {/* Usage Section - centered horizontally (1381px wide in 1515px canvas) */}
             {data.overviewType === "Usage" && (
-              <div style={{ position: "absolute", top: 352, left: 19 }}>
+              <div style={{ position: "absolute", top: 352, left: 67 }}>
                 <UsageSection
                   usageStats={data.usageStats}
                   totalPlayers={data.players.length}
@@ -140,9 +142,9 @@ export const TournamentGraphic8 = forwardRef<TournamentGraphic8Ref, TournamentGr
               </div>
             )}
 
-            {/* Bracket Section - positioned at x=43, y=224 (only for Bracket mode) */}
+            {/* Bracket Section - centered horizontally (1350px wide in 1515px canvas) */}
             {data.overviewType === "Bracket" && (
-              <div style={{ position: "absolute", top: 224, left: 43 }}>
+              <div style={{ position: "absolute", top: 254, left: 83 }}>
                 <BracketSection
                   bracketPositions={data.bracketPositions}
                   bracketReset={data.bracketReset ?? false}
@@ -150,8 +152,8 @@ export const TournamentGraphic8 = forwardRef<TournamentGraphic8Ref, TournamentGr
               </div>
             )}
 
-            {/* Winners Bracket - Column 1 at x=19, y=1050 */}
-            <div style={{ position: "absolute", top: 1050, left: 19 }}>
+            {/* Winners Bracket - Column 1 (centered: 2 columns in 1515px canvas) */}
+            <div style={{ position: "absolute", top: 1040, left: 83 }}>
               <PlayerColumn
                 title={data.bracketLabels?.winners?.enabled ? data.bracketLabels.winners.text : undefined}
                 players={winnersCol1}
@@ -160,8 +162,8 @@ export const TournamentGraphic8 = forwardRef<TournamentGraphic8Ref, TournamentGr
               />
             </div>
 
-            {/* Winners Bracket - Column 2 at x=751, y=1050 */}
-            <div style={{ position: "absolute", top: 1050, left: 751 }}>
+            {/* Winners Bracket - Column 2 */}
+            <div style={{ position: "absolute", top: 1040, left: 792 }}>
               <PlayerColumn
                 title={data.bracketLabels?.winners?.enabled ? data.bracketLabels.winners.text : undefined}
                 players={winnersCol2}
