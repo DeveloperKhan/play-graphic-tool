@@ -9,6 +9,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { FlagSelector } from "./flag-selector";
 import { TeamInput } from "./team-input";
 import { RK9ImportDialog } from "./rk9-import-dialog";
+import { PlayLATAMImportDialog } from "./playlatam-import-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -86,7 +87,7 @@ export function PlayerInputSection({
     }
   };
 
-  const handleRK9Import = (data: { name: string; team: Pokemon[] }) => {
+  const handleImport = (data: { name: string; team: Pokemon[] }) => {
     // Update player name
     form.setValue(`players.${playerId}.name`, data.name);
     // Update team
@@ -194,7 +195,10 @@ export function PlayerInputSection({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <FormLabel>Player Name</FormLabel>
-                <RK9ImportDialog onImport={handleRK9Import} />
+                <div className="flex gap-2">
+                  <RK9ImportDialog onImport={handleImport} />
+                  <PlayLATAMImportDialog onImport={handleImport} />
+                </div>
               </div>
               <FormField
                 control={form.control}

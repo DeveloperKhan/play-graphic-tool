@@ -189,6 +189,26 @@ export function getPokemonSpriteBySid(sid: number): string {
 }
 
 /**
+ * Get a single Pokemon by SID (sprite ID)
+ * Used for importing from sources that use numeric IDs (e.g., PlayLATAM)
+ */
+export async function getPokemonBySid(
+  sid: number
+): Promise<PokemonMetadata | null> {
+  if (!sid) return null;
+
+  const cache = await fetchPokemonData();
+
+  for (const pokemon of cache.values()) {
+    if (pokemon.sid === sid) {
+      return pokemon;
+    }
+  }
+
+  return null;
+}
+
+/**
  * Preload Pokemon data (call this on app initialization)
  */
 export async function preloadPokemonData(): Promise<void> {
