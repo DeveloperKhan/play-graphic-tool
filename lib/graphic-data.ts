@@ -296,6 +296,21 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
 }
 
 /**
+ * Get players organized by column (for Top 8)
+ * Uses index-based slicing from player array:
+ * - Players 0-3: Winners Column 1
+ * - Players 4-7: Winners Column 2
+ */
+export function getPlayersByColumn8(data: GraphicData) {
+  const players = data.players;
+
+  const winnersCol1 = players.slice(0, 4);
+  const winnersCol2 = players.slice(4, 8);
+
+  return { winnersCol1, winnersCol2 };
+}
+
+/**
  * Get players organized by column (for Top 16)
  * Uses index-based slicing from player array:
  * - Players 0-3: Winners Column 1

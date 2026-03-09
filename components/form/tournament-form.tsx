@@ -473,6 +473,28 @@ export function TournamentForm({
         col4a: defaultWrapper,
         col4b: defaultWrapper,
       });
+    } else if (currentPlayerCount === 8) {
+      // When switching TO 8 players, reset all players with fresh structure
+      const newPlayers: Record<string, any> = {};
+      const newOrder: string[] = [];
+
+      for (let i = 0; i < 8; i++) {
+        const playerId = `player-${i + 1}`;
+        newOrder.push(playerId);
+        newPlayers[playerId] = createPlayer(i);
+      }
+
+      form.setValue("players", newPlayers);
+      form.setValue("playerOrder", newOrder);
+
+      // Add Top 8 column wrappers (2 columns: 4 players per column)
+      const defaultWrapper = { mode: "lines" as const, text: "" };
+      form.setValue("columnWrappers", {
+        winners1: defaultWrapper,
+        winners2: defaultWrapper,
+        losers1: defaultWrapper,
+        losers2: defaultWrapper,
+      });
     } else if (currentPlayerCount > prevCount) {
       // Add new players (for non-64 counts)
       const currentPlayers = form.getValues("players");

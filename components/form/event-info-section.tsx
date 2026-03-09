@@ -134,9 +134,7 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
                   <SelectItem value="4" disabled>
                     Top 4 (Coming Soon)
                   </SelectItem>
-                  <SelectItem value="8" disabled>
-                    Top 8 (Coming Soon)
-                  </SelectItem>
+                  <SelectItem value="8">Top 8</SelectItem>
                   <SelectItem value="16">Top 16</SelectItem>
                   <SelectItem value="32">Top 32</SelectItem>
                   <SelectItem value="64">Top 64</SelectItem>

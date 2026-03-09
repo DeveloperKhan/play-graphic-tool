@@ -9,6 +9,7 @@ import { GraphicFooter } from "./graphic-footer";
 import { CalendarBadge } from "./calendar-badge";
 import { TournamentGraphic64, TournamentGraphic64Ref } from "./tournament-graphic-64";
 import { TournamentGraphic32, TournamentGraphic32Ref } from "./tournament-graphic-32";
+import { TournamentGraphic8, TournamentGraphic8Ref } from "./tournament-graphic-8";
 import { getPlayersByColumn, type GraphicData } from "@/lib/graphic-data";
 
 // Base canvas dimensions
@@ -34,16 +35,19 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
   const canvasRef = useRef<HTMLDivElement>(null);
   const graphic64Ref = useRef<TournamentGraphic64Ref>(null);
   const graphic32Ref = useRef<TournamentGraphic32Ref>(null);
+  const graphic8Ref = useRef<TournamentGraphic8Ref>(null);
   const [scale, setScale] = useState(1);
 
   // Route to appropriate graphic component based on player count
   const isTop64 = data.playerCount === 64;
   const isTop32 = data.playerCount === 32;
+  const isTop8 = data.playerCount === 8;
 
   useImperativeHandle(ref, () => ({
     getCanvasElement: () => {
       if (isTop64) return null;
       if (isTop32) return graphic32Ref.current?.getCanvasElement() ?? null;
+      if (isTop8) return graphic8Ref.current?.getCanvasElement() ?? null;
       return canvasRef.current;
     },
     getWinnersCanvasElement: () => graphic64Ref.current?.getWinnersCanvasElement() ?? null,
@@ -73,6 +77,11 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
   // Render Top 32 (single graphic, same dimensions as Top 64)
   if (isTop32) {
     return <TournamentGraphic32 ref={graphic32Ref} data={data} />;
+  }
+
+  // Render Top 8 (narrower canvas, no losers section on right)
+  if (isTop8) {
+    return <TournamentGraphic8 ref={graphic8Ref} data={data} />;
   }
 
   // Render Top 16 (default)

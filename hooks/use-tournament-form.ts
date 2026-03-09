@@ -63,6 +63,7 @@ export function createDefaultTournamentData(
 
   // Create players with empty data
   // Player order determines column placement:
+  // - Top 8: 0-3 Winners Col 1, 4-7 Winners Col 2
   // - Top 16: 0-3 Winners Col 1, 4-7 Winners Col 2, 8-11 Losers Col 1, 12-15 Losers Col 2
   // - Top 64: 0-31 Winners bracket, 32-63 Losers bracket
   for (let i = 0; i < playerCount; i++) {
