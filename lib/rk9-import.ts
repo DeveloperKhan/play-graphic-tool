@@ -9,6 +9,25 @@ import { searchPokemon } from "./pokemon-data";
 import type { Pokemon } from "./types";
 
 // ============================================================================
+// Player Name Mappings
+// ============================================================================
+
+/**
+ * Maps RK9 player names to their actual display names.
+ * Used when a player's RK9 registration name differs from their preferred name.
+ */
+const PLAYER_NAME_MAPPINGS: Record<string, string> = {
+  TzGabs: "TzSteinar",
+};
+
+/**
+ * Apply player name mapping if one exists
+ */
+function mapPlayerName(name: string): string {
+  return PLAYER_NAME_MAPPINGS[name] ?? name;
+}
+
+// ============================================================================
 // Types
 // ============================================================================
 
@@ -189,7 +208,7 @@ export async function convertRK9ToFormData(
 
   return {
     data: {
-      name: rk9Data.playerName,
+      name: mapPlayerName(rk9Data.playerName),
       team: team.slice(0, 6),
     },
     errors,
