@@ -7,12 +7,14 @@ import {
   TournamentGraphic,
   type TournamentGraphicRef,
 } from "@/components/graphic/tournament-graphic";
+import { ExportWarningDialog } from "@/components/form/export-warning-dialog";
 import { convertToGraphicData } from "@/lib/graphic-data";
 import type { TournamentData } from "@/lib/types";
 
 export default function Home() {
   const [tournamentData, setTournamentData] = useState<TournamentData | null>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [showExportWarning, setShowExportWarning] = useState(false);
   const graphicRef = useRef<TournamentGraphicRef>(null);
 
   // Convert form data to graphic data
@@ -109,7 +111,7 @@ export default function Home() {
           <div className="flex items-center justify-between mb-4 shrink-0">
             <h2 className="text-xl sm:text-2xl font-semibold">Preview</h2>
             <button
-              onClick={handleExport}
+              onClick={() => setShowExportWarning(true)}
               disabled={isExporting}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
             >
@@ -119,6 +121,12 @@ export default function Home() {
                   ? "Export Images (2)"
                   : "Export Image"}
             </button>
+            <ExportWarningDialog
+              open={showExportWarning}
+              onOpenChange={setShowExportWarning}
+              tournamentData={tournamentData}
+              onProceed={handleExport}
+            />
           </div>
           <div className="border rounded-lg bg-muted/50 flex-1 overflow-auto">
             {graphicData ? (
