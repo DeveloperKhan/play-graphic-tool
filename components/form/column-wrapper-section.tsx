@@ -311,6 +311,27 @@ function ColumnWrapperField({
         )}
       />
 
+      {/* Show Placements toggle - only for first column */}
+      {(columnId === "winners1" || columnId === "col1a" || columnId === "winners1a") && (
+        <FormField
+          control={form.control}
+          name={`columnWrappers.${columnId}.showPlacements`}
+          render={({ field }) => (
+            <FormItem className="flex items-center gap-2 space-y-0">
+              <FormControl>
+                <Switch
+                  checked={field.value ?? false}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel className="text-sm font-normal cursor-pointer">
+                Show Placements
+              </FormLabel>
+            </FormItem>
+          )}
+        />
+      )}
+
       {/* Text input - only shown when wrapper mode */}
       {mode === "wrapper" && (
         <FormField

@@ -43,6 +43,7 @@ export const bracketPairingSchema = z.object({
 export const columnWrapperConfigSchema = z.object({
   mode: z.enum(["lines", "wrapper", "hidden"]),
   text: z.string(),
+  showPlacements: z.boolean().optional(),
 });
 
 // Column wrappers schema (supports Top 16, Top 32, and Top 64)

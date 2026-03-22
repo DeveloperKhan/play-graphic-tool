@@ -252,10 +252,13 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
       }
     : undefined;
 
-  // Determine if placements should be shown (Bracket mode + bracket complete)
-  const showPlacements =
-    tournamentData.overviewType === "Bracket" &&
-    isBracketComplete(resolvedBracketPositions);
+  // Determine if placements should be shown based on first column configuration
+  const firstColumnId =
+    tournamentData.playerCount === 64 ? "winners1a" :
+    tournamentData.playerCount === 32 ? "col1a" :
+    "winners1"; // For Top 16, Top 8, and Top 4
+
+  const showPlacements = tournamentData.columnWrappers?.[firstColumnId]?.showPlacements ?? false;
 
   const graphicPlayers: GraphicPlayer[] = tournamentData.playerOrder
     .map((playerId, index) => {

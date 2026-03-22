@@ -60,6 +60,7 @@ export type ColumnDisplayMode = "lines" | "wrapper" | "hidden";
 export interface ColumnWrapperConfig {
   mode: ColumnDisplayMode;
   text: string;
+  showPlacements?: boolean; // Show placement badges (1st-4th) for first 4 players
 }
 
 // Column wrappers - base 4 required for Top 16, 8 for Top 32, 16 for Top 64 (4 players per block)
