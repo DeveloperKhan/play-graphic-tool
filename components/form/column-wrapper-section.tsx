@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import {
   FormField,
@@ -11,7 +12,16 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import type { TournamentData, ColumnId, ColumnDisplayMode } from "@/lib/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import type { TournamentData, ColumnId, ColumnDisplayMode, PlayerCount } from "@/lib/types";
 import { PAIR_COLORS } from "@/components/graphic/player-column";
 
 // Bracket labels section
@@ -168,6 +178,44 @@ const COLUMNS_64_LOSERS: ColumnConfig[] = [
   { id: "losers4b", label: "Losers Col 4 Bottom (O-P)", colorIndex: 3, defaultWrapperText: "29th-32nd" },
 ];
 
+// Helper functions for show placements defaults
+function getFirstWinnersColumnId(playerCount: PlayerCount): ColumnId {
+  if (playerCount === 64) return "winners1a";
+  if (playerCount === 32) return "col1a";
+  return "winners1";
+}
+
+function getRemainingWinnersColumnIds(playerCount: PlayerCount): ColumnId[] {
+  if (playerCount === 64) {
+    return ["winners1b", "winners2a", "winners2b", "winners3a", "winners3b", "winners4a", "winners4b"];
+  }
+  if (playerCount === 32) {
+    return ["col1b", "col2a", "col2b", "col3a", "col3b", "col4a", "col4b"];
+  }
+  return ["winners2"];
+}
+
+function getLosersColumnIds(playerCount: PlayerCount): ColumnId[] {
+  if (playerCount === 64) {
+    return ["losers1a", "losers1b", "losers2a", "losers2b", "losers3a", "losers3b", "losers4a", "losers4b"];
+  }
+  if (playerCount === 32) return [];
+  return ["losers1", "losers2"];
+}
+
+function getAllColumnIds(playerCount: PlayerCount): ColumnId[] {
+  return [
+    getFirstWinnersColumnId(playerCount),
+    ...getRemainingWinnersColumnIds(playerCount),
+    ...getLosersColumnIds(playerCount),
+  ];
+}
+
+function getDefaultWrapperText(columnId: ColumnId): string {
+  const allConfigs = [...COLUMNS_16, ...COLUMNS_32, ...COLUMNS_64_WINNERS, ...COLUMNS_64_LOSERS];
+  return allConfigs.find((c) => c.id === columnId)?.defaultWrapperText ?? "";
+}
+
 export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {
   const playerCount = form.watch("playerCount");
   const isTop64 = playerCount === 64;
@@ -258,6 +306,51 @@ function ColumnWrapperField({
 }: ColumnWrapperFieldProps) {
   const mode = form.watch(`columnWrappers.${columnId}.mode`);
   const color = PAIR_COLORS[colorIndex];
+  const isFirstColumn = columnId === "winners1" || columnId === "col1a" || columnId === "winners1a";
+
+  // State for show placements confirmation dialog
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [pendingToggleValue, setPendingToggleValue] = useState(false);
+  const playerCount = form.watch("playerCount");
+
+  const applyDefaults = (togglingOn: boolean) => {
+    if (togglingOn) {
+      // Disable bracket labels
+      form.setValue("bracketLabels.winners.enabled", false);
+      form.setValue("bracketLabels.losers.enabled", false);
+
+      // First winners column → hidden
+      const firstCol = getFirstWinnersColumnId(playerCount);
+      form.setValue(`columnWrappers.${firstCol}.mode`, "hidden");
+
+      // Remaining winners columns → wrapper
+      for (const colId of getRemainingWinnersColumnIds(playerCount)) {
+        form.setValue(`columnWrappers.${colId}.mode`, "wrapper");
+        const currentText = form.getValues(`columnWrappers.${colId}.text`);
+        if (!currentText) {
+          form.setValue(`columnWrappers.${colId}.text`, getDefaultWrapperText(colId));
+        }
+      }
+
+      // All losers columns → wrapper
+      for (const colId of getLosersColumnIds(playerCount)) {
+        form.setValue(`columnWrappers.${colId}.mode`, "wrapper");
+        const currentText = form.getValues(`columnWrappers.${colId}.text`);
+        if (!currentText) {
+          form.setValue(`columnWrappers.${colId}.text`, getDefaultWrapperText(colId));
+        }
+      }
+    } else {
+      // Enable bracket labels
+      form.setValue("bracketLabels.winners.enabled", true);
+      form.setValue("bracketLabels.losers.enabled", true);
+
+      // All columns → lines
+      for (const colId of getAllColumnIds(playerCount)) {
+        form.setValue(`columnWrappers.${colId}.mode`, "lines");
+      }
+    }
+  };
 
   return (
     <div className="flex items-center gap-4 p-3 rounded-lg border bg-muted/30">
@@ -312,7 +405,7 @@ function ColumnWrapperField({
       />
 
       {/* Show Placements toggle - only for first column */}
-      {(columnId === "winners1" || columnId === "col1a" || columnId === "winners1a") && (
+      {isFirstColumn && (
         <FormField
           control={form.control}
           name={`columnWrappers.${columnId}.showPlacements`}
@@ -321,7 +414,10 @@ function ColumnWrapperField({
               <FormControl>
                 <Switch
                   checked={field.value ?? false}
-                  onCheckedChange={field.onChange}
+                  onCheckedChange={(checked) => {
+                    setPendingToggleValue(checked);
+                    setDialogOpen(true);
+                  }}
                 />
               </FormControl>
               <FormLabel className="text-sm font-normal cursor-pointer">
@@ -331,6 +427,42 @@ function ColumnWrapperField({
           )}
         />
       )}
+
+      {/* Show Placements confirmation dialog */}
+      <Dialog open={dialogOpen} onOpenChange={(open) => {
+        if (!open) setDialogOpen(false);
+      }}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>
+              {pendingToggleValue ? "Enable" : "Disable"} Show Placements?
+            </DialogTitle>
+            <DialogDescription>
+              {pendingToggleValue
+                ? "Enabling show placements will also hide bracket labels, set the first winners column to hidden, and switch remaining columns to wrapper mode with placement labels."
+                : "Disabling show placements will also re-enable bracket labels and return all columns to lines mode."}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col gap-2 sm:flex-row">
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="secondary" onClick={() => {
+              form.setValue(`columnWrappers.${columnId}.showPlacements`, pendingToggleValue);
+              setDialogOpen(false);
+            }}>
+              Skip defaults
+            </Button>
+            <Button onClick={() => {
+              form.setValue(`columnWrappers.${columnId}.showPlacements`, pendingToggleValue);
+              applyDefaults(pendingToggleValue);
+              setDialogOpen(false);
+            }}>
+              Apply defaults
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Text input - only shown when wrapper mode */}
       {mode === "wrapper" && (
