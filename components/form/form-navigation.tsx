@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Sparkles, RotateCcw, Copy, Upload, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import-dialog";
-import { RK9RosterImportDialog } from "./rk9-roster-import-dialog";
+import { FlagImportDialog } from "./flag-import-dialog";
 import { BulkMoveDialog } from "./bulk-move-dialog";
 import {
   AlertDialog,
@@ -139,7 +139,7 @@ export function FormNavigation({
       {/* Row 2: Import/Export buttons */}
       <div className="flex gap-2 mb-3 flex-wrap">
         <ImportDialog onImport={onImport} />
-        <RK9RosterImportDialog getPlayerNames={getPlayerNames} onImportFlags={onImportFlags} />
+        <FlagImportDialog getPlayerNames={getPlayerNames} onImportFlags={onImportFlags} />
 
         {/* Import JSON Dialog */}
         <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
