@@ -93,7 +93,7 @@ function DynamicPlayerName({ name, flagCount, hasPlacement }: DynamicPlayerNameP
 
   // Estimate font size based on character count (approximate width per character)
   // This avoids DOM measurement and works reliably with html2canvas-pro
-  const estimatedCharWidth = BASE_FONT_SIZE * 0.6; // Approximate width per character
+  const estimatedCharWidth = BASE_FONT_SIZE * 0.68; // Approximate width per character
   const estimatedTextWidth = name.length * estimatedCharWidth;
 
   let fontSize = BASE_FONT_SIZE;
