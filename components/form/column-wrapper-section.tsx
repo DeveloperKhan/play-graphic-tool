@@ -21,8 +21,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import type { TournamentData, ColumnId, ColumnDisplayMode, PlayerCount } from "@/lib/types";
+import type { TournamentData, ColumnId, ColumnDisplayMode } from "@/lib/types";
 import { PAIR_COLORS } from "@/components/graphic/player-column";
+import {
+  COLUMNS_16,
+  COLUMNS_32,
+  COLUMNS_64_WINNERS,
+  COLUMNS_64_LOSERS,
+  getAllColumnIds,
+  getDefaultWrapperText,
+  getFirstWinnersColumnId,
+  getLosersColumnIds,
+  getRemainingWinnersColumnIds,
+} from "@/lib/column-wrapper-defaults";
 
 // Bracket labels section
 interface BracketLabelsSectionProps {
@@ -124,96 +135,6 @@ export function BracketLabelsSection({ form }: BracketLabelsSectionProps) {
 
 interface ColumnWrapperSectionProps {
   form: UseFormReturn<TournamentData>;
-}
-
-interface ColumnConfig {
-  id: ColumnId;
-  label: string;
-  colorIndex: number; // Index into PAIR_COLORS
-  defaultWrapperText: string; // Default text when wrapper mode is selected
-}
-
-// Columns for Top 16
-const COLUMNS_16: ColumnConfig[] = [
-  { id: "winners1", label: "Winners Column 1 (A-D)", colorIndex: 0, defaultWrapperText: "1st-4th" },
-  { id: "winners2", label: "Winners Column 2 (E-H)", colorIndex: 2, defaultWrapperText: "5th-8th" },
-  { id: "losers1", label: "Losers Column 1 (A-D)", colorIndex: 0, defaultWrapperText: "9th-12th" },
-  { id: "losers2", label: "Losers Column 2 (E-H)", colorIndex: 2, defaultWrapperText: "13th-16th" },
-];
-
-// Columns for Top 32 (8 blocks total - 4 players per block)
-const COLUMNS_32: ColumnConfig[] = [
-  { id: "col1a", label: "Column 1 Top (A-B)", colorIndex: 0, defaultWrapperText: "1st-4th" },
-  { id: "col1b", label: "Column 1 Bottom (C-D)", colorIndex: 1, defaultWrapperText: "5th-8th" },
-  { id: "col2a", label: "Column 2 Top (E-F)", colorIndex: 2, defaultWrapperText: "9th-12th" },
-  { id: "col2b", label: "Column 2 Bottom (G-H)", colorIndex: 3, defaultWrapperText: "13th-16th" },
-  { id: "col3a", label: "Column 3 Top (I-J)", colorIndex: 0, defaultWrapperText: "17th-20th" },
-  { id: "col3b", label: "Column 3 Bottom (K-L)", colorIndex: 1, defaultWrapperText: "21st-24th" },
-  { id: "col4a", label: "Column 4 Top (M-N)", colorIndex: 2, defaultWrapperText: "25th-28th" },
-  { id: "col4b", label: "Column 4 Bottom (O-P)", colorIndex: 3, defaultWrapperText: "29th-32nd" },
-];
-
-// Columns for Top 64 (16 blocks total - 4 players per block)
-// Winners graphic (8 blocks: 2 per column × 4 columns)
-const COLUMNS_64_WINNERS: ColumnConfig[] = [
-  { id: "winners1a", label: "Winners Col 1 Top (A-B)", colorIndex: 0, defaultWrapperText: "1st-4th" },
-  { id: "winners1b", label: "Winners Col 1 Bottom (C-D)", colorIndex: 1, defaultWrapperText: "5th-8th" },
-  { id: "winners2a", label: "Winners Col 2 Top (E-F)", colorIndex: 2, defaultWrapperText: "9th-12th" },
-  { id: "winners2b", label: "Winners Col 2 Bottom (G-H)", colorIndex: 3, defaultWrapperText: "13th-16th" },
-  { id: "winners3a", label: "Winners Col 3 Top (I-J)", colorIndex: 0, defaultWrapperText: "17th-20th" },
-  { id: "winners3b", label: "Winners Col 3 Bottom (K-L)", colorIndex: 1, defaultWrapperText: "21st-24th" },
-  { id: "winners4a", label: "Winners Col 4 Top (M-N)", colorIndex: 2, defaultWrapperText: "25th-28th" },
-  { id: "winners4b", label: "Winners Col 4 Bottom (O-P)", colorIndex: 3, defaultWrapperText: "29th-32nd" },
-];
-
-// Losers graphic (8 blocks: 2 per column × 4 columns)
-const COLUMNS_64_LOSERS: ColumnConfig[] = [
-  { id: "losers1a", label: "Losers Col 1 Top (A-B)", colorIndex: 0, defaultWrapperText: "1st-4th" },
-  { id: "losers1b", label: "Losers Col 1 Bottom (C-D)", colorIndex: 1, defaultWrapperText: "5th-8th" },
-  { id: "losers2a", label: "Losers Col 2 Top (E-F)", colorIndex: 2, defaultWrapperText: "9th-12th" },
-  { id: "losers2b", label: "Losers Col 2 Bottom (G-H)", colorIndex: 3, defaultWrapperText: "13th-16th" },
-  { id: "losers3a", label: "Losers Col 3 Top (I-J)", colorIndex: 0, defaultWrapperText: "17th-20th" },
-  { id: "losers3b", label: "Losers Col 3 Bottom (K-L)", colorIndex: 1, defaultWrapperText: "21st-24th" },
-  { id: "losers4a", label: "Losers Col 4 Top (M-N)", colorIndex: 2, defaultWrapperText: "25th-28th" },
-  { id: "losers4b", label: "Losers Col 4 Bottom (O-P)", colorIndex: 3, defaultWrapperText: "29th-32nd" },
-];
-
-// Helper functions for show placements defaults
-function getFirstWinnersColumnId(playerCount: PlayerCount): ColumnId {
-  if (playerCount === 64) return "winners1a";
-  if (playerCount === 32) return "col1a";
-  return "winners1";
-}
-
-function getRemainingWinnersColumnIds(playerCount: PlayerCount): ColumnId[] {
-  if (playerCount === 64) {
-    return ["winners1b", "winners2a", "winners2b", "winners3a", "winners3b", "winners4a", "winners4b"];
-  }
-  if (playerCount === 32) {
-    return ["col1b", "col2a", "col2b", "col3a", "col3b", "col4a", "col4b"];
-  }
-  return ["winners2"];
-}
-
-function getLosersColumnIds(playerCount: PlayerCount): ColumnId[] {
-  if (playerCount === 64) {
-    return ["losers1a", "losers1b", "losers2a", "losers2b", "losers3a", "losers3b", "losers4a", "losers4b"];
-  }
-  if (playerCount === 32) return [];
-  return ["losers1", "losers2"];
-}
-
-function getAllColumnIds(playerCount: PlayerCount): ColumnId[] {
-  return [
-    getFirstWinnersColumnId(playerCount),
-    ...getRemainingWinnersColumnIds(playerCount),
-    ...getLosersColumnIds(playerCount),
-  ];
-}
-
-function getDefaultWrapperText(columnId: ColumnId): string {
-  const allConfigs = [...COLUMNS_16, ...COLUMNS_32, ...COLUMNS_64_WINNERS, ...COLUMNS_64_LOSERS];
-  return allConfigs.find((c) => c.id === columnId)?.defaultWrapperText ?? "";
 }
 
 export function ColumnWrapperSection({ form }: ColumnWrapperSectionProps) {

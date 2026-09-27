@@ -5,6 +5,7 @@ export interface RosterPlayer {
   lastName: string;
   screenName: string;
   country: string; // ISO code (e.g., "UK", "IT", "US")
+  teamListUrl?: string; // Absolute rk9.gg teamlist-go URL, when the row has one
 }
 
 export interface RosterResult {
@@ -51,6 +52,9 @@ function parseRosterUrl(url: string): { valid: boolean; error?: string } {
  *   <td>Screen name</td>
  *   <td>Team List link</td>
  * </tr>
+ *
+ * The team list link is captured from the row's raw HTML before tags are
+ * stripped, so it survives the cell cleanup below.
  */
 function parseRosterHtml(html: string): RosterPlayer[] {
   const players: RosterPlayer[] = [];
@@ -69,6 +73,10 @@ function parseRosterHtml(html: string): RosterPlayer[] {
 
   while ((rowMatch = rowRegex.exec(tbody)) !== null) {
     const row = rowMatch[1];
+
+    // Capture the team list link before the cell contents are stripped of tags
+    const teamListMatch = row.match(/href="(\/teamlist-go\/public\/[^"]+)"/i);
+    const teamListUrl = teamListMatch ? `https://rk9.gg${teamListMatch[1]}` : undefined;
 
     // Extract all <td> contents
     const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
@@ -98,6 +106,7 @@ function parseRosterHtml(html: string): RosterPlayer[] {
           lastName,
           screenName,
           country,
+          teamListUrl,
         });
       }
     }

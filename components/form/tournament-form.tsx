@@ -7,7 +7,8 @@ import { PlayerInputSection } from "./player-input-section";
 import { FormNavigation } from "./form-navigation";
 import { ColumnWrapperSection, BracketLabelsSection } from "./column-wrapper-section";
 import { BracketConfigSection } from "./bracket-config-section";
-import { useTournamentForm, createDefaultTournamentData } from "@/hooks/use-tournament-form";
+import { useTournamentForm } from "@/hooks/use-tournament-form";
+import { createDefaultTournamentData } from "@/lib/tournament-defaults";
 import { sortTeam, calculateUsageCounts } from "@/lib/pokemon-sort";
 import type { TournamentData, Pokemon } from "@/lib/types";
 
@@ -164,6 +165,12 @@ export function TournamentForm({
       });
     }
     return names;
+  }, [players]);
+
+  // Whether any player data would be lost by a full-form replacement
+  const hasExistingData = React.useMemo(() => {
+    if (!players) return false;
+    return Object.values(players).some((player) => player?.name?.trim());
   }, [players]);
 
   // Callback to get fresh player names (avoids stale React Hook Form watch data)
@@ -325,6 +332,20 @@ export function TournamentForm({
         form.setValue(`players.${playerId}.team.${j}.isShadow`, pokemon.isShadow);
       }
     }
+  };
+
+  /**
+   * Replace the entire form with an auto-generated tournament.
+   *
+   * The player count effect below wipes every player whenever playerCount
+   * changes to 8/32/64, so prevPlayerCountRef must be moved ahead of the reset
+   * (same guard the localStorage loader uses) or the import is erased.
+   */
+  const handleAutoGenerate = (data: TournamentData) => {
+    prevPlayerCountRef.current = data.playerCount;
+    form.reset(data);
+    form.clearErrors();
+    onFormChange?.(data);
   };
 
   const handleImportFlags = (updates: Array<{ playerId: string; flags: string[] }>) => {
@@ -542,6 +563,8 @@ export function TournamentForm({
           onSortAllPokemon={handleSortAllPokemon}
           onImport={handleImport}
           onImportFlags={handleImportFlags}
+          onAutoGenerate={handleAutoGenerate}
+          hasExistingData={hasExistingData}
           onBulkReorder={handleBulkReorder}
           onResetForm={handleResetForm}
           onCopyJson={handleCopyJson}
