@@ -1,20 +1,30 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
-import html2canvas from "html2canvas-pro";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { TournamentForm } from "@/components/form/tournament-form";
 import {
   TournamentGraphic,
   type TournamentGraphicRef,
 } from "@/components/graphic/tournament-graphic";
 import { ExportWarningDialog } from "@/components/form/export-warning-dialog";
+import { ExportResultDialog } from "@/components/form/export-result-dialog";
 import { convertToGraphicData } from "@/lib/graphic-data";
+import {
+  downloadImage,
+  isMobileDevice,
+  releaseImages,
+  renderElementToImage,
+  type ExportedImage,
+} from "@/lib/export-image";
 import type { TournamentData } from "@/lib/types";
 
 export default function Home() {
   const [tournamentData, setTournamentData] = useState<TournamentData | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [showExportWarning, setShowExportWarning] = useState(false);
+  const [showExportResult, setShowExportResult] = useState(false);
+  const [exportedImages, setExportedImages] = useState<ExportedImage[]>([]);
+  const [exportError, setExportError] = useState<string | null>(null);
   const graphicRef = useRef<TournamentGraphicRef>(null);
 
   // Convert form data to graphic data
@@ -23,71 +33,68 @@ export default function Home() {
     return convertToGraphicData(tournamentData);
   }, [tournamentData]);
 
-  // Helper function to export a single canvas element
-  const exportCanvas = async (element: HTMLDivElement, filename: string) => {
-    const originalTransform = element.style.transform;
-    element.style.transform = "none";
+  // Object URLs outlive React state, so release them when they go out of use.
+  useEffect(() => {
+    return () => releaseImages(exportedImages);
+  }, [exportedImages]);
 
-    // Wait for all images to be fully loaded
-    const images = element.querySelectorAll("img");
-    await Promise.all(
-      Array.from(images).map((img) => {
-        if (img.complete) return Promise.resolve();
-        return new Promise((resolve) => {
-          img.onload = resolve;
-          img.onerror = resolve;
-        });
-      })
-    );
-
-    // Wait a frame for the transform change to apply
-    await new Promise((resolve) => requestAnimationFrame(resolve));
-
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: false,
-      backgroundColor: null,
-      logging: false,
-    });
-
-    const dataUrl = canvas.toDataURL("image/png");
-    element.style.transform = originalTransform;
-
-    const link = document.createElement("a");
-    link.download = `${filename}-${Date.now()}.png`;
-    link.href = dataUrl;
-    link.click();
-  };
+  const handleResultOpenChange = useCallback((open: boolean) => {
+    setShowExportResult(open);
+    if (!open) {
+      setExportedImages([]);
+      setExportError(null);
+    }
+  }, []);
 
   const handleExport = async () => {
     setIsExporting(true);
+    setExportError(null);
+    setExportedImages([]);
+
     try {
-      // Check if this is a multi-canvas export (Top 64)
-      const isMultiCanvas = graphicRef.current?.isMultiCanvas;
+      const targets: { element: HTMLDivElement; name: string }[] = [];
 
-      if (isMultiCanvas) {
-        // Export both Winners and Losers graphics
-        const winnersCanvas = graphicRef.current?.getWinnersCanvasElement?.();
-        const losersCanvas = graphicRef.current?.getLosersCanvasElement?.();
-
-        if (winnersCanvas) {
-          await exportCanvas(winnersCanvas, "tournament-winners");
-        }
-        if (losersCanvas) {
-          // Small delay between downloads to ensure both trigger
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          await exportCanvas(losersCanvas, "tournament-losers");
-        }
+      if (graphicRef.current?.isMultiCanvas) {
+        const winners = graphicRef.current?.getWinnersCanvasElement?.();
+        const losers = graphicRef.current?.getLosersCanvasElement?.();
+        if (winners) targets.push({ element: winners, name: "tournament-winners" });
+        if (losers) targets.push({ element: losers, name: "tournament-losers" });
       } else {
-        // Single canvas export
         const canvasElement = graphicRef.current?.getCanvasElement();
         if (canvasElement) {
-          await exportCanvas(canvasElement, "tournament-graphic");
+          targets.push({ element: canvasElement, name: "tournament-graphic" });
         }
+      }
+
+      if (targets.length === 0) {
+        throw new Error("The graphic isn't ready yet. Fill in the form and try again.");
+      }
+
+      const images: ExportedImage[] = [];
+      for (const target of targets) {
+        images.push(await renderElementToImage(target.element, target.name));
+      }
+
+      // Mobile browsers ignore the download attribute, so hand the images to the
+      // user as previews they can save or share instead of firing a download.
+      if (isMobileDevice()) {
+        setExportedImages(images);
+        setShowExportResult(true);
+      } else {
+        for (const [index, image] of images.entries()) {
+          // Chrome throttles back-to-back programmatic downloads.
+          if (index > 0) await new Promise((resolve) => setTimeout(resolve, 300));
+          downloadImage(image);
+        }
+        // Revoking immediately can cancel an in-flight download.
+        setTimeout(() => releaseImages(images), 60_000);
       }
     } catch (error) {
       console.error("Export failed:", error);
+      setExportError(
+        error instanceof Error ? error.message : "Something went wrong while exporting."
+      );
+      setShowExportResult(true);
     } finally {
       setIsExporting(false);
     }
@@ -126,6 +133,12 @@ export default function Home() {
               onOpenChange={setShowExportWarning}
               tournamentData={tournamentData}
               onProceed={handleExport}
+            />
+            <ExportResultDialog
+              open={showExportResult}
+              onOpenChange={handleResultOpenChange}
+              images={exportedImages}
+              error={exportError}
             />
           </div>
           <div className="border rounded-lg bg-muted/50 flex-1 overflow-auto">
