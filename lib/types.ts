@@ -165,6 +165,7 @@ export interface TournamentData {
   overviewType: OverviewType;
   playerCount: PlayerCount; // Number of players in tournament
   bracketReset: boolean; // Was there a bracket reset in grand finals?
+  communityBackground?: boolean; // Use the Community Event background (Top 8 and Top 16 only)
   players: Record<string, Player>; // player lookup by id
   playerOrder: string[]; // ordered list of player ids (for rendering order)
   bracketPositions?: BracketPositions; // Player assignments for bracket positions (for Bracket mode)

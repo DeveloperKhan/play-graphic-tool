@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import type { TournamentData, EventType, OverviewType } from "@/lib/types";
 
 interface EventInfoSectionProps {
@@ -30,7 +31,10 @@ const OVERVIEW_TYPES: { value: OverviewType; label: string; description: string 
 
 export function EventInfoSection({ form }: EventInfoSectionProps) {
   const overviewType = form.watch("overviewType");
+  const playerCount = form.watch("playerCount");
   const showBracketReset = overviewType === "Bracket";
+  // Only the Top 8 and Top 16 canvases have a Community Event backdrop
+  const showCommunityBackground = playerCount === 8 || playerCount === 16;
 
   return (
     <Card className="min-w-0 overflow-hidden">
@@ -170,6 +174,32 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
             </FormItem>
           )}
         />
+
+        {/* Community Background (Top 8 and Top 16 only) */}
+        {showCommunityBackground && (
+          <FormField
+            control={form.control}
+            name="communityBackground"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormControl>
+                  <Switch
+                    checked={field.value ?? false}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="cursor-pointer">
+                    Community Event Background
+                  </FormLabel>
+                  <FormDescription>
+                    Swap the standard backdrop for the Community Event one
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        )}
 
         {/* Overview Type */}
         <FormField

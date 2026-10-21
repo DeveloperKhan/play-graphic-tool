@@ -109,9 +109,13 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
           left: 0,
         }}
       >
-        {/* Background image */}
+        {/* Background image - Community Event events use their own backdrop */}
         <img
-          src="/assets/graphic/background.jpg"
+          src={
+            data.communityBackground
+              ? "/assets/graphic/background-community.png"
+              : "/assets/graphic/background.jpg"
+          }
           alt=""
           style={{
             position: "absolute",

@@ -105,6 +105,7 @@ export interface GraphicData {
   columnWrappers?: Partial<Record<ColumnId, ColumnWrapperConfig>>;
   bracketLabels?: BracketLabels;
   bracketReset?: boolean;
+  communityBackground?: boolean; // Use the Community Event background (Top 8 and Top 16 only)
   bracketPositions?: ResolvedBracketPositions;
   eventDateRange: EventDateRange;
 }
@@ -293,6 +294,7 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
     columnWrappers: tournamentData.columnWrappers,
     bracketLabels: tournamentData.bracketLabels,
     bracketReset: tournamentData.bracketReset,
+    communityBackground: tournamentData.communityBackground,
     bracketPositions: resolvedBracketPositions,
     eventDateRange: tournamentData.eventDateRange,
   };
