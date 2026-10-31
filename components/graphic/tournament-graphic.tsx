@@ -168,6 +168,9 @@ export const TournamentGraphic = forwardRef<TournamentGraphicRef, TournamentGrap
                     : data.titleLines
                 }
                 eventYear={data.eventYear}
+                communityTitle={
+                  data.communityBackground ? data.communityTitle ?? "" : undefined
+                }
                 eventType={data.eventType}
               />
             </div>

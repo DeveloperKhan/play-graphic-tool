@@ -106,6 +106,7 @@ export interface GraphicData {
   bracketLabels?: BracketLabels;
   bracketReset?: boolean;
   communityBackground?: boolean; // Use the Community Event background (Top 8 and Top 16 only)
+  communityTitle?: string; // Replaces the championship series line on Community Event graphics
   bracketPositions?: ResolvedBracketPositions;
   eventDateRange: EventDateRange;
 }
@@ -295,6 +296,7 @@ export function convertToGraphicData(tournamentData: TournamentData): GraphicDat
     bracketLabels: tournamentData.bracketLabels,
     bracketReset: tournamentData.bracketReset,
     communityBackground: tournamentData.communityBackground,
+    communityTitle: tournamentData.communityTitle,
     bracketPositions: resolvedBracketPositions,
     eventDateRange: tournamentData.eventDateRange,
   };

@@ -32,9 +32,12 @@ const OVERVIEW_TYPES: { value: OverviewType; label: string; description: string 
 export function EventInfoSection({ form }: EventInfoSectionProps) {
   const overviewType = form.watch("overviewType");
   const playerCount = form.watch("playerCount");
+  const communityBackground = form.watch("communityBackground");
   const showBracketReset = overviewType === "Bracket";
   // Only the Top 8 and Top 16 canvases have a Community Event backdrop
   const showCommunityBackground = playerCount === 8 || playerCount === 16;
+  // Community Event graphics carry their own title instead of the championship series line
+  const useCommunityTitle = showCommunityBackground && !!communityBackground;
 
   return (
     <Card className="min-w-0 overflow-hidden">
@@ -95,23 +98,47 @@ export function EventInfoSection({ form }: EventInfoSectionProps) {
           />
         </div>
 
-        {/* Event Year */}
-        <FormField
-          control={form.control}
-          name="eventYear"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Event Year</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="e.g., 2026"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Community Title (Community Event graphics) or Event Year */}
+        {useCommunityTitle ? (
+          <FormField
+            control={form.control}
+            name="communityTitle"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Community Title</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g., Silph Arena Community Cup"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormDescription className="text-xs">
+                  Shown above the title lines in place of the Pokémon GO
+                  Championship Series text
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : (
+          <FormField
+            control={form.control}
+            name="eventYear"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Event Year</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g., 2026"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         {/* Player Count */}
         <FormField

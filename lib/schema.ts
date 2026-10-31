@@ -154,6 +154,7 @@ export const tournamentSchema = z
     playerCount: z.union([z.literal(4), z.literal(8), z.literal(16), z.literal(32), z.literal(64)]),
     bracketReset: z.boolean(),
     communityBackground: z.boolean().optional(),
+    communityTitle: z.string().optional(),
     players: z.record(z.string(), playerSchema),
     playerOrder: z.array(z.string()),
     bracketPositions: bracketPositionsSchema.optional(),

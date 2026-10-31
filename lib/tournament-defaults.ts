@@ -95,6 +95,7 @@ export function createDefaultTournamentData(
     playerCount: playerCount as 4 | 8 | 16 | 32 | 64,
     bracketReset: false,
     communityBackground: false,
+    communityTitle: "",
     players,
     playerOrder,
     bracketPositions: createDefaultBracketPositions(),

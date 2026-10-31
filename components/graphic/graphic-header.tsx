@@ -5,6 +5,8 @@ import { useLayoutEffect, useRef, useState } from "react";
 interface GraphicHeaderProps {
   titleLines: [string, string, string];
   eventYear: string;
+  /** Community event title - when set, replaces the championship series line */
+  communityTitle?: string;
   eventType: "Regional" | "International" | "Worlds" | "Generic";
   /** Custom font size for the event name title lines */
   titleFontSize?: number;
@@ -80,11 +82,19 @@ function TitleLine({ text, width, fontSize }: TitleLineProps) {
 export function GraphicHeader({
   titleLines,
   eventYear,
+  communityTitle,
   titleFontSize = TITLE_FONT_SIZE,
   textWidth = TEXT_WIDTH,
 }: GraphicHeaderProps) {
   // Filter out empty lines
   const visibleLines = titleLines.filter((line) => line.trim().length > 0);
+
+  // Community events use their own title instead of the championship series line.
+  // Falls back to a non-breaking space so the header keeps its height while empty.
+  const seriesLine =
+    communityTitle !== undefined
+      ? communityTitle.trim() || "\u00A0"
+      : `${eventYear} Pokémon GO Championship Series`;
 
   return (
     <div
@@ -107,7 +117,7 @@ export function GraphicHeader({
           margin: 0,
         }}
       >
-        {eventYear} Pokémon GO Championship Series
+        {seriesLine}
       </p>
       <div
         style={{

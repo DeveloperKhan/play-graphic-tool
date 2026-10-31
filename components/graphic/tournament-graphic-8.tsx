@@ -129,6 +129,9 @@ export const TournamentGraphic8 = forwardRef<TournamentGraphic8Ref, TournamentGr
                       : data.titleLines
                   }
                   eventYear={data.eventYear}
+                  communityTitle={
+                    data.communityBackground ? data.communityTitle ?? "" : undefined
+                  }
                   eventType={data.eventType}
                   titleFontSize={93}
                   textWidth={1365}
