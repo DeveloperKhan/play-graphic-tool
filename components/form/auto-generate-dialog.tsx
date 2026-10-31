@@ -26,7 +26,7 @@ import { convertRK9ToFormData, type RK9TeamData } from "@/lib/rk9-import";
 import { applyNameOverride, normalizePlayerName } from "@/lib/player-name-overrides";
 import { buildPlacementColumnWrappers } from "@/lib/column-wrapper-defaults";
 import { getFlagsForPlayer } from "@/lib/player-flag-config";
-import { createDefaultTournamentData } from "@/lib/tournament-defaults";
+import { createDefaultTournamentData, getSeasonYear } from "@/lib/tournament-defaults";
 import type { StandingEntry, StandingsMode } from "@/lib/challonge";
 import type { Pokemon, PlayerCount, TournamentData } from "@/lib/types";
 
@@ -184,11 +184,11 @@ function deriveEventYear(meta: ChallongeTournamentMeta): string {
   if (fromName) return fromName[1];
 
   if (meta.startedAt) {
-    const year = new Date(meta.startedAt).getFullYear();
-    if (!Number.isNaN(year)) return String(year);
+    const startedAt = new Date(meta.startedAt);
+    if (!Number.isNaN(startedAt.getTime())) return getSeasonYear(startedAt);
   }
 
-  return new Date().getFullYear().toString();
+  return getSeasonYear();
 }
 
 /** ISO timestamp -> YYYY-MM-DD, or "" when absent */

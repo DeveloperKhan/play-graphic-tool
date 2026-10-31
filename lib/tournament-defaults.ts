@@ -7,6 +7,19 @@
 
 import type { TournamentData, Player, BracketPositions } from "./types";
 
+/** The season rolls over in September (0-indexed month 8) */
+const SEASON_START_MONTH = 8;
+
+/**
+ * The season year shown on the graphic, which runs ahead of the calendar year:
+ * the 2027 season starts in September 2026. January-August belongs to the
+ * current year's season, September-December to the next one.
+ */
+export function getSeasonYear(date: Date = new Date()): string {
+  const year = date.getFullYear();
+  return String(date.getMonth() >= SEASON_START_MONTH ? year + 1 : year);
+}
+
 /**
  * Create default bracket positions (all null)
  * Maps to all 21 cells in the Top 8 double elimination bracket
@@ -89,7 +102,7 @@ export function createDefaultTournamentData(
 
   return {
     titleLines: ["", "", ""],
-    eventYear: new Date().getFullYear().toString(),
+    eventYear: getSeasonYear(),
     eventType: "Regional",
     overviewType,
     playerCount: playerCount as 4 | 8 | 16 | 32 | 64,
