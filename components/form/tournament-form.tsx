@@ -10,6 +10,7 @@ import { BracketConfigSection } from "./bracket-config-section";
 import { useTournamentForm } from "@/hooks/use-tournament-form";
 import { createDefaultTournamentData } from "@/lib/tournament-defaults";
 import { sortTeam, calculateUsageCounts } from "@/lib/pokemon-sort";
+import { isEmptyPlayer } from "@/lib/screenshot-import";
 import type { TournamentData, Pokemon } from "@/lib/types";
 
 const STORAGE_KEY = "tournament-form-data";
@@ -348,6 +349,33 @@ export function TournamentForm({
     onFormChange?.(data);
   };
 
+  // Slots a screenshot import may fill: no name and no Pokémon, in bracket order.
+  const getEmptySlotIds = React.useCallback(() => {
+    const currentPlayers = form.getValues("players");
+    return form.getValues("playerOrder").filter((id) => isEmptyPlayer(currentPlayers[id]));
+  }, [form]);
+
+  const handleScreenshotImport = (importedPlayers: Array<{
+    name: string;
+    flags: string[];
+    team: Array<{ id: string; isShadow: boolean }>;
+  }>) => {
+    const emptyIds = getEmptySlotIds();
+    const count = Math.min(emptyIds.length, importedPlayers.length);
+    for (let i = 0; i < count; i++) {
+      const playerId = emptyIds[i];
+      const imported = importedPlayers[i];
+      form.setValue(`players.${playerId}.name`, imported.name);
+      form.setValue(`players.${playerId}.flags`, imported.flags);
+      for (let j = 0; j < 6; j++) {
+        const pokemon = imported.team[j] || { id: "", isShadow: false };
+        form.setValue(`players.${playerId}.team.${j}.id`, pokemon.id);
+        form.setValue(`players.${playerId}.team.${j}.isShadow`, pokemon.isShadow);
+      }
+    }
+    return count;
+  };
+
   const handleImportFlags = (updates: Array<{ playerId: string; flags: string[] }>) => {
     for (const update of updates) {
       form.setValue(`players.${update.playerId}.flags`, update.flags);
@@ -563,6 +591,8 @@ export function TournamentForm({
           onSortAllPokemon={handleSortAllPokemon}
           onImport={handleImport}
           onImportFlags={handleImportFlags}
+          onImportScreenshot={handleScreenshotImport}
+          getEmptySlotCount={() => getEmptySlotIds().length}
           onAutoGenerate={handleAutoGenerate}
           hasExistingData={hasExistingData}
           onBulkReorder={handleBulkReorder}
