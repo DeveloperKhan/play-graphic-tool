@@ -18,7 +18,14 @@ import {
 import { cn } from "@/lib/utils";
 import { getPokemonById, getPokemonSpriteBySid } from "@/lib/pokemon-data";
 import { getFlagsForPlayer } from "@/lib/player-flag-config";
-import { LOW_CONFIDENCE, normalizeName, recognizeScreenshot } from "@/lib/screenshot-import";
+import {
+  LOW_CONFIDENCE,
+  cropRegions,
+  normalizeName,
+  loadLocalRecognizer,
+  recognizeScreenshot,
+  type RecognizedTeam,
+} from "@/lib/screenshot-import";
 import type { PokemonMetadata } from "@/lib/types";
 import { PokemonCombobox } from "./pokemon-combobox";
 
@@ -32,6 +39,8 @@ interface ReviewSlot {
   id: string;
   isShadow: boolean;
   confidence: number;
+  /** The tile as it appears in the screenshot (data URL). */
+  ref?: string;
 }
 
 interface ReviewEntry {
@@ -41,6 +50,8 @@ interface ReviewEntry {
   name: string;
   /** What OCR read, when it differs from the matched Dracoviz name. */
   read?: string;
+  /** The name bar as it appears in the screenshot (data URL). */
+  nameRef?: string;
   flags: string[];
   team: ReviewSlot[];
   note?: string;
@@ -52,6 +63,21 @@ interface ScreenshotImportDialogProps {
   getEmptySlotCount: () => number;
   /** Fills empty slots in bracket order; returns how many players were placed. */
   onImport: (players: ImportedPlayer[]) => number;
+}
+
+/** A region cut from the uploaded screenshot, shown as-is for comparison. */
+function ScreenshotCrop({ src, alt, className }: { src?: string; alt: string; className?: string }) {
+  if (!src) return null;
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={96}
+      height={96}
+      unoptimized
+      className={cn("rounded-md border bg-black/5 object-contain", className)}
+    />
+  );
 }
 
 function RecognizedSprite({
@@ -128,6 +154,9 @@ export function ScreenshotImportDialog({
   const [errors, setErrors] = React.useState<string[]>([]);
   const [editing, setEditing] = React.useState<{ key: string; slot: number } | null>(null);
   const [emptySlots, setEmptySlots] = React.useState(0);
+  // Loading the in-browser recognizer: bytes downloaded / total, then whether it's usable.
+  const [download, setDownload] = React.useState<{ loaded: number; total: number } | null>(null);
+  const [engine, setEngine] = React.useState<"loading" | "browser" | "server">("loading");
   const fileInput = React.useRef<HTMLInputElement>(null);
 
   const reset = () => {
@@ -140,22 +169,30 @@ export function ScreenshotImportDialog({
     setOpen(next);
     if (next) {
       setEmptySlots(getEmptySlotCount());
+      // Start downloading the models while the user picks screenshots (cached after the first time).
+      loadLocalRecognizer((loaded, total) => setDownload({ loaded, total })).then((ok) =>
+        setEngine(ok ? "browser" : "server")
+      );
     } else {
       reset();
     }
   };
 
-  const toEntries = async (teams: Awaited<ReturnType<typeof recognizeScreenshot>>, source: string) =>
+  const toEntries = async (teams: RecognizedTeam[], image: Blob, source: string) =>
     Promise.all(
       teams.map(async (team, i): Promise<ReviewEntry> => {
         const name = team.player?.trim() ?? "";
+        const [[nameRef], tileRefs] = await Promise.all([
+          cropRegions(image, [team.nameBox], 40),
+          cropRegions(image, team.pokemon.map((p) => p.box)),
+        ]);
         const slots = await Promise.all(
-          team.pokemon.map(async (p) => {
+          team.pokemon.map(async (p, j) => {
             // Only keep ids the picker knows; anything else is left for the user to choose.
             const known = await getPokemonById(p.speciesId);
             return known
-              ? { id: p.speciesId, isShadow: p.shadow, confidence: p.confidence }
-              : { id: "", isShadow: false, confidence: 0 };
+              ? { id: p.speciesId, isShadow: p.shadow, confidence: p.confidence, ref: tileRefs[j] }
+              : { id: "", isShadow: false, confidence: 0, ref: tileRefs[j] };
           })
         );
         return {
@@ -164,6 +201,7 @@ export function ScreenshotImportDialog({
           include: true,
           name,
           read: team.playerRead && team.playerRead !== name ? team.playerRead : undefined,
+          nameRef,
           flags: getFlagsForPlayer(name) ?? (team.country ? [team.country] : [""]),
           team: slots,
         };
@@ -178,11 +216,11 @@ export function ScreenshotImportDialog({
       images.map(async (file) => {
         const source = file.name || "pasted image";
         try {
-          const teams = await recognizeScreenshot(file);
+          const { teams, image } = await recognizeScreenshot(file);
           if (teams.length === 0) {
             setErrors((e) => [...e, `${source}: no team grid found`]);
           } else {
-            const recognized = await toEntries(teams, source);
+            const recognized = await toEntries(teams, image, source);
             setEntries((current) => markDuplicates([...current, ...recognized]));
           }
         } catch (error) {
@@ -279,10 +317,20 @@ export function ScreenshotImportDialog({
             Choose images
           </Button>
           <p className="mt-2 text-xs">or drop them here, or paste with Ctrl/Cmd+V</p>
+          <p className="mt-1 text-[11px]">
+            {engine === "loading" &&
+              (download && download.total > 0
+                ? `Downloading the recognizer (first time only)… ${Math.round(download.loaded / 1e6)} of ${Math.round(download.total / 1e6)} MB`
+                : "Loading the recognizer…")}
+            {engine === "browser" && "Recognition runs in your browser."}
+            {engine === "server" && "This browser can't run the recognizer, so screenshots are sent to the server (slower)."}
+          </p>
           {pending > 0 && (
             <p className="mt-2 flex items-center justify-center gap-2 text-xs">
               <Loader2 className="h-3 w-3 animate-spin" />
-              Recognizing {pending} screenshot{pending === 1 ? "" : "s"}… (first one can take ~15 s)
+              Recognizing {pending} screenshot{pending === 1 ? "" : "s"}…
+              {engine === "loading" && " (loading the recognizer first)"}
+              {engine === "server" && " (on the server: ~20 s each)"}
             </p>
           )}
         </div>
@@ -325,25 +373,32 @@ export function ScreenshotImportDialog({
                     className="h-8 w-20 text-sm uppercase"
                   />
                 </div>
-                {entry.read && (
-                  <p className="pl-6 text-[11px] text-muted-foreground">
-                    Matched to a Dracoviz player · read as {entry.read}
-                  </p>
+                {(entry.nameRef || entry.read) && (
+                  <div className="flex items-center gap-2 pl-6">
+                    <ScreenshotCrop src={entry.nameRef} alt="Name in the screenshot" className="h-7 w-auto max-w-[55%]" />
+                    {entry.read && (
+                      <span className="text-[11px] text-muted-foreground">
+                        Matched to a Dracoviz player · read as {entry.read}
+                      </span>
+                    )}
+                  </div>
                 )}
-                <div className="flex items-center gap-1.5 flex-wrap">
+                <div className="flex items-end gap-1.5 flex-wrap">
                   {entry.team.map((slot, i) => (
-                    <RecognizedSprite
-                      key={i}
-                      slot={slot}
-                      selected={editing?.key === entry.key && editing.slot === i}
-                      onClick={() =>
-                        setEditing((cur) =>
-                          cur?.key === entry.key && cur.slot === i ? null : { key: entry.key, slot: i }
-                        )
-                      }
-                    />
+                    <div key={i} className="flex flex-col items-center gap-1">
+                      <ScreenshotCrop src={slot.ref} alt={`Tile ${i + 1} in the screenshot`} className="w-12 h-12" />
+                      <RecognizedSprite
+                        slot={slot}
+                        selected={editing?.key === entry.key && editing.slot === i}
+                        onClick={() =>
+                          setEditing((cur) =>
+                            cur?.key === entry.key && cur.slot === i ? null : { key: entry.key, slot: i }
+                          )
+                        }
+                      />
+                    </div>
                   ))}
-                  <span className="ml-auto text-[11px] text-muted-foreground truncate max-w-[40%]">
+                  <span className="ml-auto self-center text-[11px] text-muted-foreground truncate max-w-[30%]">
                     {entry.note ?? entry.source}
                   </span>
                 </div>

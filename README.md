@@ -56,9 +56,19 @@ whose team list the organizer has not published.
 
 The **Import Screenshot** button reads teams straight off screenshots of the 2027
 broadcast overlay: a full frame (both players) or a cropped player panel. Upload,
-drop or paste several at once; each is downscaled in the browser and sent to the
-team recognizer (`/api/screenshot-import` forwards it with the token), which
-returns each player's name, country and six Pokémon with shadow flags.
+drop or paste several at once.
+
+Recognition runs **in the browser**: `vendor/team-recognizer/` starts a Web Worker that
+loads the models from `public/team-recognizer/<hash>/` (WebGPU where available,
+otherwise WebAssembly; about 50–70 MB the first time, cached by the browser after
+that). If the browser can't run it, the screenshot is downscaled and sent to the
+recognizer service instead (`/api/screenshot-import`, `RECOGNIZER_URL`), which is much
+slower. Either way the result is each player's name, country and six Pokémon with
+shadow flags; names are then matched to Dracoviz players by `/api/match-player-names`.
+
+To update the in-browser recognizer after retraining, run `npm run build && npm run sync`
+in `../team-recognizer/web` (see its README) and commit the changed `vendor/` and
+`public/team-recognizer/` folders.
 
 The review step lists every recognized team. Tiles the recognizer was unsure of
 are outlined in amber; click any tile to change the Pokémon or its shadow flag,
@@ -70,9 +80,9 @@ already in the bracket, or repeated across screenshots, are unticked. **Fill
 empty slots** places the ticked teams into slots that have no name and no
 Pokémon, in bracket order, and leaves everything else untouched.
 
-To run it locally, start the recognizer (`uv run uvicorn server:app --port 8000`
-in `../team-recognizer`) and add `RECOGNIZER_URL=http://localhost:8000` to
-`.env.local`.
+Locally nothing extra is needed for the in-browser path. To exercise the server
+fallback, start the recognizer (`uv run uvicorn server:app --port 8000` in
+`../team-recognizer`) and add `RECOGNIZER_URL=http://localhost:8000` to `.env.local`.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
