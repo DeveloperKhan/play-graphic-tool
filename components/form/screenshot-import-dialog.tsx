@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { ImageUp, Loader2 } from "lucide-react";
+import { AlertCircle, ImageUp, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -56,6 +56,20 @@ interface ReviewEntry {
   team: ReviewSlot[];
   note?: string;
 }
+
+/** A screenshot being recognized; it disappears once its teams appear below. */
+interface Job {
+  key: string;
+  name: string;
+  thumb: string; // object URL
+  status: "queued" | "working" | "error";
+  started?: number;
+  message?: string;
+}
+
+// Outside the component: only called from event handlers and timers, never during render.
+const clock = () => Date.now();
+let jobCounter = 0;
 
 interface ScreenshotImportDialogProps {
   /** Names already in the form, so re-imported players can be skipped. */
@@ -150,8 +164,13 @@ export function ScreenshotImportDialog({
 }: ScreenshotImportDialogProps) {
   const [open, setOpen] = React.useState(false);
   const [entries, setEntries] = React.useState<ReviewEntry[]>([]);
-  const [pending, setPending] = React.useState(0);
-  const [errors, setErrors] = React.useState<string[]>([]);
+  const [jobs, setJobs] = React.useState<Job[]>([]);
+  const [now, setNow] = React.useState(0);
+  const [dragging, setDragging] = React.useState(false);
+  // Screenshots are recognized one after another (the recognizer handles one at a time), and
+  // results from before the dialog was closed are dropped.
+  const queue = React.useRef<Promise<void>>(Promise.resolve());
+  const generation = React.useRef(0);
   const [editing, setEditing] = React.useState<{ key: string; slot: number } | null>(null);
   const [emptySlots, setEmptySlots] = React.useState(0);
   // Loading the in-browser recognizer: bytes downloaded / total, then whether it's usable.
@@ -159,9 +178,33 @@ export function ScreenshotImportDialog({
   const [engine, setEngine] = React.useState<"loading" | "browser" | "server">("loading");
   const fileInput = React.useRef<HTMLInputElement>(null);
 
+  const busy = jobs.some((j) => j.status !== "error");
+
+  // Tick while something is running so elapsed times stay live.
+  React.useEffect(() => {
+    if (!jobs.some((j) => j.status === "working")) return;
+    const timer = setInterval(() => setNow(clock()), 500);
+    return () => clearInterval(timer);
+  }, [jobs]);
+
+  const updateJob = (key: string, change: Partial<Job>) =>
+    setJobs((list) => list.map((j) => (j.key === key ? { ...j, ...change } : j)));
+
+  const removeJob = (key: string) =>
+    setJobs((list) => {
+      const job = list.find((j) => j.key === key);
+      if (job) URL.revokeObjectURL(job.thumb);
+      return list.filter((j) => j.key !== key);
+    });
+
   const reset = () => {
+    generation.current++;
+    queue.current = Promise.resolve();
+    setJobs((list) => {
+      list.forEach((j) => URL.revokeObjectURL(j.thumb));
+      return [];
+    });
     setEntries([]);
-    setErrors([]);
     setEditing(null);
   };
 
@@ -208,28 +251,47 @@ export function ScreenshotImportDialog({
       })
     );
 
-  const addFiles = async (files: File[]) => {
+  const recognizeJob = async (job: Job, file: File, gen: number) => {
+    if (gen !== generation.current) return;
+    const started = clock();
+    setNow(started);
+    updateJob(job.key, { status: "working", started });
+    try {
+      const { teams, image } = await recognizeScreenshot(file);
+      if (gen !== generation.current) return;
+      if (teams.length === 0) {
+        updateJob(job.key, {
+          status: "error",
+          message: "No team grid found. Is this a screenshot of the 2027 broadcast overlay?",
+        });
+        return;
+      }
+      const recognized = await toEntries(teams, image, job.name);
+      if (gen !== generation.current) return;
+      setEntries((current) => markDuplicates([...current, ...recognized]));
+      removeJob(job.key);
+    } catch (error) {
+      if (gen !== generation.current) return;
+      updateJob(job.key, { status: "error", message: error instanceof Error ? error.message : "Recognition failed" });
+    }
+  };
+
+  const addFiles = (files: File[]) => {
     const images = files.filter((f) => f.type.startsWith("image/"));
     if (images.length === 0) return;
-    setPending((n) => n + images.length);
-    await Promise.all(
-      images.map(async (file) => {
-        const source = file.name || "pasted image";
-        try {
-          const { teams, image } = await recognizeScreenshot(file);
-          if (teams.length === 0) {
-            setErrors((e) => [...e, `${source}: no team grid found`]);
-          } else {
-            const recognized = await toEntries(teams, image, source);
-            setEntries((current) => markDuplicates([...current, ...recognized]));
-          }
-        } catch (error) {
-          setErrors((e) => [...e, `${source}: ${error instanceof Error ? error.message : "failed"}`]);
-        } finally {
-          setPending((n) => n - 1);
-        }
+    const gen = generation.current;
+    const added = images.map(
+      (file): Job => ({
+        key: `job-${++jobCounter}`,
+        name: file.name || "pasted image",
+        thumb: URL.createObjectURL(file),
+        status: "queued",
       })
     );
+    setJobs((list) => [...list, ...added]);
+    added.forEach((job, i) => {
+      queue.current = queue.current.then(() => recognizeJob(job, images[i], gen));
+    });
   };
 
   // The same player often appears in several screenshots, and may already be in the bracket.
@@ -244,6 +306,15 @@ export function ScreenshotImportDialog({
       seen.add(key);
       return entry;
     });
+  };
+
+  const jobStatus = (job: Job): string => {
+    if (job.status === "queued") return "Waiting…";
+    if (job.status === "error") return job.message ?? "Recognition failed";
+    const seconds = Math.max(0, Math.floor((now - (job.started ?? now)) / 1000));
+    if (engine === "loading") return "Loading the recognizer first…";
+    if (engine === "server") return `Sending to the server… ${seconds} s (takes about 20 s)`;
+    return `Finding teams… ${seconds} s`;
   };
 
   const handlePaste = (event: React.ClipboardEvent) => {
@@ -295,10 +366,18 @@ export function ScreenshotImportDialog({
         </DialogHeader>
 
         <div
-          className="border-2 border-dashed rounded-lg p-4 text-center text-sm text-muted-foreground"
-          onDragOver={(e) => e.preventDefault()}
+          className={cn(
+            "border-2 border-dashed rounded-lg p-4 text-center text-sm text-muted-foreground transition-colors",
+            dragging && "border-primary bg-primary/5"
+          )}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragging(true);
+          }}
+          onDragLeave={() => setDragging(false)}
           onDrop={(e) => {
             e.preventDefault();
+            setDragging(false);
             addFiles(Array.from(e.dataTransfer.files));
           }}
         >
@@ -317,28 +396,75 @@ export function ScreenshotImportDialog({
             Choose images
           </Button>
           <p className="mt-2 text-xs">or drop them here, or paste with Ctrl/Cmd+V</p>
-          <p className="mt-1 text-[11px]">
+          <div className="mt-2 text-[11px]">
             {engine === "loading" &&
-              (download && download.total > 0
-                ? `Downloading the recognizer (first time only)… ${Math.round(download.loaded / 1e6)} of ${Math.round(download.total / 1e6)} MB`
-                : "Loading the recognizer…")}
-            {engine === "browser" && "Recognition runs in your browser."}
-            {engine === "server" && "This browser can't run the recognizer, so screenshots are sent to the server (slower)."}
-          </p>
-          {pending > 0 && (
-            <p className="mt-2 flex items-center justify-center gap-2 text-xs">
-              <Loader2 className="h-3 w-3 animate-spin" />
-              Recognizing {pending} screenshot{pending === 1 ? "" : "s"}…
-              {engine === "loading" && " (loading the recognizer first)"}
-              {engine === "server" && " (on the server: ~20 s each)"}
-            </p>
-          )}
+              (download && download.total > 0 ? (
+                <div className="mx-auto max-w-xs space-y-1">
+                  <p>
+                    Downloading the recognizer (first time only)… {Math.round(download.loaded / 1e6)} of{" "}
+                    {Math.round(download.total / 1e6)} MB
+                  </p>
+                  <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                    <div
+                      className="h-full bg-primary transition-[width]"
+                      style={{ width: `${Math.min(100, (100 * download.loaded) / download.total)}%` }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <p>Loading the recognizer…</p>
+              ))}
+            {engine === "browser" && <p>Recognition runs in your browser.</p>}
+            {engine === "server" && (
+              <p>This browser can&apos;t run the recognizer, so screenshots are sent to the server (slower).</p>
+            )}
+          </div>
         </div>
 
-        {errors.length > 0 && (
-          <div className="text-xs text-destructive space-y-1">
-            {errors.map((error, i) => (
-              <p key={i}>{error}</p>
+        {jobs.length > 0 && (
+          <div className="space-y-2">
+            {jobs.map((job) => (
+              <div
+                key={job.key}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg border p-2",
+                  job.status === "error" && "border-destructive/40 bg-destructive/5"
+                )}
+              >
+                <Image
+                  src={job.thumb}
+                  alt=""
+                  width={80}
+                  height={48}
+                  unoptimized
+                  className={cn("h-12 w-20 rounded object-cover", job.status === "queued" && "opacity-50")}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{job.name}</p>
+                  <p
+                    className={cn(
+                      "flex items-center gap-1.5 text-xs",
+                      job.status === "error" ? "text-destructive" : "text-muted-foreground"
+                    )}
+                  >
+                    {job.status === "working" && <Loader2 className="h-3 w-3 shrink-0 animate-spin" />}
+                    {job.status === "error" && <AlertCircle className="h-3 w-3 shrink-0" />}
+                    <span className="truncate">{jobStatus(job)}</span>
+                  </p>
+                </div>
+                {job.status === "error" && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 shrink-0"
+                    aria-label="Dismiss"
+                    onClick={() => removeJob(job.key)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             ))}
           </div>
         )}
@@ -424,8 +550,15 @@ export function ScreenshotImportDialog({
           <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
             Cancel
           </Button>
-          <Button type="button" onClick={handleFill} disabled={selected.length === 0 || emptySlots === 0 || pending > 0}>
-            Fill empty slots
+          <Button type="button" onClick={handleFill} disabled={selected.length === 0 || emptySlots === 0 || busy}>
+            {busy ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                Recognizing…
+              </>
+            ) : (
+              "Fill empty slots"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
