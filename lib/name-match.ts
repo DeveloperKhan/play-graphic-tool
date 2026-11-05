@@ -24,7 +24,7 @@ export function foldName(name: string): string {
     .replace(/[01l582]/g, (c) => CONFUSABLE[c]);
 }
 
-function editDistance(a: string, b: string): number {
+export function editDistance(a: string, b: string): number {
   let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
   for (let i = 1; i <= a.length; i++) {
     const cur = [i];

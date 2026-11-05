@@ -9,7 +9,7 @@
  */
 
 import type { StandingEntry } from "./challonge";
-import { buildNameIndex, matchPlayerName, type NameIndex } from "./name-match";
+import { buildNameIndex, editDistance, foldName, matchPlayerName, type NameIndex } from "./name-match";
 import { applyNameOverride } from "./player-name-overrides";
 
 /** One team grid recognized in a screenshot. */
@@ -26,9 +26,18 @@ export interface ScreenshotTeam {
   nameRef?: string;
   /**
    * Six slots; an id the Pokémon picker doesn't know is left "". `ref` is the tile as it
-   * appears in the screenshot (data URL), to compare with what it was recognized as.
+   * appears in the screenshot (data URL), to compare with what it was recognized as. `edited`
+   * marks a slot set by hand in the review (its confidence is then 1).
    */
-  pokemon: Array<{ id: string; isShadow: boolean; confidence: number; ref?: string }>;
+  pokemon: Array<{ id: string; isShadow: boolean; confidence: number; ref?: string; edited?: boolean }>;
+}
+
+/** How a team's name matched its standings entry */
+export interface NameMatch {
+  /** "read": the name as OCR read it; "dracoviz": only its Dracoviz correction matched */
+  via: "read" | "dracoviz";
+  /** Letters that differed once case and look-alike characters were folded */
+  edits: number;
 }
 
 export interface TeamMatches {
@@ -36,6 +45,8 @@ export interface TeamMatches {
   assignment: Array<string | null>;
   /** Per team key, the standings entry its name matched, or null if it matched none. */
   entryOf: Map<string, number | null>;
+  /** Per team key that matched an entry, how its name matched. */
+  nameMatches: Map<string, NameMatch>;
 }
 
 export function teamConfidence(team: ScreenshotTeam): number {
@@ -59,11 +70,18 @@ function buildStandingsIndex(entries: StandingEntry[]): StandingsIndex {
 }
 
 /** The standings entry a team belongs to: by the name as read, else by its Dracoviz match. */
-function findEntry(team: ScreenshotTeam, index: StandingsIndex): number | null {
-  for (const candidate of [team.read, team.dracovizName]) {
+function findEntry(team: ScreenshotTeam, index: StandingsIndex): { entry: number; name: NameMatch } | null {
+  const candidates = [
+    ["read", team.read],
+    ["dracoviz", team.dracovizName],
+  ] as const;
+  for (const [via, candidate] of candidates) {
     if (!candidate) continue;
     const name = matchPlayerName(candidate, index.names);
-    if (name !== null) return index.entryByName.get(name) ?? null;
+    const entry = name === null ? undefined : index.entryByName.get(name);
+    if (name !== null && entry !== undefined) {
+      return { entry, name: { via, edits: editDistance(foldName(name), foldName(candidate)) } };
+    }
   }
   return null;
 }
@@ -77,13 +95,42 @@ function findEntry(team: ScreenshotTeam, index: StandingsIndex): number | null {
 export function matchTeamsToStandings(entries: StandingEntry[], teams: ScreenshotTeam[]): TeamMatches {
   const index = buildStandingsIndex(entries);
   const entryOf = new Map<string, number | null>();
+  const nameMatches = new Map<string, NameMatch>();
   const best: Array<ScreenshotTeam | null> = entries.map(() => null);
   for (const team of teams) {
-    const i = findEntry(team, index);
-    entryOf.set(team.key, i);
-    if (i === null) continue;
-    const current = best[i];
-    if (!current || teamConfidence(team) > teamConfidence(current)) best[i] = team;
+    const found = findEntry(team, index);
+    entryOf.set(team.key, found?.entry ?? null);
+    if (!found) continue;
+    nameMatches.set(team.key, found.name);
+    const current = best[found.entry];
+    if (!current || teamConfidence(team) > teamConfidence(current)) best[found.entry] = team;
   }
-  return { assignment: best.map((team) => team?.key ?? null), entryOf };
+  return { assignment: best.map((team) => team?.key ?? null), entryOf, nameMatches };
+}
+
+/** The Pokémon a team is least sure of, by slot */
+export function weakestSlot(team: ScreenshotTeam): { slot: number; confidence: number } {
+  return team.pokemon.reduce(
+    (weakest, p, slot) => {
+      const confidence = p.id ? p.confidence : 0;
+      return confidence < weakest.confidence ? { slot, confidence } : weakest;
+    },
+    { slot: 0, confidence: 1 }
+  );
+}
+
+/**
+ * How much a name match can be trusted, 0-1. Folded-equal names are certain; each letter OCR
+ * got wrong, or needing the Dracoviz correction to match at all, makes a wrong player likelier.
+ * Without a match (a team picked by hand) the name is the user's call: certain.
+ */
+export function nameMatchConfidence(match: NameMatch | undefined): number {
+  if (!match) return 1;
+  const byEdits = [1, 0.8, 0.65][Math.min(match.edits, 2)];
+  return match.via === "dracoviz" ? Math.min(byEdits, 0.7) : byEdits;
+}
+
+/** How sure an import is, 0-1: the weaker of its least confident Pokémon and its name match */
+export function importConfidence(team: ScreenshotTeam, match: NameMatch | undefined): number {
+  return Math.min(weakestSlot(team).confidence, nameMatchConfidence(match));
 }

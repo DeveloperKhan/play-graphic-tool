@@ -15,6 +15,7 @@ import {
 } from "@/lib/screenshot-import";
 import type { ScreenshotTeam } from "@/lib/screenshot-standings";
 import type { PokemonMetadata } from "@/lib/types";
+import { PokemonCombobox } from "./pokemon-combobox";
 
 /** One uploaded screenshot and what was found in it. */
 interface ScreenshotJob {
@@ -139,6 +140,28 @@ export function useScreenshotTeams() {
       return list.filter((j) => j.key !== key);
     });
 
+  /** Set a slot's Pokémon or shadow form by hand; a hand-picked slot is as good as certain. */
+  const updateSlot = (teamKey: string, slot: number, change: { id?: string; isShadow?: boolean }) =>
+    setJobs((list) =>
+      list.map((job) =>
+        job.teams.some((t) => t.key === teamKey)
+          ? {
+              ...job,
+              teams: job.teams.map((t) =>
+                t.key === teamKey
+                  ? {
+                      ...t,
+                      pokemon: t.pokemon.map((p, i) =>
+                        i === slot ? { ...p, ...change, confidence: 1, edited: true } : p
+                      ),
+                    }
+                  : t
+              ),
+            }
+          : job
+      )
+    );
+
   const reset = () => {
     generation.current++;
     queue.current = Promise.resolve();
@@ -151,7 +174,7 @@ export function useScreenshotTeams() {
   const teams = React.useMemo(() => jobs.flatMap((j) => j.teams), [jobs]);
   const pending = jobs.filter((j) => j.status === "queued" || j.status === "working").length;
 
-  return { jobs, teams, pending, engine, download, prepare, addFiles, removeJob, reset };
+  return { jobs, teams, pending, engine, download, prepare, addFiles, removeJob, updateSlot, reset };
 }
 
 export type ScreenshotTeamsState = ReturnType<typeof useScreenshotTeams>;
@@ -288,8 +311,21 @@ export function ScreenshotTeamsInput({ state, disabled }: { state: ScreenshotTea
   );
 }
 
-/** One slot: the tile from the screenshot above the Pokémon it was recognized as. */
-function SlotComparison({ slot, index }: { slot: ScreenshotTeam["pokemon"][number]; index: number }) {
+/**
+ * One slot: the tile from the screenshot above the Pokémon it was recognized as, which can be
+ * clicked to change it.
+ */
+function SlotComparison({
+  slot,
+  index,
+  selected,
+  onSelect,
+}: {
+  slot: ScreenshotTeam["pokemon"][number];
+  index: number;
+  selected: boolean;
+  onSelect?: () => void;
+}) {
   const [pokemon, setPokemon] = React.useState<PokemonMetadata | null>(null);
 
   React.useEffect(() => {
@@ -316,10 +352,17 @@ function SlotComparison({ slot, index }: { slot: ScreenshotTeam["pokemon"][numbe
       ) : (
         <div className="h-16 w-16 rounded-md border bg-muted/50" />
       )}
-      <div
+      <button
+        type="button"
+        onClick={onSelect}
+        disabled={!onSelect}
+        title={onSelect ? "Change this Pokémon" : undefined}
+        aria-label={`Tile ${index + 1}: ${pokemon ? pokemon.speciesName : "not recognized"}${onSelect ? ", change" : ""}`}
         className={cn(
           "relative h-16 w-16 rounded-md border bg-muted/50 flex items-center justify-center p-1",
-          unsure && "border-amber-500 ring-1 ring-amber-500"
+          onSelect && "hover:border-primary",
+          unsure && "border-amber-500 ring-1 ring-amber-500",
+          selected && "border-primary ring-2 ring-primary"
         )}
       >
         {pokemon ? (
@@ -342,14 +385,14 @@ function SlotComparison({ slot, index }: { slot: ScreenshotTeam["pokemon"][numbe
             className="absolute bottom-0.5 right-0.5 h-[18px] w-[18px]"
           />
         )}
-      </div>
+      </button>
       <p className="w-full text-center text-[11px] leading-tight">
         <span className="block truncate" title={pokemon?.speciesName}>
           {pokemon ? pokemon.speciesName : "Not recognized"}
         </span>
         <span className={cn("text-muted-foreground", unsure && "text-amber-700 dark:text-amber-400")}>
           {slot.isShadow ? "Shadow · " : ""}
-          {Math.round(slot.confidence * 100)}%
+          {slot.edited ? "Set by hand" : `${Math.round(slot.confidence * 100)}%`}
         </span>
       </p>
     </div>
@@ -358,9 +401,25 @@ function SlotComparison({ slot, index }: { slot: ScreenshotTeam["pokemon"][numbe
 
 /**
  * A screenshot team next to what was recognized: the name bar as it appears in the screenshot,
- * then each tile above the Pokémon it was read as, large enough to check by eye.
+ * then each tile above the Pokémon it was read as, large enough to check by eye. With
+ * `onSlotChange`, a tile's Pokémon and shadow form can be changed: clicking it opens a picker.
  */
-export function TeamComparison({ team }: { team: ScreenshotTeam }) {
+export function TeamComparison({
+  team,
+  note,
+  editingSlot = null,
+  onEditSlot,
+  onSlotChange,
+}: {
+  team: ScreenshotTeam;
+  /** Shown after the reading, e.g. how sure the import is */
+  note?: React.ReactNode;
+  editingSlot?: number | null;
+  onEditSlot?: (slot: number | null) => void;
+  onSlotChange?: (slot: number, change: { id?: string; isShadow?: boolean }) => void;
+}) {
+  const editable = Boolean(onEditSlot && onSlotChange);
+  const editing = editingSlot !== null ? team.pokemon[editingSlot] : undefined;
   return (
     <div className="space-y-2 py-1">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -377,12 +436,29 @@ export function TeamComparison({ team }: { team: ScreenshotTeam }) {
         <span className="text-xs text-muted-foreground">
           Read as <span className="font-medium text-foreground">{team.read || "?"}</span> · {team.source}
         </span>
+        {note}
       </div>
       <div className="grid grid-cols-6 gap-2 max-w-[28rem]">
         {team.pokemon.map((slot, i) => (
-          <SlotComparison key={i} slot={slot} index={i} />
+          <SlotComparison
+            key={i}
+            slot={slot}
+            index={i}
+            selected={editingSlot === i}
+            onSelect={editable ? () => onEditSlot!(editingSlot === i ? null : i) : undefined}
+          />
         ))}
       </div>
+      {editable && editing && editingSlot !== null && (
+        <div className="max-w-[28rem]">
+          <PokemonCombobox
+            value={editing.id}
+            isShadow={editing.isShadow}
+            onValueChange={(id) => onSlotChange!(editingSlot, { id })}
+            onShadowChange={(isShadow) => onSlotChange!(editingSlot, { isShadow })}
+          />
+        </div>
+      )}
     </div>
   );
 }
