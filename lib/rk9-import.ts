@@ -23,7 +23,7 @@ const PLAYER_NAME_MAPPINGS: Record<string, string> = {
 /**
  * Apply player name mapping if one exists
  */
-function mapPlayerName(name: string): string {
+export function mapPlayerName(name: string): string {
   return PLAYER_NAME_MAPPINGS[name] ?? name;
 }
 
