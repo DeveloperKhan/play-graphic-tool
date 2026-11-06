@@ -22,14 +22,31 @@ export interface ScreenshotTeam {
   country: string | null;
   /** The screenshot it came from, and the side for a full broadcast frame. */
   source: string;
+  side?: "left" | "right" | null;
   /** The name bar as it appears in the screenshot (data URL), to check the reading against. */
   nameRef?: string;
-  /**
-   * Six slots; an id the Pokémon picker doesn't know is left "". `ref` is the tile as it
-   * appears in the screenshot (data URL), to compare with what it was recognized as. `edited`
-   * marks a slot set by hand in the review (its confidence is then 1).
-   */
-  pokemon: Array<{ id: string; isShadow: boolean; confidence: number; ref?: string; edited?: boolean }>;
+  /** Where the name bar is in the screenshot, [x0, y0, x1, y1] as fractions of its size. */
+  nameBox?: [number, number, number, number];
+  /** Which recognizer read it, and its models' version when known. */
+  engine?: "browser" | "server";
+  modelVersion?: string | null;
+  /** Six slots, in grid order. */
+  pokemon: ScreenshotSlot[];
+}
+
+export interface ScreenshotSlot {
+  /** An id the Pokémon picker knows, or "" */
+  id: string;
+  isShadow: boolean;
+  confidence: number;
+  /** The tile as it appears in the screenshot (data URL), to compare with what it was read as */
+  ref?: string;
+  /** Where the tile is in the screenshot, [x0, y0, x1, y1] as fractions of its size */
+  box?: [number, number, number, number];
+  /** Set by hand in the review (its confidence is then 1) */
+  edited?: boolean;
+  /** What the recognizer read before a hand edit */
+  predicted?: { id: string; isShadow: boolean; confidence: number };
 }
 
 /** How a team's name matched its standings entry */

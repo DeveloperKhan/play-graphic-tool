@@ -6,13 +6,13 @@
  * cropped player panel, two for a full broadcast frame) and returns the player name and
  * country it read, plus six Dracoviz speciesIds with shadow flags and confidences.
  *
- * It runs in the browser (vendor/team-recognizer: a Web Worker with the models under
- * public/team-recognizer/), which is fast once the models are downloaded. If this browser
- * can't run it, the same recognizer is called as a server API instead.
+ * It runs in the browser (@dracoviz/team-recognizer: a Web Worker that loads the package's
+ * models from jsDelivr), which is fast once the models are downloaded; a new model release is a
+ * version bump of the package. If this browser can't run it, the same recognizer is called as a
+ * server API instead.
  */
 
-import { createLocalRecognizer, type LocalRecognizer } from "@/vendor/team-recognizer/client";
-import { RECOGNIZER_BASE_URL } from "@/vendor/team-recognizer/version";
+import { createLocalRecognizer, type LocalRecognizer } from "@dracoviz/team-recognizer";
 import type { Player } from "./types";
 
 /** [x0, y0, x1, y1] as fractions of the image's width and height. */
@@ -71,6 +71,8 @@ export async function prepareUpload(file: Blob): Promise<Blob> {
 
 let local: LocalRecognizer | null = null;
 let localUnavailable = false;
+/** The in-browser models' version, once loaded (recorded with shared corrections). */
+let localVersion: string | null = null;
 const progressListeners = new Set<(loaded: number, total: number) => void>();
 
 /**
@@ -82,12 +84,14 @@ export function loadLocalRecognizer(onProgress?: (loaded: number, total: number)
   if (localUnavailable || typeof Worker === "undefined") return Promise.resolve(false);
   if (!local) {
     local = createLocalRecognizer({
-      baseUrl: RECOGNIZER_BASE_URL,
       onProgress: (loaded, total) => progressListeners.forEach((listener) => listener(loaded, total)),
     });
   }
   return local.ready.then(
-    () => true,
+    ({ version }) => {
+      localVersion = version;
+      return true;
+    },
     (error) => {
       console.warn("In-browser recognizer unavailable, using the server:", error);
       localUnavailable = true;
@@ -131,18 +135,22 @@ async function recognizeOnServer(file: Blob): Promise<{ teams: RecognizedTeam[];
  * Recognize the teams in a screenshot, in the browser when possible. Also returns the image
  * the boxes in the result refer to.
  */
-export async function recognizeScreenshot(
-  file: Blob
-): Promise<{ teams: RecognizedTeam[]; image: Blob; where: "browser" | "server" }> {
+export async function recognizeScreenshot(file: Blob): Promise<{
+  teams: RecognizedTeam[];
+  image: Blob;
+  where: "browser" | "server";
+  /** The models' version, when known (the server doesn't report one). */
+  modelVersion: string | null;
+}> {
   if (await loadLocalRecognizer()) {
     try {
       const { teams } = await local!.recognize(file);
-      return { teams: await matchPlayerNames(teams), image: file, where: "browser" };
+      return { teams: await matchPlayerNames(teams), image: file, where: "browser", modelVersion: localVersion };
     } catch (error) {
       console.warn("In-browser recognition failed, using the server:", error);
     }
   }
-  return { ...(await recognizeOnServer(file)), where: "server" };
+  return { ...(await recognizeOnServer(file)), where: "server", modelVersion: null };
 }
 
 /**
@@ -172,6 +180,35 @@ export async function cropRegions(
       canvas.getContext("2d")?.drawImage(bitmap, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
       return canvas.toDataURL("image/jpeg", 0.85);
     });
+  } finally {
+    bitmap.close();
+  }
+}
+
+/**
+ * A region of an image at its full resolution, as a JPEG, with the region actually cut (the
+ * requested one rounded out to whole pixels and clipped to the image).
+ */
+export async function cropToJpeg(
+  image: Blob,
+  [x0, y0, x1, y1]: RelativeBox,
+  quality = 0.9
+): Promise<{ jpeg: Blob; region: RelativeBox }> {
+  const bitmap = await createImageBitmap(image);
+  try {
+    const { width, height } = bitmap;
+    const sx = Math.max(0, Math.floor(x0 * width));
+    const sy = Math.max(0, Math.floor(y0 * height));
+    const ex = Math.max(sx + 1, Math.min(width, Math.ceil(x1 * width)));
+    const ey = Math.max(sy + 1, Math.min(height, Math.ceil(y1 * height)));
+    const canvas = document.createElement("canvas");
+    canvas.width = ex - sx;
+    canvas.height = ey - sy;
+    canvas.getContext("2d")?.drawImage(bitmap, sx, sy, ex - sx, ey - sy, 0, 0, ex - sx, ey - sy);
+    const jpeg = await new Promise<Blob>((resolve, reject) =>
+      canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("Could not encode image"))), "image/jpeg", quality)
+    );
+    return { jpeg, region: [sx / width, sy / height, ex / width, ey / height] };
   } finally {
     bitmap.close();
   }

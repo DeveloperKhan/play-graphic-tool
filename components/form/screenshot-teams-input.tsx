@@ -25,6 +25,8 @@ interface ScreenshotJob {
   status: "queued" | "working" | "done" | "error";
   message?: string;
   teams: ScreenshotTeam[];
+  /** The image the teams' boxes refer to, kept for cutting shared corrections */
+  image?: Blob;
 }
 
 type Engine = "idle" | "loading" | "browser" | "server";
@@ -39,7 +41,8 @@ let jobCounter = 0;
 async function toScreenshotTeams(
   teams: RecognizedTeam[],
   image: Blob,
-  job: ScreenshotJob
+  job: ScreenshotJob,
+  recognizer: { engine: "browser" | "server"; modelVersion: string | null }
 ): Promise<ScreenshotTeam[]> {
   return Promise.all(
     teams.map(async (team, i) => {
@@ -53,8 +56,8 @@ async function toScreenshotTeams(
         team.pokemon.map(async (p, j) =>
           // Only keep ids the picker knows; anything else imports as an empty slot.
           (await getPokemonById(p.speciesId))
-            ? { id: p.speciesId, isShadow: p.shadow, confidence: p.confidence, ref: tileRefs[j] }
-            : { id: "", isShadow: false, confidence: 0, ref: tileRefs[j] }
+            ? { id: p.speciesId, isShadow: p.shadow, confidence: p.confidence, ref: tileRefs[j], box: p.box }
+            : { id: "", isShadow: false, confidence: 0, ref: tileRefs[j], box: p.box }
         )
       );
       return {
@@ -63,7 +66,11 @@ async function toScreenshotTeams(
         dracovizName: team.player && team.player !== read ? team.player : null,
         country: team.country,
         source: team.side ? `${job.name} (${team.side})` : job.name,
+        side: team.side,
         nameRef,
+        nameBox: team.nameBox,
+        engine: recognizer.engine,
+        modelVersion: recognizer.modelVersion,
         pokemon,
       };
     })
@@ -98,15 +105,15 @@ export function useScreenshotTeams() {
     if (gen !== generation.current) return;
     updateJob(job.key, { status: "working" });
     try {
-      const { teams, image } = await recognizeScreenshot(file);
+      const { teams, image, where, modelVersion } = await recognizeScreenshot(file);
       if (gen !== generation.current) return;
       if (teams.length === 0) {
         updateJob(job.key, { status: "error", message: "No team grid found" });
         return;
       }
-      const found = await toScreenshotTeams(teams, image, job);
+      const found = await toScreenshotTeams(teams, image, job, { engine: where, modelVersion });
       if (gen !== generation.current) return;
-      updateJob(job.key, { status: "done", teams: found });
+      updateJob(job.key, { status: "done", teams: found, image });
     } catch (error) {
       if (gen !== generation.current) return;
       updateJob(job.key, { status: "error", message: error instanceof Error ? error.message : "Recognition failed" });
@@ -152,7 +159,16 @@ export function useScreenshotTeams() {
                   ? {
                       ...t,
                       pokemon: t.pokemon.map((p, i) =>
-                        i === slot ? { ...p, ...change, confidence: 1, edited: true } : p
+                        i === slot
+                          ? {
+                              ...p,
+                              ...change,
+                              confidence: 1,
+                              edited: true,
+                              // Keep what the recognizer read, for shared corrections
+                              predicted: p.predicted ?? { id: p.id, isShadow: p.isShadow, confidence: p.confidence },
+                            }
+                          : p
                       ),
                     }
                   : t
@@ -172,9 +188,13 @@ export function useScreenshotTeams() {
   };
 
   const teams = React.useMemo(() => jobs.flatMap((j) => j.teams), [jobs]);
+
+  /** The image a team's boxes refer to */
+  const imageFor = (teamKey: string): Blob | undefined =>
+    jobs.find((j) => j.teams.some((t) => t.key === teamKey))?.image;
   const pending = jobs.filter((j) => j.status === "queued" || j.status === "working").length;
 
-  return { jobs, teams, pending, engine, download, prepare, addFiles, removeJob, updateSlot, reset };
+  return { jobs, teams, pending, engine, download, prepare, addFiles, removeJob, updateSlot, imageFor, reset };
 }
 
 export type ScreenshotTeamsState = ReturnType<typeof useScreenshotTeams>;
