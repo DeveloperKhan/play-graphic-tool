@@ -53,12 +53,22 @@ async function toScreenshotTeams(
         cropRegions(image, team.pokemon.map((p) => p.box), 128),
       ]);
       const pokemon = await Promise.all(
-        team.pokemon.map(async (p, j) =>
+        team.pokemon.map(async (p, j) => {
           // Only keep ids the picker knows; anything else imports as an empty slot.
-          (await getPokemonById(p.speciesId))
-            ? { id: p.speciesId, isShadow: p.shadow, confidence: p.confidence, ref: tileRefs[j], box: p.box }
-            : { id: "", isShadow: false, confidence: 0, ref: tileRefs[j], box: p.box }
-        )
+          const known = await getPokemonById(p.speciesId);
+          const shadowChecks = { shadowViolet: p.shadowViolet, shadowProbe: p.shadowProbe };
+          return known
+            ? {
+                id: p.speciesId,
+                isShadow: p.shadow,
+                confidence: p.confidence,
+                ref: tileRefs[j],
+                box: p.box,
+                shadowEligible: known.shadowEligible,
+                ...shadowChecks,
+              }
+            : { id: "", isShadow: false, confidence: 0, ref: tileRefs[j], box: p.box, ...shadowChecks };
+        })
       );
       return {
         key: `${job.key}-${i}`,

@@ -25,6 +25,9 @@ export interface RecognizedPokemon {
   alternatives: Array<{ speciesId: string; confidence: number }>;
   /** Where the tile is in the uploaded image. */
   box?: RelativeBox;
+  /** The two shadow checks: violet smoke on the border, and the learned check's probability. */
+  shadowViolet?: number;
+  shadowProbe?: number;
 }
 
 export interface RecognizedTeam {

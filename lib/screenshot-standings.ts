@@ -47,6 +47,11 @@ export interface ScreenshotSlot {
   edited?: boolean;
   /** What the recognizer read before a hand edit */
   predicted?: { id: string; isShadow: boolean; confidence: number };
+  /** The recognizer's two shadow checks, when it reported them */
+  shadowViolet?: number;
+  shadowProbe?: number;
+  /** Whether the recognized species has a shadow form at all */
+  shadowEligible?: boolean;
 }
 
 /** How a team's name matched its standings entry */

@@ -43,6 +43,7 @@ async function fetchPokemonData(): Promise<Map<string, PokemonMetadata>> {
         speciesId: value.speciesId,
         sid: value.sid,
         types,
+        shadowEligible: Array.isArray(value.tags) && value.tags.includes("shadoweligible"),
       };
       // Use speciesId as the key for consistent lookup
       cache.set(value.speciesId, pokemon);

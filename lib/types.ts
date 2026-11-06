@@ -183,6 +183,7 @@ export interface PokemonMetadata {
   speciesId: string;
   sid: number; // Sprite ID for image fetching
   types: string[]; // Pokemon types (e.g., ["ground", "steel"])
+  shadowEligible?: boolean; // Has a shadow form in Pokemon GO
 }
 
 export interface UsageStats {
