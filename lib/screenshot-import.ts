@@ -45,6 +45,12 @@ export interface RecognizedTeam {
 /** Below this confidence a recognized Pokémon is highlighted for review. */
 export const LOW_CONFIDENCE = 0.6;
 
+/**
+ * Decode images for the recognizer with their pixels as stored, ignoring any embedded color
+ * profile (macOS screenshots carry the display's), the way it reads them itself and was trained.
+ */
+const RAW_PIXELS: ImageBitmapOptions = { colorSpaceConversion: "none" };
+
 /** Largest side sent to the recognizer; keeps uploads well under Vercel's 4.5 MB body limit. */
 const MAX_UPLOAD_SIDE = 2000;
 
@@ -54,7 +60,7 @@ const MAX_UPLOAD_SIDE = 2000;
  * recognizer doesn't need more pixels than this.
  */
 export async function prepareUpload(file: Blob): Promise<Blob> {
-  const bitmap = await createImageBitmap(file);
+  const bitmap = await createImageBitmap(file, RAW_PIXELS);
   const scale = Math.min(1, MAX_UPLOAD_SIDE / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement("canvas");
   canvas.width = Math.round(bitmap.width * scale);
@@ -197,7 +203,7 @@ export async function cropToJpeg(
   [x0, y0, x1, y1]: RelativeBox,
   quality = 0.9
 ): Promise<{ jpeg: Blob; region: RelativeBox }> {
-  const bitmap = await createImageBitmap(image);
+  const bitmap = await createImageBitmap(image, RAW_PIXELS);
   try {
     const { width, height } = bitmap;
     const sx = Math.max(0, Math.floor(x0 * width));
