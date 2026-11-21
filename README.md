@@ -52,6 +52,25 @@ review step shows every player before anything is written to the form, and
 flags players it could not match, players ordered approximately, and players
 whose team list the organizer has not published.
 
+Both the public bracket link and the organizer's own `/tournaments/<id>` link
+work.
+
+## Bulk Reorder
+
+The **Bulk Reorder** button assigns players to positions. Paste a Challonge URL
+into **Order from a Challonge bracket** and it fills those positions from the
+bracket, leaving names, flags and teams exactly as they are — the use for it is
+a form whose teams are already entered and only in the wrong order.
+
+It reads the same ordering Auto-Generate does (final placement for a finished
+event, live matchup for one still running), so on an event in progress each pair
+of positions is one real pairing. Players are tied to bracket entries by name,
+allowing for the RK9 renames and for the look-alike characters OCR confuses, so
+a form filled from screenshots still matches; near matches are listed for
+review. A bracket covering only part of the form is fine: players it doesn't
+name keep their relative order at the end. Nothing is written to the form until
+**Apply Order**, so the result can be adjusted in the grid first.
+
 ## Import Screenshot
 
 The **Import Screenshot** button reads teams straight off screenshots of the 2027

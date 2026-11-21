@@ -107,10 +107,20 @@ export function parseChallongeUrl(url: string): {
   }
 
   // First path segment is the tournament slug; ignore trailing pages
-  // like /standings, /module, /log
-  const slug = parsed.pathname.split("/").filter(Boolean)[0];
+  // like /standings, /module, /log. The organizer's own view of a bracket
+  // nests it under /tournaments/, so that prefix is dropped first:
+  //   https://pokemongochampionshipseries.challonge.com/tournaments/18556217
+  const segments = parsed.pathname.split("/").filter(Boolean);
+  const path = segments[0] === "tournaments" ? segments.slice(1) : segments;
+  const slug = path[0];
   if (!slug) {
     return { valid: false, error: "Missing tournament name in URL" };
+  }
+
+  // A numeric tournament id is global, so it is used on its own - prefixing
+  // the organization subdomain would not resolve.
+  if (/^\d+$/.test(slug)) {
+    return { valid: true, tournamentId: slug };
   }
 
   const subdomain = hostname.endsWith(".challonge.com")
