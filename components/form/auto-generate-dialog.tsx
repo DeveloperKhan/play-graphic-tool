@@ -144,8 +144,9 @@ const FALLBACK_SIZE: PlayerCount = 16;
  *
  * - A distinct top cut (fewer ranked players than participants) is the
  *   strongest signal - use it.
- * - In pairings mode, use the number of players actually in a live matchup, so
- *   the graphic holds the pairings and nothing else.
+ * - In pairings mode, use the number of players the bracket itself places -
+ *   those in a live matchup plus those it has knocked out - so a day 2 bracket
+ *   fills the graphic whether it has just been drawn or is nearly over.
  * - Events run as parallel group brackets rank their whole field, which implies
  *   nothing about graphic size, so those fall back to Top 16.
  */
@@ -161,8 +162,10 @@ function pickDefaultSize(
   if (mode === "final" && rankedCount > 0 && !fullFieldRanked) {
     target = rankedCount;
   } else if (mode === "pairings") {
-    const pairingCount = entries.filter((e) => e.source === "pairing").length;
-    if (pairingCount > 0) target = pairingCount;
+    const placedCount = entries.filter(
+      (e) => e.source === "pairing" || e.source === "bracket"
+    ).length;
+    if (placedCount > 0) target = placedCount;
   }
 
   const exact = sizes.find((size) => size === target);

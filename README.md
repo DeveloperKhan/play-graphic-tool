@@ -46,8 +46,13 @@ links:
 - the matching RK9 roster URL (e.g. `https://rk9.gg/roster/BR003-6CxLSFjQiTHuAh`)
 
 Challonge supplies the ordering, RK9 supplies flags and team lists. A finished
-event is ordered by final placement; an event still in progress is ordered by
-live matchup, so each pair line in the graphic spans one real pairing. The
+event is ordered by final placement. An event still in progress is ordered from
+its live bracket: the matches still to be decided come first, each pair line in
+the graphic spanning one real pairing, and behind them everyone the bracket has
+already knocked out, deepest exit first — so a day 2 bracket fills the graphic
+whether it has just been drawn, is part way through, or is down to its last
+match. Only players the bracket hasn't reached fall back to a day 1 record,
+which is approximate. The
 review step shows every player before anything is written to the form, and
 flags players it could not match, players ordered approximately, and players
 whose team list the organizer has not published.
@@ -62,9 +67,10 @@ into **Order from a Challonge bracket** and it fills those positions from the
 bracket, leaving names, flags and teams exactly as they are — the use for it is
 a form whose teams are already entered and only in the wrong order.
 
-It reads the same ordering Auto-Generate does (final placement for a finished
-event, live matchup for one still running), so on an event in progress each pair
-of positions is one real pairing. Players are tied to bracket entries by name,
+It reads the same ordering Auto-Generate does, and the summary breaks down what
+fixed each position — final placings, live matchups, bracket exits, or a day 1
+record — so a partly played bracket can be trusted as far as it deserves.
+Players are tied to bracket entries by name,
 allowing for the RK9 renames and for the look-alike characters OCR confuses, so
 a form filled from screenshots still matches; near matches are listed for
 review. A bracket covering only part of the form is fine: players it doesn't

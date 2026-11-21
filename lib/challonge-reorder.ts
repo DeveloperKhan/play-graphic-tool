@@ -12,7 +12,7 @@
  * the form leaves the rest alone.
  */
 
-import type { StandingEntry } from "./challonge";
+import type { StandingEntry, StandingSource } from "./challonge";
 import { buildNameIndex, matchPlayerName } from "./name-match";
 import { applyNameOverride, normalizePlayerName } from "./player-name-overrides";
 import { mapPlayerName } from "./rk9-import";
@@ -40,6 +40,8 @@ export interface ReorderMatch {
   /** The name Challonge lists, which may be spelled differently */
   entryName: string;
   kind: ReorderMatchKind;
+  /** What fixed this position in the bracket: a placing, a live match, an exit */
+  source: StandingSource;
 }
 
 export interface ReorderPlan {
@@ -92,7 +94,7 @@ export function planReorder(
   }
 
   const matched: ReorderMatch[] = [];
-  const claim = (playerId: string, entryName: string, kind: ReorderMatchKind) => {
+  const claim = (playerId: string, entry: StandingEntry, kind: ReorderMatchKind) => {
     const player = remaining.get(playerId);
     if (!player) return false;
     remaining.delete(playerId);
@@ -100,8 +102,9 @@ export function planReorder(
       position: matched.length,
       playerId,
       playerName: player.name,
-      entryName,
+      entryName: entry.name,
       kind,
+      source: entry.source,
     });
     return true;
   };
@@ -113,7 +116,7 @@ export function planReorder(
       .flatMap((name) => idsByName.get(name) ?? [])
       .find((id) => remaining.has(id));
 
-    if (!hit || !claim(hit, entry.name, "exact")) pending.push(entry);
+    if (!hit || !claim(hit, entry, "exact")) pending.push(entry);
   }
 
   // Second pass: names that only agree allowing for OCR's look-alike
@@ -133,7 +136,7 @@ export function planReorder(
     if (!closest) continue;
 
     const player = unclaimed.find((candidate) => candidate.name === closest);
-    if (player) claim(player.id, entry.name, "close");
+    if (player) claim(player.id, entry, "close");
   }
 
   // Whoever the bracket never named keeps the order they already had

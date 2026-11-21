@@ -23,7 +23,7 @@ import {
 import { ListOrdered, Loader2, Trash2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { planReorder, type ReorderPlan } from "@/lib/challonge-reorder";
-import type { StandingEntry, StandingsMode } from "@/lib/challonge";
+import type { StandingEntry, StandingSource, StandingsMode } from "@/lib/challonge";
 
 interface BulkMoveDialogProps {
   playerOrder: string[];
@@ -205,6 +205,26 @@ export function BulkMoveDialog({
 
   const closeMatches = summary?.plan.matched.filter((m) => m.kind === "close") ?? [];
 
+  // What actually fixed each position, so the order can be trusted as far as it
+  // deserves: a finished event gives placings, a live one a mix of the matches
+  // being played, the exits behind them, and - for anyone the bracket hasn't
+  // reached - nothing but a day 1 record.
+  const countBySource = (source: StandingSource) =>
+    summary?.plan.matched.filter((m) => m.source === source).length ?? 0;
+
+  const approximateCount = countBySource("swiss");
+  const orderingBreakdown = (
+    [
+      [countBySource("final_rank"), "by final placing"],
+      [countBySource("pairing"), "in a live matchup, side by side"],
+      [countBySource("bracket"), "by how far they got in the bracket"],
+      [approximateCount, "by day 1 record"],
+    ] as const
+  )
+    .filter(([count]) => count > 0)
+    .map(([count, label]) => `${count} ${label}`)
+    .join(", ");
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -273,17 +293,24 @@ export function BulkMoveDialog({
             <div className="space-y-1 text-xs">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded bg-blue-500/10 px-1.5 py-0.5 text-blue-700 dark:text-blue-400">
-                  {summary.mode === "final" ? "Final standings" : "Day 2 pairings"}
+                  {summary.mode === "final" ? "Final standings" : "Live bracket"}
                 </span>
                 {summary.eventName && (
                   <span className="text-muted-foreground">{summary.eventName}</span>
                 )}
               </div>
               <p className="text-muted-foreground">
-                Placed {summary.plan.matched.length} of {playerOrder.length} players.
-                {summary.mode === "pairings" &&
-                  " Each pair of positions is one live matchup."}
+                Placed {summary.plan.matched.length} of {playerOrder.length} players
+                {orderingBreakdown ? `: ${orderingBreakdown}` : ""}.
               </p>
+              {approximateCount > 0 && (
+                <p className="text-amber-700 dark:text-amber-400">
+                  {approximateCount === summary.plan.matched.length
+                    ? "Nothing has been played yet, so this order is a day 1 record only"
+                    : `Those ${approximateCount} have only a day 1 record to go on`}{" "}
+                  - worth a check before applying.
+                </p>
+              )}
               {closeMatches.length > 0 && (
                 <p className="text-amber-700 dark:text-amber-400">
                   Matched on a near spelling:{" "}

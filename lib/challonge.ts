@@ -45,8 +45,15 @@ export interface ChallongeTournament {
   completed_at: string | null;
 }
 
-/** How a standings entry's position was determined */
-export type StandingSource = "final_rank" | "swiss" | "pairing";
+/**
+ * How a standings entry's position was determined.
+ *
+ * "final_rank" - Challonge's own placement. "pairing" - a match still to be
+ * decided, so the entry sits next to its opponent. "bracket" - knocked out of a
+ * bracket Challonge hasn't ranked yet, placed by how deep they got. "swiss" -
+ * nothing but a group-stage record to go on, which is approximate.
+ */
+export type StandingSource = "final_rank" | "swiss" | "pairing" | "bracket";
 
 export interface StandingEntry {
   name: string;
@@ -295,49 +302,108 @@ function toEntry(record: PlayerRecord, source: StandingSource): StandingEntry {
 }
 
 /**
- * Order players by live matchup, so consecutive pairs in the result are real
- * pairings and land on one colored pair line in the graphic.
+ * How far along a final-stage match is, as a sort key that puts the players
+ * closest to winning first.
+ *
+ * Challonge numbers winners-bracket rounds 1, 2, 3... and losers-bracket rounds
+ * -1, -2, -3..., where -1 is the *first* losers round and the most negative is
+ * the last. Everyone still in the winners bracket is guaranteed to place at or
+ * above anyone in the losers bracket, so that side leads; within a side, the
+ * deeper round comes first.
+ */
+function finalStageKey(match: ChallongeMatch): [number, number] {
+  return match.round > 0 ? [0, -match.round] : [1, match.round];
+}
+
+/**
+ * How far each player in the final stage got, as a sort key where a larger
+ * number is a better placement.
+ *
+ * A run only ends in the losers bracket - a winners-bracket loss just drops a
+ * player into it - so the losing round there is what says how deep they got,
+ * and the deepest of them is used in case a bracket has been redrawn. Anyone
+ * with no losers-bracket loss is still in, and leads them all.
+ */
+function finalStageDepths(finalStage: ChallongeMatch[]): Map<number, number> {
+  const depths = new Map<number, number>();
+
+  for (const match of finalStage) {
+    for (const playerId of [match.player1_id, match.player2_id]) {
+      if (playerId !== null && !depths.has(playerId)) {
+        depths.set(playerId, Number.POSITIVE_INFINITY);
+      }
+    }
+  }
+
+  for (const match of finalStage) {
+    if (match.round >= 0) continue; // A winners-bracket loss is not an exit
+    if (match.state !== "complete" || match.winner_id === null) continue;
+    if (match.player1_id === null || match.player2_id === null) continue;
+
+    const loser =
+      match.winner_id === match.player1_id ? match.player2_id : match.player1_id;
+    const depth = -match.round;
+    const current = depths.get(loser);
+    if (current === undefined || current === Number.POSITIVE_INFINITY || depth > current) {
+      depths.set(loser, depth);
+    }
+  }
+
+  return depths;
+}
+
+/**
+ * Order players by how they stand in a bracket Challonge hasn't ranked yet, so
+ * consecutive pairs in the result are real pairings and land on one colored
+ * pair line in the graphic.
  *
  * Events are run as parallel double-elimination group brackets (Frankfurt:
- * 4 groups of 28), with an optional small final stage between the group
- * winners. Before that final stage exists, the pairings worth showing are the
- * in-progress matches of the group brackets, so both shapes are handled:
+ * 4 groups of 28), with a final stage between the group survivors. Both the
+ * group brackets and that final stage are read the same way:
  *
  * 1. Matches that are open (being played now), paired up.
  * 2. Matches still pending with at least one known player - someone waiting on
  *    a result, e.g. a group's losers-bracket finalist.
- * 3. Everyone else, ordered by record, so a larger graphic size still fills.
+ * 3. In a final stage, everyone already knocked out of it, deepest exit first.
+ *    A bracket part way through has only a match or two live, so without this
+ *    most of the field would have nothing to order it but a day 1 record.
+ * 4. Everyone else, ordered by record, so a larger graphic size still fills.
  */
 function buildPairingEntries(
   matches: ChallongeMatch[],
   records: PlayerRecord[],
   byId: Map<number, PlayerRecord>
 ): StandingEntry[] {
-  // A real final stage takes priority: its opening round is the day 2 bracket
-  const finalStage = matches.filter(
-    (m) => m.group_id === null && (m.player1_id !== null || m.player2_id !== null)
+  // A real final stage takes priority: it is the day 2 bracket
+  const finalStage = matches.filter((m) => m.group_id === null);
+  const hasFinalStage = finalStage.some(
+    (m) => m.player1_id !== null || m.player2_id !== null
   );
+  const stage = hasFinalStage ? finalStage : matches;
 
-  let pairingMatches: ChallongeMatch[];
-
-  if (finalStage.length > 0) {
-    const firstRound = Math.min(...finalStage.map((m) => m.round));
-    pairingMatches = finalStage.filter((m) => m.round === firstRound);
-  } else {
-    pairingMatches = matches.filter(
-      (m) =>
-        m.state !== "complete" &&
-        (m.player1_id !== null || m.player2_id !== null)
-    );
-  }
+  // Only matches still to be decided are live pairings. On a freshly generated
+  // bracket that is its whole opening round; part way through, it is whatever
+  // is on stream now.
+  const pairingMatches = stage.filter(
+    (m) =>
+      m.state !== "complete" &&
+      (m.player1_id !== null || m.player2_id !== null)
+  );
 
   // Matches in progress first, then those still waiting on a player
   const stateRank = (match: ChallongeMatch) => (match.state === "open" ? 0 : 1);
 
   pairingMatches.sort((a, b) => {
-    if (stateRank(a) !== stateRank(b)) return stateRank(a) - stateRank(b);
-    if ((a.group_id ?? 0) !== (b.group_id ?? 0)) {
-      return (a.group_id ?? 0) - (b.group_id ?? 0);
+    if (hasFinalStage) {
+      const [sideA, depthA] = finalStageKey(a);
+      const [sideB, depthB] = finalStageKey(b);
+      if (sideA !== sideB) return sideA - sideB;
+      if (depthA !== depthB) return depthA - depthB;
+    } else {
+      if (stateRank(a) !== stateRank(b)) return stateRank(a) - stateRank(b);
+      if ((a.group_id ?? 0) !== (b.group_id ?? 0)) {
+        return (a.group_id ?? 0) - (b.group_id ?? 0);
+      }
     }
     const orderA = a.suggested_play_order;
     const orderB = b.suggested_play_order;
@@ -357,6 +423,31 @@ function buildPairingEntries(
       if (!record || seen.has(record.participant.id)) continue;
       seen.add(record.participant.id);
       entries.push(toEntry(record, "pairing"));
+    }
+  }
+
+  // Then the rest of the bracket, in the order it knocked them out: the deeper
+  // their exit, the better they placed. Part way through an event this is most
+  // of the field, and a day 1 record says nothing about how day 2 has gone.
+  if (hasFinalStage) {
+    const byRecord = new Map<PlayerRecord, number>();
+    for (const [playerId, depth] of finalStageDepths(finalStage)) {
+      const record = byId.get(playerId);
+      if (!record || seen.has(record.participant.id)) continue;
+      // byId maps several ids to one record; keep the deepest run per player
+      const current = byRecord.get(record);
+      if (current === undefined || depth > current) byRecord.set(record, depth);
+    }
+
+    const placed = [...byRecord.entries()].sort(
+      ([recordA, depthA], [recordB, depthB]) =>
+        depthB - depthA || compareByRecord(recordA, recordB)
+    );
+
+    for (const [record] of placed) {
+      if (seen.has(record.participant.id)) continue;
+      seen.add(record.participant.id);
+      entries.push(toEntry(record, "bracket"));
     }
   }
 
