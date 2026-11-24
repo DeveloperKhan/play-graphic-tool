@@ -44,6 +44,9 @@ async function fetchPokemonData(): Promise<Map<string, PokemonMetadata>> {
         sid: value.sid,
         types,
         shadowEligible: Array.isArray(value.tags) && value.tags.includes("shadoweligible"),
+        // The "mega" tag covers Mega Evolutions and Primal forms, and avoids
+        // false positives from names containing "mega" (Meganium, Yanmega).
+        isMega: Array.isArray(value.tags) && value.tags.includes("mega"),
       };
       // Use speciesId as the key for consistent lookup
       cache.set(value.speciesId, pokemon);

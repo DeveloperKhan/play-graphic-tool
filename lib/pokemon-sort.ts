@@ -17,6 +17,7 @@ interface PokemonWithScore {
   metadata: PokemonMetadata | null;
   sortScore: number;
   usageCount: number;
+  isMega: boolean;
 }
 
 /**
@@ -61,6 +62,8 @@ function calculateSortScore(metadata: PokemonMetadata | null): number {
  * Sort a team of Pokemon based on type preferences.
  * Simply reorders the existing Pokemon - doesn't add or remove any.
  *
+ * Mega Evolutions (and Primals) always sort to the front, ahead of usage.
+ *
  * @param team - Array of Pokemon from the form
  * @param usageCounts - Optional map of Pokemon ID to usage count across all teams
  * @returns Sorted array of the same Pokemon
@@ -82,19 +85,26 @@ export async function sortTeam(
       metadata: pokemon.id ? await getPokemonById(pokemon.id) : null,
       sortScore: 0, // Will be calculated below
       usageCount: pokemon.id ? (usageCounts?.get(pokemon.id) ?? 0) : 0,
+      isMega: false, // Will be set below, once metadata is resolved
     }))
   );
 
   // Calculate sort scores
   for (const p of pokemonWithScores) {
     p.sortScore = calculateSortScore(p.metadata);
+    p.isMega = p.metadata?.isMega ?? false;
   }
 
   // Sort by:
-  // 1. Usage count (descending - higher usage first)
-  // 2. Bucket score (ascending - lower score = earlier slot preference)
+  // 1. Mega (megas always lead the team, regardless of usage)
+  // 2. Usage count (descending - higher usage first)
+  // 3. Bucket score (ascending - lower score = earlier slot preference)
   pokemonWithScores.sort((a, b) => {
-    // First sort by usage (higher usage = earlier)
+    // Megas first, always - this outranks usage
+    if (a.isMega !== b.isMega) {
+      return a.isMega ? -1 : 1;
+    }
+    // Then sort by usage (higher usage = earlier)
     if (a.usageCount !== b.usageCount) {
       return b.usageCount - a.usageCount;
     }

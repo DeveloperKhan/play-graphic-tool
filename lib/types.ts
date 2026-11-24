@@ -184,6 +184,7 @@ export interface PokemonMetadata {
   sid: number; // Sprite ID for image fetching
   types: string[]; // Pokemon types (e.g., ["ground", "steel"])
   shadowEligible?: boolean; // Has a shadow form in Pokemon GO
+  isMega?: boolean; // Mega Evolution or Primal form (occupies the mega slot)
 }
 
 export interface UsageStats {
