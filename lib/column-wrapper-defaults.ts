@@ -109,10 +109,32 @@ export function getDefaultWrapperText(columnId: ColumnId): string {
 }
 
 /**
+ * Placement labels earlier versions of this tool filled in automatically.
+ * They are no longer defaults, but they live on in saved tournaments, so the
+ * "show placements" preset has to recognise them as its own output rather than
+ * as something the user typed.
+ */
+const SUPERSEDED_WRAPPER_TEXTS = ["17th-20th", "21st-24th", "25th-28th", "29th-32nd"];
+
+/**
+ * Whether `text` is a label this tool generates (or used to generate), and so
+ * may be overwritten when the placement defaults are re-applied. Text the user
+ * typed themselves is left alone.
+ */
+export function isGeneratedWrapperText(text: string | undefined): boolean {
+  const trimmed = (text ?? "").trim();
+  if (!trimmed) return true;
+  if (SUPERSEDED_WRAPPER_TEXTS.includes(trimmed)) return true;
+  const allConfigs = [...COLUMNS_16, ...COLUMNS_32, ...COLUMNS_64_WINNERS, ...COLUMNS_64_LOSERS];
+  return allConfigs.some((c) => c.defaultWrapperText !== "" && c.defaultWrapperText === trimmed);
+}
+
+/**
  * Build the complete `columnWrappers` value for the "show placements" layout.
  *
- * Existing text is preserved when `current` is supplied, matching the form
- * section's behaviour of only filling in a wrapper label when it is blank.
+ * Hand-written text is preserved when `current` is supplied, matching the form
+ * section's behaviour; labels this tool generated itself are refreshed from the
+ * tables above so superseded ones do not survive re-applying the preset.
  */
 export function buildPlacementColumnWrappers(
   playerCount: PlayerCount,
@@ -131,9 +153,12 @@ export function buildPlacementColumnWrappers(
     ...getRemainingWinnersColumnIds(playerCount),
     ...getLosersColumnIds(playerCount),
   ]) {
+    const existingText = current?.[columnId]?.text;
     wrappers[columnId] = {
       mode: "wrapper",
-      text: current?.[columnId]?.text || getDefaultWrapperText(columnId),
+      text: isGeneratedWrapperText(existingText)
+        ? getDefaultWrapperText(columnId)
+        : (existingText as string),
     };
   }
 

@@ -33,6 +33,7 @@ import {
   getFirstWinnersColumnId,
   getLosersColumnIds,
   getRemainingWinnersColumnIds,
+  isGeneratedWrapperText,
 } from "@/lib/column-wrapper-defaults";
 
 // Bracket labels section
@@ -247,8 +248,10 @@ function ColumnWrapperField({
       // Remaining winners columns → wrapper
       for (const colId of getRemainingWinnersColumnIds(playerCount)) {
         form.setValue(`columnWrappers.${colId}.mode`, "wrapper");
+        // Refresh labels this tool generated (blank, or a superseded default
+        // still sitting in a saved tournament); keep anything hand-written.
         const currentText = form.getValues(`columnWrappers.${colId}.text`);
-        if (!currentText) {
+        if (isGeneratedWrapperText(currentText)) {
           form.setValue(`columnWrappers.${colId}.text`, getDefaultWrapperText(colId));
         }
       }
@@ -256,8 +259,10 @@ function ColumnWrapperField({
       // All losers columns → wrapper
       for (const colId of getLosersColumnIds(playerCount)) {
         form.setValue(`columnWrappers.${colId}.mode`, "wrapper");
+        // Refresh labels this tool generated (blank, or a superseded default
+        // still sitting in a saved tournament); keep anything hand-written.
         const currentText = form.getValues(`columnWrappers.${colId}.text`);
-        if (!currentText) {
+        if (isGeneratedWrapperText(currentText)) {
           form.setValue(`columnWrappers.${colId}.text`, getDefaultWrapperText(colId));
         }
       }
